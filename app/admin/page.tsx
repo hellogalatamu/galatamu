@@ -26,6 +26,10 @@ export default function AdminDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("Semua");
 
+  // Guest Tool state
+  const [guestToolSlug, setGuestToolSlug] = useState<string | null>(null);
+  const [guestNames, setGuestNames] = useState("");
+
   const filteredInvitations = invitations.filter((inv) => {
     const matchesSearch = 
       inv.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -571,6 +575,15 @@ export default function AdminDashboard() {
                               <Send size={13} /> Salin Link Edit
                             </button>
                           )}
+
+                          {/* Guest Name Tool */}
+                          <button
+                            onClick={() => setGuestToolSlug(inv.slug)}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 bg-purple-50 text-purple-600 rounded-lg text-xs font-medium hover:bg-purple-100 transition"
+                            title="Generate link personal untuk tamu"
+                          >
+                            <MessageCircle size={13} /> Guest Tool (Link Nama)
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -716,6 +729,91 @@ export default function AdminDashboard() {
                 className="flex-1 py-3 bg-[#1a1a1a] text-white rounded-xl font-medium hover:bg-gray-800 transition disabled:bg-gray-400"
               >
                 {isSaving ? "Menyimpan..." : "Simpan Perubahan"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Guest Name Tool Modal */}
+      {guestToolSlug && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-serif font-bold">Guest Name Tool</h2>
+                <p className="text-sm text-gray-500">Generate personal links for /{guestToolSlug}</p>
+              </div>
+              <button onClick={() => setGuestToolSlug(null)} className="p-2 hover:bg-gray-100 rounded-full">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto space-y-6">
+              <div>
+                <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Daftar Nama Tamu (Satu nama per baris)</label>
+                <textarea 
+                  rows={8}
+                  value={guestNames}
+                  onChange={(e) => setGuestNames(e.target.value)}
+                  placeholder="Contoh:&#10;Budi & Istri&#10;Keluarga Bpk. Ahmad&#10;Santi"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a1a1a] focus:bg-white focus:outline-none transition-all text-sm"
+                ></textarea>
+              </div>
+
+              {guestNames.trim() && (
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Link Generated</h3>
+                  <div className="space-y-3">
+                    {guestNames.split('\n').filter(name => name.trim()).map((name, idx) => {
+                      const encodedName = encodeURIComponent(name.trim());
+                      const personalUrl = `${window.location.origin}/${guestToolSlug}?to=${encodedName}`;
+                      const waMsg = encodeURIComponent(
+                        `Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i *${name.trim()}* untuk hadir di acara pernikahan kami.\n\n` +
+                        `Berikut link undangan digital kami:\n${personalUrl}\n\n` +
+                        `Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\n` +
+                        `Terima kasih.`
+                      );
+                      
+                      return (
+                        <div key={idx} className="p-4 bg-gray-50 border border-gray-200 rounded-xl flex items-center justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold truncate">{name.trim()}</p>
+                            <p className="text-xs text-gray-400 truncate">{personalUrl}</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button 
+                              onClick={() => {
+                                navigator.clipboard.writeText(personalUrl);
+                                alert(`Link untuk ${name.trim()} disalin!`);
+                              }}
+                              className="p-2 bg-white border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 transition"
+                              title="Salin Link"
+                            >
+                              <ExternalLink size={14} />
+                            </button>
+                            <a 
+                              href={`https://wa.me/?text=${waMsg}`}
+                              target="_blank"
+                              className="p-2 bg-[#25D366] text-white rounded-lg hover:bg-[#1ebe5d] transition"
+                              title="Kirim WA"
+                            >
+                              <MessageCircle size={14} />
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="p-6 border-t border-gray-100">
+              <button 
+                onClick={() => setGuestToolSlug(null)}
+                className="w-full py-3 bg-[#1a1a1a] text-white rounded-xl font-medium hover:bg-gray-800 transition"
+              >
+                Selesai
               </button>
             </div>
           </div>
