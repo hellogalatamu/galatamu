@@ -3,14 +3,19 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, updateDoc, doc, addDoc, deleteDoc, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Trash2, Edit, X, ExternalLink, Send, Eye, RefreshCw, MessageCircle, LayoutDashboard, Home } from "lucide-react";
+import { Trash2, Edit, X, ExternalLink, Send, Eye, RefreshCw, MessageCircle, LayoutDashboard, Home, LogOut, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { getAllInvitationsLocal, togglePaymentStatusLocal, createInvitationAdminLocal, deleteInvitationLocal, updateInvitationFullLocal } from "@/app/actions";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
   const [invitations, setInvitations] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isDummy, setIsDummy] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const router = useRouter();
   
   // New invitation form state
   const [newSlug, setNewSlug] = useState("");
@@ -69,9 +74,25 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    fetchData();
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setIsAuthorized(true);
+        fetchData();
+      } else {
+        router.push("/admin/login");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      router.push("/admin/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
 
 
 
@@ -204,8 +225,20 @@ export default function AdminDashboard() {
     }
   };
 
-  if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Memuat data...</div>;
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen bg-[#faf9f6] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+      </div>
+    );
+  }
+
+  if (isLoading && invitations.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#faf9f6] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+      </div>
+    );
   }
 
   return (
@@ -225,6 +258,12 @@ export default function AdminDashboard() {
           <Link href="/" className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl text-sm transition">
             <Home size={18} /> Landing Page
           </Link>
+          <button 
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl text-sm transition mt-4"
+          >
+            <LogOut size={18} /> Keluar (Logout)
+          </button>
         </nav>
         
         <div className="p-8">
