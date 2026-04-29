@@ -394,6 +394,7 @@ export default function AdminDashboard() {
               >
                 <option value="Semua">Semua Kategori</option>
                 <option value="Pernikahan">Pernikahan</option>
+                <option value="Lainnya">Lainnya</option>
               </select>
             </div>
           </div>
@@ -683,22 +684,20 @@ export default function AdminDashboard() {
                       <option value="midnight_01">Midnight Dark</option>
                       <option value="gold_white_01">Golden White</option>
                     </optgroup>
-                    <optgroup label="— Budaya / Adat">
-                      <option value="jawa_01">Jawa Traditional</option>
-                      <option value="minang_01">Minang Traditional</option>
-                      <option value="sunda_01">Sunda Traditional</option>
-                      <option value="batak_01">Batak Traditional</option>
-                      <option value="bali_01">Bali Traditional</option>
-                      <option value="bugis_01">Bugis Traditional</option>
-                    </optgroup>
-                    <optgroup label="— Acara Lainnya">
+                    <optgroup label="— Lainnya">
+                      <option value="jawa_01">Jawa Traditional (Adat)</option>
+                      <option value="minang_01">Minang Traditional (Adat)</option>
+                      <option value="sunda_01">Sunda Traditional (Adat)</option>
+                      <option value="batak_01">Batak Traditional (Adat)</option>
+                      <option value="bali_01">Bali Traditional (Adat)</option>
+                      <option value="bugis_01">Bugis Traditional (Adat)</option>
                       <option value="aqiqah_01">Baby Pastel Breeze (Aqiqah)</option>
                       <option value="syukuran_01">Warm Minimalist (Syukuran)</option>
                       <option value="corporate_01">Corporate Nexus</option>
                       <option value="education_01">Golden Graduation</option>
                       <option value="adult_bd_01">Luxury Minimalist (Ulang Tahun)</option>
                       <option value="kids_01">Ceria Playground (Anak)</option>
-                      <option value="sweet17_01">Midnight Glamour (Sweet 17)</option>
+                      <option value="sweet17_01">Sweet 17 Midnight</option>
                     </optgroup>
                   </select>
                 </div>

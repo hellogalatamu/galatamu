@@ -32,7 +32,7 @@ const DEMO_DATA = {
 };
 
 // Theme Catalog Data
-const CATEGORIES = ["Semua", "Pernikahan", "Adat", "Aqiqah", "Ulang Tahun"];
+const CATEGORIES = ["Semua", "Pernikahan", "Lainnya"];
 
 const THEMES: any[] = [
   {
@@ -50,34 +50,6 @@ const THEMES: any[] = [
     waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Amara Premium* dan ingin memesan undangan digital untuk pernikahan saya.\n\nBoleh saya tahu detailnya? 🙏`,
   },
   {
-    id: "jawa_01",
-    name: "Jawa Ningrat",
-    category: "Adat",
-    tagline: "Klasik, Sakral & Megah",
-    bg: "bg-[#2d1b0d]",
-    border: "border-[#8c7a6b]/30",
-    textColor: "text-[#f4efe6]",
-    tagColor: "text-[#c8973e]",
-    previewBg: "from-[#2d1b0d] to-[#4a2c16]",
-    previewText: "text-[#f4efe6]",
-    btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#2d1b0d]",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Jawa Ningrat* untuk pernikahan saya.`,
-  },
-  {
-    id: "aqiqah_01",
-    name: "Baby Pastel Breeze",
-    category: "Aqiqah",
-    tagline: "Lembut, Ceria & Menggemaskan",
-    bg: "bg-[#f0f9ff]",
-    border: "border-blue-100",
-    textColor: "text-blue-900",
-    tagColor: "text-blue-400",
-    previewBg: "from-blue-100 to-white",
-    previewText: "text-blue-600",
-    btnBorder: "border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Baby Pastel Breeze* untuk acara Aqiqah anak saya.`,
-  },
-  {
     id: "modern_01",
     name: "Modern Editorial",
     category: "Pernikahan",
@@ -92,18 +64,31 @@ const THEMES: any[] = [
     waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Modern Editorial* untuk pernikahan saya.`,
   },
   {
-    id: "sweet17_01",
-    name: "Midnight Glamour",
-    category: "Ulang Tahun",
-    tagline: "Glow, Party & Sophisticated",
+    id: "rustic_01",
+    name: "Rustic Botanical",
+    category: "Pernikahan",
+    tagline: "Klasik, Natural & Elegan",
+    bg: "bg-[#f4efe6]",
+    border: "border-[#d4c3b3]",
+    textColor: "text-[#382f27]",
+    tagColor: "text-[#8c7a6b]",
+    previewBg: "from-[#382f27] to-[#8c7a6b]",
+    previewText: "text-[#f4efe6]",
+    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Rustic Botanical* dan ingin memesan undangan digital untuk pernikahan saya.`,
+  },
+  {
+    id: "royal_01",
+    name: "Royal Baroque",
+    category: "Pernikahan",
+    tagline: "Grand, Split-Screen & Cinematic",
     bg: "bg-[#06060f]",
-    border: "border-purple-500/30",
-    textColor: "text-white",
-    tagColor: "text-purple-400",
-    previewBg: "from-[#06060f] to-[#1a1a2e]",
-    previewText: "text-purple-300",
-    btnBorder: "border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Midnight Glamour* untuk Sweet 17 saya.`,
+    border: "border-[#c8973e]/40",
+    textColor: "text-[#e8d5a3]",
+    tagColor: "text-[#c8973e]",
+    previewBg: "from-[#06060f] to-[#12102a]",
+    previewText: "text-[#e8d5a3]",
+    btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#06060f]",
+    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Royal Baroque* untuk pernikahan saya.`,
   },
   {
     id: "islamic_01",
@@ -118,9 +103,50 @@ const THEMES: any[] = [
     previewText: "text-[#fdfcf0]",
     btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#0d2b1a]",
     waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Islamic Syar'i Barakah* untuk pernikahan saya.`,
+  },
+  {
+    id: "emerald_01",
+    name: "Emerald Green Glow",
+    category: "Pernikahan",
+    tagline: "Mewah, Dalam & Elegan",
+    bg: "bg-[#022c22]",
+    border: "border-[#10b981]/20",
+    textColor: "text-white",
+    tagColor: "text-[#10b981]",
+    previewBg: "from-[#022c22] to-[#064e3b]",
+    previewText: "text-white",
+    btnBorder: "border-[#10b981] text-[#10b981] hover:bg-[#10b981] hover:text-white",
+    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Emerald Green Glow* untuk pernikahan saya.`,
+  },
+  {
+    id: "aqiqah_01",
+    name: "Baby Pastel Breeze",
+    category: "Lainnya",
+    tagline: "Lembut, Ceria & Menggemaskan",
+    bg: "bg-[#f0f9ff]",
+    border: "border-blue-100",
+    textColor: "text-blue-900",
+    tagColor: "text-blue-400",
+    previewBg: "from-blue-100 to-white",
+    previewText: "text-blue-600",
+    btnBorder: "border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white",
+    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Baby Pastel Breeze* untuk acara Aqiqah anak saya.`,
+  },
+  {
+    id: "sweet17_01",
+    name: "Midnight Glamour",
+    category: "Lainnya",
+    tagline: "Glow, Party & Sophisticated",
+    bg: "bg-[#06060f]",
+    border: "border-purple-500/30",
+    textColor: "text-white",
+    tagColor: "text-purple-400",
+    previewBg: "from-[#06060f] to-[#1a1a2e]",
+    previewText: "text-purple-300",
+    btnBorder: "border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white",
+    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Midnight Glamour* untuk Sweet 17 saya.`,
   }
 ];
-
 
 const FEATURES = [
   { icon: <Music className="w-6 h-6" />, title: "Musik Otomatis", desc: "Alunan musik indah yang berputar secara otomatis saat undangan dibuka." },
@@ -284,7 +310,7 @@ export default function LandingPage() {
                     </div>
                   </div>
 
-                  <div className={`p-8 text-center ${theme.id === 'sweet17_01' ? 'bg-[#111111] border-t border-[#333333]' : 'bg-white border-t border-gray-100'}`}>
+                  <div className={`p-8 text-center bg-white border-t border-gray-100`}>
                     <div className="flex justify-center mb-3">
                       <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-gray-100 text-gray-600 rounded-full">{theme.category}</span>
                     </div>
