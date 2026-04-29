@@ -1,0 +1,525 @@
+"use client";
+
+import { useState, useEffect, Suspense } from "react";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
+import { CheckCircle, ExternalLink, Share2, Copy } from "lucide-react";
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { InvitationData } from "@/components/themes/AmaraTheme";
+import PhotoUpload from "@/components/PhotoUpload";
+
+import { getInvitationLocal, updateInvitationLocal } from "@/app/actions";
+
+function EditForm() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  
+  const slug = params?.slug as string;
+  const token = searchParams?.get("token");
+
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [docId, setDocId] = useState<string | null>(null);
+  const [formData, setFormData] = useState<InvitationData | null>(null);
+  const [isLocalDb, setIsLocalDb] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    async function validateAndFetch() {
+      if (!slug || !token) {
+        setError("Error 401: Unauthorized (Token or Slug missing)");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const isDummy = !process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === "dummy-api-key";
+        let dataToUse: any = null;
+
+        if (!isDummy) {
+          const q = query(collection(db, "invitations"), where("slug", "==", slug));
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            const document = querySnapshot.docs[0];
+            dataToUse = document.data();
+            setDocId(document.id);
+          }
+        }
+
+        if (!dataToUse) {
+          dataToUse = await getInvitationLocal(slug);
+          if (dataToUse) setIsLocalDb(true);
+        }
+
+        if (!dataToUse) {
+          setError("Undangan tidak ditemukan.");
+          setIsLoading(false);
+          return;
+        }
+
+        if (dataToUse.edit_token !== token) {
+          setError("Error 401: Unauthorized (Invalid Token)");
+          setIsLoading(false);
+          return;
+        }
+
+        setFormData(dataToUse as InvitationData);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setError("Gagal memuat data. Periksa koneksi.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    validateAndFetch();
+  }, [slug, token]);
+
+  const handleBrideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!formData) return;
+    const { name, value } = e.target;
+    setFormData(prev => prev ? ({
+      ...prev,
+      bride_data: {
+        ...prev.bride_data,
+        [name]: value
+      }
+    }) : prev);
+  };
+
+  const handleEventChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!formData) return;
+    const { name, value } = e.target;
+    setFormData(prev => prev ? ({
+      ...prev,
+      event_data: {
+        ...prev.event_data,
+        [name]: value
+      }
+    }) : prev);
+  };
+
+  const handleUpdate = async () => {
+    if (!formData) return;
+    setIsSaving(true);
+    try {
+      if (isLocalDb) {
+        await updateInvitationLocal(slug, {
+          bride_data: formData.bride_data,
+          event_data: formData.event_data,
+          category: formData.category || "Pernikahan",
+          hero_image: formData.hero_image || "",
+          bg_middle: formData.bg_middle || "",
+          bg_bottom: formData.bg_bottom || "",
+          groom_photo: formData.groom_photo || "",
+          bride_photo: formData.bride_photo || "",
+          gallery: formData.gallery || [],
+          love_story: formData.love_story || [],
+          gifts: formData.gifts || [],
+          video: formData.video || "",
+          music_url: formData.music_url || "",
+          quote: formData.quote || "",
+        });
+      } else if (docId) {
+        const docRef = doc(db, "invitations", docId);
+        await updateDoc(docRef, {
+          bride_data: formData.bride_data,
+          event_data: formData.event_data,
+          category: formData.category || "Pernikahan",
+          hero_image: formData.hero_image || "",
+          bg_middle: formData.bg_middle || "",
+          bg_bottom: formData.bg_bottom || "",
+          groom_photo: formData.groom_photo || "",
+          bride_photo: formData.bride_photo || "",
+          gallery: formData.gallery || [],
+          love_story: formData.love_story || [],
+          gifts: formData.gifts || [],
+          video: formData.video || "",
+          music_url: formData.music_url || "",
+          quote: formData.quote || "",
+        });
+      }
+      setSaveSuccess(true); // Show success screen
+    } catch (err) {
+      console.error("Update error:", err);
+      alert("Gagal memperbarui data. Coba lagi.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const invitationUrl = typeof window !== 'undefined' ? `${window.location.origin}/${slug}` : `/${slug}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(invitationUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#faf9f6]">
+        <div className="text-center">
+          <div className="w-10 h-10 border-2 border-[#1a1a1a] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-500 font-light">Memvalidasi akses...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !formData) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#faf9f6] px-6 text-center">
+        <div className="text-8xl mb-6">🔒</div>
+        <h1 className="font-serif text-3xl font-bold text-[#1a1a1a] mb-3">Akses Ditolak</h1>
+        <p className="text-gray-500 font-light max-w-sm">{error || "Link tidak valid atau sudah kadaluarsa."}</p>
+      </div>
+    );
+  }
+
+  // SUCCESS SCREEN after save
+  if (saveSuccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#faf9f6] px-6">
+        <div className="max-w-md w-full text-center">
+          <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-10 h-10 text-green-500" />
+          </div>
+          <h1 className="font-serif text-3xl font-bold text-[#1a1a1a] mb-3">Data Berhasil Disimpan!</h1>
+          <p className="text-gray-500 font-light mb-8">
+            Undangan atas nama <strong className="text-[#1a1a1a]">{formData.bride_data.groom} & {formData.bride_data.bride}</strong> sudah diperbarui dan siap disebarkan.
+          </p>
+
+          {/* Link Box */}
+          <div className="bg-white border border-gray-200 rounded-2xl p-4 mb-6">
+            <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">Link Undangan Anda</p>
+            <div className="flex gap-2 items-center">
+              <input
+                readOnly
+                value={invitationUrl}
+                className="flex-1 text-sm text-[#1a1a1a] bg-gray-50 px-3 py-2 rounded-xl border border-gray-100 font-mono"
+              />
+              <button
+                onClick={handleCopy}
+                className="p-2 bg-[#1a1a1a] text-white rounded-xl hover:bg-gray-800 transition"
+                title="Salin link"
+              >
+                <Copy size={16} />
+              </button>
+            </div>
+            {copied && <p className="text-xs text-green-500 mt-2">✓ Link berhasil disalin!</p>}
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={invitationUrl}
+              target="_blank"
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-[#1a1a1a] text-white rounded-xl font-medium hover:bg-gray-800 transition"
+            >
+              <ExternalLink size={18} /> Lihat Undangan
+            </a>
+            <button
+              onClick={() => {
+                if (navigator.share) {
+                  navigator.share({ title: `Undangan ${formData.bride_data.groom} & ${formData.bride_data.bride}`, url: invitationUrl });
+                } else {
+                  handleCopy();
+                }
+              }}
+              className="flex-1 flex items-center justify-center gap-2 py-3 border border-[#1a1a1a] text-[#1a1a1a] rounded-xl font-medium hover:bg-gray-50 transition"
+            >
+              <Share2 size={18} /> Bagikan
+            </button>
+          </div>
+
+          <button
+            onClick={() => setSaveSuccess(false)}
+            className="mt-4 text-sm text-gray-400 hover:text-gray-600 transition underline"
+          >
+            Edit ulang data
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-12 px-6 text-[#1a1a1a]">
+      <div className="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
+        <h1 className="text-3xl font-serif font-bold mb-2">Edit Undangan</h1>
+        <p className="text-gray-500 mb-8 font-light">Perbarui data undangan Anda (Slug: {slug})</p>
+
+        <div className="space-y-8">
+          {/* Section Kategori */}
+          <section>
+            <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Kategori Undangan</h2>
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Kategori</label>
+              <select 
+                value={formData.category || "Pernikahan"} 
+                onChange={(e) => setFormData(prev => prev ? ({ ...prev, category: e.target.value }) : prev)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none bg-white"
+              >
+                <option value="Pernikahan">Pernikahan & Pertunangan</option>
+              </select>
+            </div>
+          </section>
+
+          {/* Section Mempelai */}
+          <section>
+            <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Data Pemilik Acara (Mempelai/Yang Merayakan)</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Nama Pria</label>
+                <input type="text" name="groom" value={formData.bride_data.groom} onChange={handleBrideChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Nama Wanita</label>
+                <input type="text" name="bride" value={formData.bride_data.bride} onChange={handleBrideChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-sm text-gray-600 mb-1">Nama Orang Tua Pria</label>
+                <input type="text" name="parents_groom" value={formData.bride_data.parents_groom} onChange={handleBrideChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+              </div>
+              <div className="col-span-2">
+                <label className="block text-sm text-gray-600 mb-1">Nama Orang Tua Wanita</label>
+                <input type="text" name="parents_bride" value={formData.bride_data.parents_bride} onChange={handleBrideChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Instagram Pria</label>
+                <input type="text" name="groom_ig" value={formData.bride_data.groom_ig || ''} onChange={handleBrideChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="username_ig" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Instagram Wanita</label>
+                <input type="text" name="bride_ig" value={formData.bride_data.bride_ig || ''} onChange={handleBrideChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="username_ig" />
+              </div>
+            </div>
+          </section>
+
+          {/* Section Acara */}
+          <section>
+            <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Detail Acara</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Tanggal Acara</label>
+                <input type="date" name="date" value={formData.event_data.date} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Waktu Akad</label>
+                  <input type="text" name="akad_time" value={formData.event_data.akad_time} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Waktu Resepsi</label>
+                  <input type="text" name="resepsi_time" value={formData.event_data.resepsi_time} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Lokasi Akad</label>
+                  <input type="text" name="akad_location" value={formData.event_data.akad_location} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Lokasi Resepsi</label>
+                  <input type="text" name="resepsi_location" value={formData.event_data.resepsi_location} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Link Maps Akad</label>
+                  <input type="text" name="akad_map" value={formData.event_data.akad_map || ''} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="https://maps.app.goo.gl/..." />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Link Maps Resepsi</label>
+                  <input type="text" name="resepsi_map" value={formData.event_data.resepsi_map || ''} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="https://maps.app.goo.gl/..." />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Link Live Streaming (Opsional)</label>
+                <input type="text" name="live_stream" value={formData.event_data.live_stream || ''} onChange={handleEventChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="https://youtube.com/live/..." />
+              </div>
+            </div>
+          </section>
+
+          {/* Section Tambahan: Video, Musik & Quotes */}
+          <section>
+            <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Konten Tambahan</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Link Video YouTube (Opsional)</label>
+                <input type="text" value={formData.video || ''} onChange={(e) => setFormData(prev => prev ? ({ ...prev, video: e.target.value }) : prev)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="https://youtube.com/watch?v=..." />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Link Musik (URL MP3)</label>
+                <input type="text" value={formData.music_url || ''} onChange={(e) => setFormData(prev => prev ? ({ ...prev, music_url: e.target.value }) : prev)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="https://domain.com/musik.mp3" />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Quote / Ayat Suci</label>
+                <textarea value={formData.quote || ''} onChange={(e) => setFormData(prev => prev ? ({ ...prev, quote: e.target.value }) : prev)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" rows={3} placeholder="Tuliskan kata mutiara atau ayat suci..."></textarea>
+              </div>
+            </div>
+          </section>
+
+          {/* Section Media */}
+          <section>
+            <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Media & Foto</h2>
+            <div className="space-y-6">
+              <PhotoUpload 
+                label="Background Utama (Hero/Cover)" 
+                value={formData.hero_image} 
+                onChange={(base64) => setFormData(prev => prev ? ({ ...prev, hero_image: base64 }) : prev)}
+                onClear={() => setFormData(prev => prev ? ({ ...prev, hero_image: "" }) : prev)}
+              />
+              <div className="grid grid-cols-2 gap-6">
+                <PhotoUpload 
+                  label="Background Tengah (Mempelai/Acara)" 
+                  value={formData.bg_middle} 
+                  onChange={(base64) => setFormData(prev => prev ? ({ ...prev, bg_middle: base64 }) : prev)}
+                  onClear={() => setFormData(prev => prev ? ({ ...prev, bg_middle: "" }) : prev)}
+                />
+                <PhotoUpload 
+                  label="Background Bawah (RSVP/Footer)" 
+                  value={formData.bg_bottom} 
+                  onChange={(base64) => setFormData(prev => prev ? ({ ...prev, bg_bottom: base64 }) : prev)}
+                  onClear={() => setFormData(prev => prev ? ({ ...prev, bg_bottom: "" }) : prev)}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-6">
+                <PhotoUpload 
+                  label="Foto Mempelai Pria" 
+                  value={formData.groom_photo} 
+                  onChange={(base64) => setFormData(prev => prev ? ({ ...prev, groom_photo: base64 }) : prev)}
+                  onClear={() => setFormData(prev => prev ? ({ ...prev, groom_photo: "" }) : prev)}
+                />
+                <PhotoUpload 
+                  label="Foto Mempelai Wanita" 
+                  value={formData.bride_photo} 
+                  onChange={(base64) => setFormData(prev => prev ? ({ ...prev, bride_photo: base64 }) : prev)}
+                  onClear={() => setFormData(prev => prev ? ({ ...prev, bride_photo: "" }) : prev)}
+                />
+              </div>
+
+              {/* Gallery Section */}
+              <div className="pt-4 border-t border-gray-100">
+                <h3 className="text-sm font-medium text-gray-700 mb-4">Galeri Foto (Maksimal 6 Foto)</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  {[0, 1, 2, 3, 4, 5].map((index) => (
+                    <PhotoUpload 
+                      key={index}
+                      label={`Foto ${index + 1}`} 
+                      value={formData.gallery?.[index]} 
+                      onChange={(base64) => {
+                        if (!formData) return;
+                        const newGallery = [...(formData.gallery || [])];
+                        newGallery[index] = base64;
+                        setFormData(prev => prev ? ({ ...prev, gallery: newGallery }) : prev);
+                      }}
+                      onClear={() => {
+                        if (!formData) return;
+                        const newGallery = [...(formData.gallery || [])];
+                        newGallery[index] = "";
+                        setFormData(prev => prev ? ({ ...prev, gallery: newGallery }) : prev);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              <p className="text-[10px] text-gray-400 italic text-center">*Foto akan disimpan secara otomatis di database undangan Anda.</p>
+            </div>
+          </section>
+
+          {/* Section Love Story */}
+          <section>
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+              <h2 className="text-xl font-medium">Love Story</h2>
+              <button onClick={() => setFormData(prev => prev ? ({ ...prev, love_story: [...(prev.love_story || []), { year: "", title: "", desc: "" }] }) : prev)} className="text-xs px-3 py-1 bg-gray-100 rounded-full hover:bg-gray-200">+ Tambah Cerita</button>
+            </div>
+            <div className="space-y-4">
+              {formData.love_story?.map((story, idx) => (
+                <div key={idx} className="p-4 border border-gray-200 rounded-xl relative">
+                  <button onClick={() => setFormData(prev => prev ? ({ ...prev, love_story: prev.love_story?.filter((_, i) => i !== idx) }) : prev)} className="absolute top-2 right-2 text-gray-400 hover:text-red-500">×</button>
+                  <div className="grid grid-cols-3 gap-2 mb-2">
+                    <input type="text" value={story.year} onChange={(e) => {
+                      if (!formData) return;
+                      const newStory = [...(formData.love_story || [])];
+                      newStory[idx].year = e.target.value;
+                      setFormData(prev => prev ? ({ ...prev, love_story: newStory }) : prev);
+                    }} placeholder="Tahun" className="col-span-1 px-3 py-1 border border-gray-200 rounded-lg focus:outline-none text-sm" />
+                    <input type="text" value={story.title} onChange={(e) => {
+                      if (!formData) return;
+                      const newStory = [...(formData.love_story || [])];
+                      newStory[idx].title = e.target.value;
+                      setFormData(prev => prev ? ({ ...prev, love_story: newStory }) : prev);
+                    }} placeholder="Judul Momen" className="col-span-2 px-3 py-1 border border-gray-200 rounded-lg focus:outline-none text-sm" />
+                  </div>
+                  <textarea value={story.desc} onChange={(e) => {
+                    if (!formData) return;
+                    const newStory = [...(formData.love_story || [])];
+                    newStory[idx].desc = e.target.value;
+                    setFormData(prev => prev ? ({ ...prev, love_story: newStory }) : prev);
+                  }} placeholder="Cerita singkat..." className="w-full px-3 py-1 border border-gray-200 rounded-lg focus:outline-none text-sm" rows={2}></textarea>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Section Digital Gift */}
+          <section>
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+              <h2 className="text-xl font-medium">Amplop Digital</h2>
+              <button onClick={() => setFormData(prev => prev ? ({ ...prev, gifts: [...(prev.gifts || []), { bank: "", acc: "", name: "" }] }) : prev)} className="text-xs px-3 py-1 bg-gray-100 rounded-full hover:bg-gray-200">+ Tambah Rekening</button>
+            </div>
+            <div className="space-y-4">
+              {formData.gifts?.map((gift, idx) => (
+                <div key={idx} className="p-4 border border-gray-200 rounded-xl relative">
+                  <button onClick={() => setFormData(prev => prev ? ({ ...prev, gifts: prev.gifts?.filter((_, i) => i !== idx) }) : prev)} className="absolute top-2 right-2 text-gray-400 hover:text-red-500">×</button>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input type="text" value={gift.bank} onChange={(e) => {
+                      if (!formData) return;
+                      const newGifts = [...(formData.gifts || [])];
+                      newGifts[idx].bank = e.target.value;
+                      setFormData(prev => prev ? ({ ...prev, gifts: newGifts }) : prev);
+                    }} placeholder="Nama Bank/E-Wallet" className="px-3 py-1 border border-gray-200 rounded-lg focus:outline-none text-sm" />
+                    <input type="text" value={gift.acc} onChange={(e) => {
+                      if (!formData) return;
+                      const newGifts = [...(formData.gifts || [])];
+                      newGifts[idx].acc = e.target.value;
+                      setFormData(prev => prev ? ({ ...prev, gifts: newGifts }) : prev);
+                    }} placeholder="Nomor Rekening" className="px-3 py-1 border border-gray-200 rounded-lg focus:outline-none text-sm" />
+                    <input type="text" value={gift.name} onChange={(e) => {
+                      if (!formData) return;
+                      const newGifts = [...(formData.gifts || [])];
+                      newGifts[idx].name = e.target.value;
+                      setFormData(prev => prev ? ({ ...prev, gifts: newGifts }) : prev);
+                    }} placeholder="Atas Nama" className="col-span-2 px-3 py-1 border border-gray-200 rounded-lg focus:outline-none text-sm" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <button 
+            onClick={handleUpdate}
+            disabled={isSaving}
+            className="w-full py-4 mt-4 bg-[#1a1a1a] text-white rounded-xl font-medium tracking-wide hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md"
+          >
+            {isSaving ? "Menyimpan..." : "Simpan Perubahan"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function MagicLinkEditor() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Memuat...</div>}>
+      <EditForm />
+    </Suspense>
+  );
+}

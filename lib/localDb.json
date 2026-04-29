@@ -1,0 +1,23 @@
+[
+  {
+    "theme_id": "amara_01",
+    "category": "Pernikahan",
+    "bride_data": {
+      "groom": "Imam",
+      "bride": "Dewi",
+      "parents_groom": "",
+      "parents_bride": ""
+    },
+    "event_data": {
+      "date": "",
+      "akad_time": "",
+      "akad_location": "",
+      "resepsi_time": "",
+      "resepsi_location": ""
+    },
+    "slug": "imam-dewi-728",
+    "is_paid": false,
+    "edit_token": "81a76467-2075-4a0c-9851-0659e333af3e",
+    "createdAt": "2026-04-27T05:35:20.322Z"
+  }
+]
