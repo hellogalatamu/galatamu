@@ -32,7 +32,7 @@ const DEMO_DATA = {
 };
 
 // Theme Catalog Data
-const CATEGORIES = ["Semua", "Pernikahan", "Lainnya"];
+const CATEGORIES = ["Semua", "Pernikahan"];
 
 const THEMES: any[] = [
   {
@@ -117,34 +117,6 @@ const THEMES: any[] = [
     previewText: "text-white",
     btnBorder: "border-[#10b981] text-[#10b981] hover:bg-[#10b981] hover:text-white",
     waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Emerald Green Glow* untuk pernikahan saya.`,
-  },
-  {
-    id: "aqiqah_01",
-    name: "Baby Pastel Breeze",
-    category: "Lainnya",
-    tagline: "Lembut, Ceria & Menggemaskan",
-    bg: "bg-[#f0f9ff]",
-    border: "border-blue-100",
-    textColor: "text-blue-900",
-    tagColor: "text-blue-400",
-    previewBg: "from-blue-100 to-white",
-    previewText: "text-blue-600",
-    btnBorder: "border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Baby Pastel Breeze* untuk acara Aqiqah anak saya.`,
-  },
-  {
-    id: "sweet17_01",
-    name: "Midnight Glamour",
-    category: "Lainnya",
-    tagline: "Glow, Party & Sophisticated",
-    bg: "bg-[#06060f]",
-    border: "border-purple-500/30",
-    textColor: "text-white",
-    tagColor: "text-purple-400",
-    previewBg: "from-[#06060f] to-[#1a1a2e]",
-    previewText: "text-purple-300",
-    btnBorder: "border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Midnight Glamour* untuk Sweet 17 saya.`,
   }
 ];
 

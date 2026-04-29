@@ -394,7 +394,6 @@ export default function AdminDashboard() {
               >
                 <option value="Semua">Semua Kategori</option>
                 <option value="Pernikahan">Pernikahan</option>
-                <option value="Lainnya">Lainnya</option>
               </select>
             </div>
           </div>
