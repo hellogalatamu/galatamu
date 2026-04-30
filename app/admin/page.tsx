@@ -394,6 +394,9 @@ export default function AdminDashboard() {
                   <option value="midnight_01">Midnight Dark</option>
                   <option value="gold_white_01">Golden White</option>
                   <option value="jawa_01">Jawa Traditional</option>
+                  <option value="jawa_02">Jawa Jogja Royal</option>
+                  <option value="jawa_03">Jawa Solo Classic</option>
+                  <option value="jawa_04">Jawa Modern Minimalist</option>
                   <option value="minang_01">Minang Traditional</option>
                   <option value="sunda_01">Sunda Traditional</option>
                   <option value="batak_01">Batak Traditional</option>
@@ -516,6 +519,9 @@ export default function AdminDashboard() {
                   'emerald_01': 'Emerald Green Glow',
                   'vintage_01': 'Vintage Elegance',
                   'jawa_01': 'Jawa Traditional',
+                  'jawa_02': 'Jawa Jogja Royal',
+                  'jawa_03': 'Jawa Solo Classic',
+                  'jawa_04': 'Jawa Modern Minimalist',
                   'minang_01': 'Minang Traditional',
                   'sunda_01': 'Sunda Traditional',
                   'batak_01': 'Batak Traditional',
@@ -793,6 +799,9 @@ export default function AdminDashboard() {
                     </optgroup>
                     <optgroup label="— Lainnya">
                       <option value="jawa_01">Jawa Traditional (Adat)</option>
+                      <option value="jawa_02">Jawa Jogja Royal</option>
+                      <option value="jawa_03">Jawa Solo Classic</option>
+                      <option value="jawa_04">Jawa Modern Minimalist</option>
                       <option value="minang_01">Minang Traditional (Adat)</option>
                       <option value="sunda_01">Sunda Traditional (Adat)</option>
                       <option value="batak_01">Batak Traditional (Adat)</option>

@@ -12,6 +12,9 @@ import ModernTheme from "./themes/ModernTheme";
 import VintageTheme from "./themes/VintageTheme";
 import RoyalTheme from "./themes/RoyalTheme";
 import JawaTheme from "./themes/JawaTheme";
+import JawaJogjaTheme from "./themes/JawaJogjaTheme";
+import JawaSoloTheme from "./themes/JawaSoloTheme";
+import JawaModernTheme from "./themes/JawaModernTheme";
 import MinangTheme from "./themes/MinangTheme";
 import IslamicTheme from "./themes/IslamicTheme";
 import SundaTheme from "./themes/SundaTheme";
@@ -63,6 +66,12 @@ export default function ThemeRegistry({ themeId, data, guestName, previewMode }:
       return <RoyalTheme data={data} guestName={guestName} previewMode={previewMode} />;
     case "jawa_01":
       return <JawaTheme data={data} guestName={guestName} previewMode={previewMode} />;
+    case "jawa_02":
+      return <JawaJogjaTheme data={data} guestName={guestName} previewMode={previewMode} />;
+    case "jawa_03":
+      return <JawaSoloTheme data={data} guestName={guestName} previewMode={previewMode} />;
+    case "jawa_04":
+      return <JawaModernTheme data={data} guestName={guestName} previewMode={previewMode} />;
     case "minang_01":
       return <MinangTheme data={data} guestName={guestName} previewMode={previewMode} />;
     case "islamic_01":
