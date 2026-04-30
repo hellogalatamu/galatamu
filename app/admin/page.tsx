@@ -296,7 +296,7 @@ export default function AdminDashboard() {
       <aside className={`w-64 bg-[#1a1a1a] text-white fixed h-full flex flex-col shadow-2xl z-30 border-r border-[#333] transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
         <div className="p-8 hidden lg:block">
           <h1 className="font-serif text-3xl font-bold italic tracking-wide">Galatamu.</h1>
-          <p className="text-xs text-gray-400 mt-2 uppercase tracking-widest font-medium">Admin Panel v1.1</p>
+          <p className="text-xs text-gray-400 mt-2 uppercase tracking-widest font-medium">Admin Panel v1.2</p>
         </div>
         
         <nav className="flex-1 px-4 space-y-2 mt-20 lg:mt-8">
