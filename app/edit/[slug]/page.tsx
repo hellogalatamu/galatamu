@@ -7,6 +7,8 @@ import { collection, query, where, getDocs, updateDoc, doc } from "firebase/fire
 import { db } from "@/lib/firebase";
 import { InvitationData } from "@/components/themes/AmaraTheme";
 import PhotoUpload from "@/components/PhotoUpload";
+import { musicLibrary } from "@/lib/musicLibrary";
+import { Music, Play, Pause } from "lucide-react";
 
 import { getInvitationLocal, updateInvitationLocal } from "@/app/actions";
 
@@ -26,6 +28,30 @@ function EditForm() {
   const [formData, setFormData] = useState<InvitationData | null>(null);
   const [isLocalDb, setIsLocalDb] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [audioPreview, setAudioPreview] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioPreview) {
+        audioPreview.pause();
+      }
+    };
+  }, [audioPreview]);
+
+  const togglePreview = (url: string, id: string) => {
+    if (playingId === id) {
+      audioPreview?.pause();
+      setPlayingId(null);
+    } else {
+      if (audioPreview) audioPreview.pause();
+      const newAudio = new Audio(url);
+      newAudio.play();
+      setAudioPreview(newAudio);
+      setPlayingId(id);
+      newAudio.onended = () => setPlayingId(null);
+    }
+  };
 
   useEffect(() => {
     async function validateAndFetch() {
@@ -354,8 +380,47 @@ function EditForm() {
                 <input type="text" value={formData.video || ''} onChange={(e) => setFormData(prev => prev ? ({ ...prev, video: e.target.value }) : prev)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="https://youtube.com/watch?v=..." />
               </div>
               <div>
-                <label className="block text-sm text-gray-600 mb-1">Link Musik (URL MP3)</label>
-                <input type="text" value={formData.music_url || ''} onChange={(e) => setFormData(prev => prev ? ({ ...prev, music_url: e.target.value }) : prev)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none" placeholder="https://domain.com/musik.mp3" />
+                <label className="block text-sm text-gray-600 mb-1">Pilih dari Galatamu Music Library</label>
+                <div className="grid grid-cols-1 gap-2 mb-4">
+                  <select 
+                    onChange={(e) => {
+                      const track = musicLibrary.find(t => t.id === e.target.value);
+                      if (track) {
+                        setFormData(prev => prev ? ({ ...prev, music_url: track.url }) : prev);
+                      }
+                    }}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none bg-white text-sm"
+                  >
+                    <option value="">-- Pilih Lagu --</option>
+                    {["Pernikahan", "Tradisional", "Islami", "Modern", "Lainnya"].map(cat => (
+                      <optgroup key={cat} label={cat}>
+                        {musicLibrary.filter(t => t.category === cat).map(track => (
+                          <option key={track.id} value={track.id}>{track.title} - {track.artist}</option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
+                </div>
+                
+                <label className="block text-sm text-gray-600 mb-1">Link Musik (URL MP3 Kustom)</label>
+                <div className="flex gap-2">
+                  <input 
+                    type="text" 
+                    value={formData.music_url || ''} 
+                    onChange={(e) => setFormData(prev => prev ? ({ ...prev, music_url: e.target.value }) : prev)} 
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none text-sm" 
+                    placeholder="https://domain.com/musik.mp3" 
+                  />
+                  {formData.music_url && (
+                    <button 
+                      onClick={() => togglePreview(formData.music_url!, "custom")}
+                      className={`p-2 rounded-lg transition ${playingId === "custom" ? "bg-red-50 text-red-500" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                    >
+                      {playingId === "custom" ? <Pause size={18} /> : <Play size={18} />}
+                    </button>
+                  )}
+                </div>
+                <p className="text-[10px] text-gray-400 mt-1 italic">*Anda bisa memilih dari library atau memasukkan link MP3 kustom.</p>
               </div>
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Quote / Ayat Suci</label>

@@ -9,6 +9,8 @@ import { getAllInvitationsLocal, togglePaymentStatusLocal, createInvitationAdmin
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import { musicLibrary } from "@/lib/musicLibrary";
+import { Music, Play, Pause } from "lucide-react";
 
 export default function AdminDashboard() {
   const [invitations, setInvitations] = useState<any[]>([]);
@@ -34,6 +36,28 @@ export default function AdminDashboard() {
   // Guest Tool state
   const [guestToolSlug, setGuestToolSlug] = useState<string | null>(null);
   const [guestNames, setGuestNames] = useState("");
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [audioPreview, setAudioPreview] = useState<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (audioPreview) audioPreview.pause();
+    };
+  }, [audioPreview]);
+
+  const togglePreview = (url: string, id: string) => {
+    if (playingId === id) {
+      audioPreview?.pause();
+      setPlayingId(null);
+    } else {
+      if (audioPreview) audioPreview.pause();
+      const newAudio = new Audio(url);
+      newAudio.play();
+      setAudioPreview(newAudio);
+      setPlayingId(id);
+      newAudio.onended = () => setPlayingId(null);
+    }
+  };
 
   const filteredInvitations = invitations.filter((inv) => {
     const matchesSearch = 
@@ -751,6 +775,54 @@ export default function AdminDashboard() {
                       <option value="sweet17_01">Sweet 17 Midnight</option>
                     </optgroup>
                   </select>
+                </div>
+              </section>
+
+              {/* Musik */}
+              <section>
+                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Pengaturan Musik</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 uppercase">Pilih dari Library</label>
+                    <select 
+                      onChange={(e) => {
+                        const track = musicLibrary.find(t => t.id === e.target.value);
+                        if (track) {
+                          setEditingItem({ ...editingItem, music_url: track.url });
+                        }
+                      }}
+                      className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none bg-white text-sm"
+                    >
+                      <option value="">-- Pilih Lagu --</option>
+                      {["Pernikahan", "Tradisional", "Islami", "Modern", "Lainnya"].map(cat => (
+                        <optgroup key={cat} label={cat}>
+                          {musicLibrary.filter(t => t.category === cat).map(track => (
+                            <option key={track.id} value={track.id}>{track.title} - {track.artist}</option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1 uppercase">URL Musik Kustom</label>
+                    <div className="flex gap-2">
+                      <input 
+                        type="text" 
+                        value={editingItem.music_url || ""} 
+                        onChange={(e) => setEditingItem({ ...editingItem, music_url: e.target.value })}
+                        placeholder="https://domain.com/musik.mp3"
+                        className="flex-1 px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none text-sm"
+                      />
+                      {editingItem.music_url && (
+                        <button 
+                          onClick={() => togglePreview(editingItem.music_url!, "admin-preview")}
+                          className={`p-2 rounded-xl transition ${playingId === "admin-preview" ? "bg-red-50 text-red-500" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                        >
+                          {playingId === "admin-preview" ? <Pause size={16} /> : <Play size={16} />}
+                        </button>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </section>
             </div>
