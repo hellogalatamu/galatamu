@@ -172,26 +172,37 @@ export default function AdminDashboard() {
     setIsCreating(false);
   };
 
-  const handleDelete = async (slug: string) => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus undangan ini?")) return;
+  const handleDelete = async (inv: any) => {
+    if (!window.confirm(`Apakah Anda yakin ingin menghapus undangan "${inv.slug || 'tanpa nama'}"?`)) return;
     
     if (isDummy) {
-      const result = await deleteInvitationLocal(slug);
+      const result = await deleteInvitationLocal(inv.slug);
       if (result === true) {
-        setInvitations(prev => prev.filter(inv => inv.slug !== slug));
+        setInvitations(prev => prev.filter(item => item.slug !== inv.slug));
         alert("Undangan berhasil dihapus.");
       } else {
         alert("Gagal menghapus undangan lokal: " + result);
       }
     } else {
       try {
-        const invToDelete = invitations.find(inv => inv.slug === slug);
-        if (invToDelete && invToDelete.id) {
-          await deleteDoc(doc(db, "invitations", invToDelete.id));
-          setInvitations(prev => prev.filter(inv => inv.slug !== slug));
+        // Use ID directly if available, otherwise fallback to finding by slug
+        const idToDelete = inv.id;
+        
+        if (idToDelete) {
+          await deleteDoc(doc(db, "invitations", idToDelete));
+          setInvitations(prev => prev.filter(item => item.id !== idToDelete));
           alert("Undangan berhasil dihapus.");
+        } else if (inv.slug) {
+          const found = invitations.find(i => i.slug === inv.slug);
+          if (found && found.id) {
+            await deleteDoc(doc(db, "invitations", found.id));
+            setInvitations(prev => prev.filter(item => item.id !== found.id));
+            alert("Undangan berhasil dihapus.");
+          } else {
+            alert("Data tidak ditemukan di Firebase.");
+          }
         } else {
-          alert("Data tidak ditemukan di Firebase.");
+          alert("Data tidak memiliki ID atau Slug yang valid.");
         }
       } catch (err) {
         console.error("Failed to delete from Firebase", err);
@@ -598,7 +609,7 @@ export default function AdminDashboard() {
                               <Edit size={15} />
                             </button>
                             <button
-                              onClick={() => handleDelete(inv.slug)}
+                              onClick={() => handleDelete(inv)}
                               className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
                               title="Hapus Undangan"
                             >

@@ -180,6 +180,7 @@ export async function deleteInvitationLocal(slug: string): Promise<boolean | str
     const newDb = db.filter((item: any) => item.slug !== slug);
     if (db.length === newDb.length) return "Slug tidak ditemukan di database";
     await fs.writeFile(filePath, JSON.stringify(newDb, null, 2));
+    revalidatePath('/admin');
     return true;
   } catch (e: any) {
     console.error("Delete failed:", e);
