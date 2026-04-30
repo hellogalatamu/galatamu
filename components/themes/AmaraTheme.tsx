@@ -181,7 +181,7 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
             <div className="relative z-10">
               <FadeIn><p className="tracking-widest uppercase text-sm mb-4 text-gray-500">We Are Getting Married</p></FadeIn>
               <FadeIn delay={0.2}>
-                <h2 className="font-serif text-6xl md:text-8xl font-bold mb-6">{data.bride_data.groom || "Groom"} & {data.bride_data.bride || "Bride"}</h2>
+                <h2 className="font-serif text-4xl sm:text-6xl md:text-8xl font-bold mb-6 px-4">{data.bride_data.groom || "Groom"} & {data.bride_data.bride || "Bride"}</h2>
               </FadeIn>
               <FadeIn delay={0.4}>
                 <p className="text-lg text-gray-600 italic font-serif mb-12">

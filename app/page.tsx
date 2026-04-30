@@ -212,15 +212,18 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Mobile Nav */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-20 left-0 w-full bg-white border-b border-gray-100 py-4 px-6 flex flex-col gap-4 shadow-xl">
-            <a href="#beranda" onClick={() => setIsMobileMenuOpen(false)} className="text-[#1a1a1a] font-medium py-2 uppercase tracking-wide text-sm">Beranda</a>
-            <a href="#fitur" onClick={() => setIsMobileMenuOpen(false)} className="text-[#1a1a1a] font-medium py-2 uppercase tracking-wide text-sm">Fitur</a>
-            <a href="#katalog" onClick={() => setIsMobileMenuOpen(false)} className="text-[#1a1a1a] font-medium py-2 uppercase tracking-wide text-sm">Katalog Tema</a>
-            <Link href="/editor" className="mt-2 text-center w-full py-3 bg-[#1a1a1a] text-white rounded-full font-medium uppercase tracking-wide text-sm">Buat Undangan</Link>
-          </div>
-        )}
+        {/* Mobile Nav Overlay */}
+        <div className={`md:hidden fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center gap-8 transition-all duration-500 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+          <button className="absolute top-6 right-6 p-2 text-[#1a1a1a]" onClick={() => setIsMobileMenuOpen(false)}>
+            <X size={32} />
+          </button>
+          <a href="#beranda" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Beranda</a>
+          <a href="#fitur" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Fitur</a>
+          <a href="#katalog" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Katalog Tema</a>
+          <Link href="/editor" onClick={() => setIsMobileMenuOpen(false)} className="mt-4 px-10 py-4 bg-[#1a1a1a] text-white rounded-full font-bold uppercase tracking-widest text-sm shadow-xl">
+            Buat Undangan
+          </Link>
+        </div>
       </nav>
 
       {/* Hero Section */}
@@ -238,8 +241,8 @@ export default function LandingPage() {
             </span>
           </FadeIn>
           <FadeIn delay={0.2}>
-            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-[#1a1a1a] leading-tight">
-              Sempurnakan <br className="hidden md:block"/>Hari Bahagia Anda.
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-[#1a1a1a] leading-tight px-2">
+              Sempurnakan <br className="hidden sm:block"/>Hari Bahagia Anda.
             </h1>
           </FadeIn>
           <FadeIn delay={0.4}>
@@ -298,12 +301,12 @@ export default function LandingPage() {
               </p>
               
               {/* Category Filter */}
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 px-4">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all ${
+                    className={`px-5 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
                       activeCategory === cat 
                         ? "bg-[#1a1a1a] text-white shadow-md" 
                         : "bg-white text-gray-500 border border-gray-200 hover:bg-gray-50 hover:text-[#1a1a1a]"

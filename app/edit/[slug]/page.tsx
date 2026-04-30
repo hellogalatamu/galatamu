@@ -274,9 +274,9 @@ function EditForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-6 text-[#1a1a1a]">
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-3xl shadow-sm border border-gray-200">
-        <h1 className="text-3xl font-serif font-bold mb-2">Edit Undangan</h1>
+    <div className="min-h-screen bg-gray-50 py-6 sm:py-12 px-4 sm:px-6 text-[#1a1a1a]">
+      <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-200">
+        <h1 className="text-2xl sm:text-3xl font-serif font-bold mb-2">Edit Undangan</h1>
         <p className="text-gray-500 mb-8 font-light">Perbarui data undangan Anda (Slug: {slug})</p>
 
         <div className="space-y-8">

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, updateDoc, doc, addDoc, deleteDoc, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Trash2, Edit, X, ExternalLink, Send, Eye, RefreshCw, MessageCircle, LayoutDashboard, Home, LogOut, Loader2 } from "lucide-react";
+import { Trash2, Edit, X, ExternalLink, Send, Eye, RefreshCw, MessageCircle, LayoutDashboard, Home, LogOut, Loader2, Menu } from "lucide-react";
 import Link from "next/link";
 import { getAllInvitationsLocal, togglePaymentStatusLocal, createInvitationAdminLocal, deleteInvitationLocal, updateInvitationFullLocal } from "@/app/actions";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -14,6 +14,7 @@ import { Music, Play, Pause } from "lucide-react";
 
 export default function AdminDashboard() {
   const [invitations, setInvitations] = useState<any[]>([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isDummy, setIsDummy] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -268,18 +269,26 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-[#faf9f6] flex text-[#1a1a1a] font-sans">
       
+      {/* Mobile Header Toggle */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#1a1a1a] text-white flex items-center justify-between px-6 z-20 shadow-md">
+        <h1 className="font-serif text-2xl font-bold italic tracking-wide">Galatamu.</h1>
+        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-white/10 rounded-lg transition">
+          {isSidebarOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
       {/* Premium Sidebar */}
-      <aside className="w-64 bg-[#1a1a1a] text-white fixed h-full flex flex-col shadow-2xl z-10 border-r border-[#333]">
-        <div className="p-8">
+      <aside className={`w-64 bg-[#1a1a1a] text-white fixed h-full flex flex-col shadow-2xl z-30 border-r border-[#333] transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div className="p-8 hidden lg:block">
           <h1 className="font-serif text-3xl font-bold italic tracking-wide">Galatamu.</h1>
           <p className="text-xs text-gray-400 mt-2 uppercase tracking-widest font-medium">Admin Panel</p>
         </div>
         
-        <nav className="flex-1 px-4 space-y-2 mt-8">
-          <Link href="/admin" className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-medium transition text-white border border-white/5">
+        <nav className="flex-1 px-4 space-y-2 mt-20 lg:mt-8">
+          <Link href="/admin" onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-3 px-4 py-3 bg-white/10 rounded-xl text-sm font-medium transition text-white border border-white/5">
             <LayoutDashboard size={18} /> Dashboard
           </Link>
-          <Link href="/" className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl text-sm transition">
+          <Link href="/" onClick={() => setIsSidebarOpen(false)} className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-xl text-sm transition">
             <Home size={18} /> Landing Page
           </Link>
           <button 
@@ -301,8 +310,16 @@ export default function AdminDashboard() {
         </div>
       </aside>
 
+      {/* Overlay for mobile sidebar */}
+      {isSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-20 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Main Content Area */}
-      <main className="flex-1 ml-64 p-8 md:p-12 min-h-screen overflow-y-auto">
+      <main className="flex-1 lg:ml-64 p-6 md:p-12 min-h-screen overflow-y-auto mt-16 lg:mt-0">
         <div className="max-w-5xl mx-auto">
           
           {/* Header */}
@@ -522,10 +539,10 @@ export default function AdminDashboard() {
 
                 return (
                   <div key={inv.slug || idx} className="bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
-                    <div className="flex flex-col md:flex-row">
+                    <div className="flex flex-col sm:flex-row">
                       
                       {/* Left: Color Bar + Theme */}
-                      <div className={`md:w-2 w-full h-2 md:h-auto flex-shrink-0 ${inv.theme_id === 'rustic_01' ? 'bg-[#8c7a6b]' : 'bg-[#1a1a1a]'}`}></div>
+                      <div className={`sm:w-2 w-full h-2 sm:h-auto flex-shrink-0 ${inv.theme_id === 'rustic_01' ? 'bg-[#8c7a6b]' : 'bg-[#1a1a1a]'}`}></div>
 
                       {/* Main Content */}
                       <div className="flex-1 p-5">
