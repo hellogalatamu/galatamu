@@ -5,7 +5,7 @@ import { collection, getDocs, updateDoc, doc, addDoc, deleteDoc, query, where } 
 import { db } from "@/lib/firebase";
 import { Trash2, Edit, X, ExternalLink, Send, Eye, RefreshCw, MessageCircle, LayoutDashboard, Home, LogOut, Loader2, Menu } from "lucide-react";
 import Link from "next/link";
-import { getAllInvitationsLocal, togglePaymentStatusLocal, createInvitationAdminLocal, deleteInvitationLocal, updateInvitationFullLocal } from "@/app/actions";
+import { getAllInvitationsLocal, togglePaymentStatusLocal, createInvitationAdminLocal, deleteInvitation, updateInvitationFullLocal } from "@/app/actions";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
@@ -173,45 +173,30 @@ export default function AdminDashboard() {
   };
 
   const handleDelete = async (inv: any) => {
-    console.log("Delete triggered for:", inv);
+    console.log("Delete attempt for:", inv);
     if (!inv) return;
     
     const confirmMsg = `Apakah Anda yakin ingin menghapus undangan "${inv.slug || 'tanpa nama'}"?`;
     if (!window.confirm(confirmMsg)) return;
     
-    if (isDummy) {
-      const result = await deleteInvitationLocal(inv.slug);
+    setIsLoading(true);
+    try {
+      const result = await deleteInvitation(inv.id, inv.slug);
+      
       if (result === true) {
-        setInvitations(prev => prev.filter(item => item.slug !== inv.slug));
+        setInvitations(prev => prev.filter(item => 
+          (inv.id && item.id !== inv.id) || (item.slug !== inv.slug)
+        ));
         alert("Undangan berhasil dihapus.");
       } else {
-        alert("Gagal menghapus undangan lokal: " + result);
+        alert("Gagal menghapus: " + result);
       }
-    } else {
-      try {
-        // Use ID directly if available, otherwise fallback to finding by slug
-        const idToDelete = inv.id;
-        
-        if (idToDelete) {
-          await deleteDoc(doc(db, "invitations", idToDelete));
-          setInvitations(prev => prev.filter(item => item.id !== idToDelete));
-          alert("Undangan berhasil dihapus.");
-        } else if (inv.slug) {
-          const found = invitations.find(i => i.slug === inv.slug);
-          if (found && found.id) {
-            await deleteDoc(doc(db, "invitations", found.id));
-            setInvitations(prev => prev.filter(item => item.id !== found.id));
-            alert("Undangan berhasil dihapus.");
-          } else {
-            alert("Data tidak ditemukan di Firebase.");
-          }
-        } else {
-          alert("Data tidak memiliki ID atau Slug yang valid.");
-        }
-      } catch (err) {
-        console.error("Failed to delete from Firebase", err);
-        alert("Gagal menghapus undangan.");
-      }
+    } catch (err: any) {
+      console.error("Delete handler error:", err);
+      alert("Terjadi kesalahan sistem saat menghapus.");
+    } finally {
+      setIsLoading(false);
+      fetchData(); // Ensure UI is in sync
     }
   };
 

@@ -188,6 +188,40 @@ export async function deleteInvitationLocal(slug: string): Promise<boolean | str
   }
 }
 
+export async function deleteInvitation(id: string, slug: string) {
+  const isDummy = !process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === "dummy-api-key";
+
+  if (isDummy) {
+    return await deleteInvitationLocal(slug);
+  }
+
+  try {
+    // 1. Delete from Firebase using ID
+    if (id) {
+       const { deleteDoc, doc } = await import("firebase/firestore");
+       await deleteDoc(doc(firestoreDb, "invitations", id));
+       revalidatePath('/admin');
+       return true;
+    }
+    
+    // 2. Fallback to searching by slug if ID is missing
+    const q = query(collection(firestoreDb, "invitations"), where("slug", "==", slug));
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const { deleteDoc, doc } = await import("firebase/firestore");
+      await deleteDoc(doc(firestoreDb, "invitations", querySnapshot.docs[0].id));
+      revalidatePath('/admin');
+      return true;
+    }
+
+    return await deleteInvitationLocal(slug);
+  } catch (error: any) {
+    console.error("Error deleting invitation from Firebase:", error);
+    return error.message || "Gagal menghapus dari Firebase";
+  }
+}
+
 export async function updateInvitationFullLocal(oldSlug: string, newData: any) {
   const filePath = getFilePath();
   try {
