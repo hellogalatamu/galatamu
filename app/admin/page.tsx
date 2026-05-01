@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 import { musicLibrary } from "@/lib/musicLibrary";
 import { Music, Play, Pause } from "lucide-react";
 
+// Admin Dashboard - Managed by Galatamu Team
 export default function AdminDashboard() {
   const [invitations, setInvitations] = useState<any[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
