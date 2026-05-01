@@ -3,7 +3,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import DraftOverlay from "@/components/DraftOverlay";
-import { InvitationData } from "@/components/themes/AmaraTheme";
+import { InvitationData } from "@/components/themes/types";
 import { getInvitationLocal } from "@/app/actions";
 
 async function getInvitationData(slug: string): Promise<InvitationData | null> {

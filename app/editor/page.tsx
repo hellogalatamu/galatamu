@@ -3,7 +3,7 @@
 import { useState, Suspense, useEffect } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { InvitationData } from "@/components/themes/AmaraTheme";
+import { InvitationData } from "@/components/themes/types";
 import { saveInvitationLocal } from "@/app/actions";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import { useSearchParams } from "next/navigation";

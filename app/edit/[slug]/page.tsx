@@ -2,10 +2,10 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { CheckCircle, ExternalLink, Share2, Copy } from "lucide-react";
+import { CheckCircle, ExternalLink, Share2, Copy, X } from "lucide-react";
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { InvitationData } from "@/components/themes/AmaraTheme";
+import { InvitationData } from "@/components/themes/types";
 import PhotoUpload from "@/components/PhotoUpload";
 import { musicLibrary } from "@/lib/musicLibrary";
 import { Music, Play, Pause } from "lucide-react";

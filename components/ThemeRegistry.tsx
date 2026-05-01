@@ -1,5 +1,6 @@
 import React from "react";
-import AmaraTheme, { InvitationData } from "./themes/AmaraTheme";
+import AmaraTheme from "./themes/AmaraTheme";
+import { InvitationData } from "./themes/types";
 import RusticTheme from "./themes/RusticTheme";
 import AqiqahTheme from "./themes/AqiqahTheme";
 import SyukuranTheme from "./themes/SyukuranTheme";
