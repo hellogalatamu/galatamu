@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function MidnightTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -69,7 +69,7 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
           <section className="py-32 px-6 text-center italic max-w-3xl mx-auto text-[#c7d2fe]/50 leading-relaxed font-light">
             <FadeIn>
               <p className="text-2xl font-bold tracking-widest leading-loose uppercase">
-                {data.quote || "“I want to be your favorite hello and your hardest goodbye. Under the stars, in the middle of the night, our hearts beat as one forever.”"}
+                {data.quote || "I want to be your favorite hello and your hardest goodbye. Under the stars, in the middle of the night, our hearts beat as one forever."}
               </p>
             </FadeIn>
           </section>
@@ -220,7 +220,7 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
             </div>
           </section>
 
-          <footer className="py-40 text-center text-white/5 uppercase text-[10px] tracking-[5em]">— Midnight Glamour —</footer>
+          <footer className="py-40 text-center text-white/5 uppercase text-[10px] tracking-[5em]"> Midnight Glamour </footer>
         </motion.main>
       )}
 

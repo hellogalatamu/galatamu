@@ -7,7 +7,9 @@ import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import GalleryLightbox from "../GalleryLightbox";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
+import VideoPlayer from "../VideoPlayer";
+import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
 
 export default function AmaraTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -60,7 +62,7 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
         .outline-text { -webkit-text-stroke: 1px #1a1a1a; color: transparent; }
       `}</style>
 
-      {/* ── ENVELOPE / COVER ── */}
+      {/*  ENVELOPE / COVER  */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
@@ -98,7 +100,7 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
         </AnimatePresence>
       )}
 
-      {/* ── MAIN CONTENT ── */}
+      {/*  MAIN CONTENT  */}
       {(isOpen || previewMode) && (
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative">
           
@@ -188,6 +190,21 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
             </div>
           </section>
 
+          {/* New Section: Video Story */}
+          {data.video && (
+            <section className="py-32 px-8 md:px-20 bg-white">
+              <div className="max-w-4xl mx-auto">
+                <FadeIn className="text-center mb-16">
+                  <p className="font-inter tracking-[0.4em] uppercase text-[10px] text-gray-400 mb-6 font-bold">Watch Our Story</p>
+                  <h2 className="font-serif-display text-5xl italic">Pre-Wedding Video</h2>
+                </FadeIn>
+                <FadeIn delay={0.2}>
+                  <VideoPlayer url={data.video} />
+                </FadeIn>
+              </div>
+            </section>
+          )}
+
           {/* Section 4: Event Details Asymmetric */}
           <section className="py-32 px-8 md:px-20 bg-white">
             <div className="grid md:grid-cols-2 gap-px bg-black/5 border border-black/5">
@@ -210,11 +227,41 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
                     <p className="font-inter text-2xl font-light mb-2">{data.event_data.resepsi_time}</p>
                     <p className="font-inter text-gray-400 italic text-sm leading-relaxed max-w-xs">{data.event_data.resepsi_location}</p>
                   </div>
-                  <a href={data.event_data.resepsi_map} target="_blank" className="mt-12 flex items-center gap-4 font-inter text-[10px] uppercase tracking-widest text-black/40 hover:text-black transition-all">
-                     <span className="w-10 h-px bg-black/10" /> View On Maps
-                  </a>
+                  <div className="flex flex-col gap-4">
+                    <a href={data.event_data.resepsi_map} target="_blank" className="mt-12 flex items-center gap-4 font-inter text-[10px] uppercase tracking-widest text-black/40 hover:text-black transition-all">
+                       <span className="w-10 h-px bg-black/10" /> View On Maps
+                    </a>
+                    <div className="flex gap-4">
+                      <a 
+                        href={generateGoogleCalendarLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)} 
+                        target="_blank"
+                        className="text-[9px] uppercase tracking-[0.2em] bg-gray-50 px-4 py-2 rounded-full text-gray-400 hover:bg-[#1a1a1a] hover:text-white transition-all font-bold"
+                      >
+                        + Google Calendar
+                      </a>
+                      <a 
+                        href={generateICalLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)} 
+                        className="text-[9px] uppercase tracking-[0.2em] bg-gray-50 px-4 py-2 rounded-full text-gray-400 hover:bg-[#1a1a1a] hover:text-white transition-all font-bold"
+                      >
+                        + iCal
+                      </a>
+                    </div>
+                  </div>
                </FadeIn>
             </div>
+
+            {/* New: Live Stream Button */}
+            {data.event_data.live_stream && (
+              <FadeIn className="mt-12 text-center">
+                <a 
+                  href={data.event_data.live_stream} 
+                  target="_blank"
+                  className="inline-flex items-center gap-3 px-10 py-5 bg-[#d4af37] text-white rounded-full font-inter text-xs uppercase tracking-[0.3em] font-bold hover:bg-black transition-all shadow-xl"
+                >
+                  <Video size={16} /> Join Live Streaming
+                </a>
+              </FadeIn>
+            )}
           </section>
 
           {/* Section 5: Gallery Mosaic */}
@@ -322,7 +369,7 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
             <h2 className="font-serif-display text-4xl italic mb-6">
                {data.bride_data.groom.split(' ')[0]} <span className="text-gray-200">&</span> {data.bride_data.bride.split(' ')[0]}
             </h2>
-            <p className="font-inter text-[9px] tracking-[0.8em] text-gray-300 uppercase">Editorial Series — Galatamu</p>
+            <p className="font-inter text-[9px] tracking-[0.8em] text-gray-300 uppercase">Editorial Series  Galatamu</p>
           </footer>
         </motion.main>
       )}

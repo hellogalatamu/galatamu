@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function RomanticRoseTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function RomanticRoseTheme({ data, previewMode = false, guestName
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-[#881337]/60 leading-relaxed font-light">
             <FadeIn>
               <p className="text-2xl font-serif leading-loose">
-                {data.quote || "“I want to be your favorite hello and your hardest goodbye. Two hearts, one soul, one love forever.”"}
+                {data.quote || "I want to be your favorite hello and your hardest goodbye. Two hearts, one soul, one love forever."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function RomanticRoseTheme({ data, previewMode = false, guestName
             </div>
           </section>
 
-          <footer className="py-40 text-center text-[#881337]/20 uppercase text-[10px] tracking-[3em]">— Romantic Dusty Rose —</footer>
+          <footer className="py-40 text-center text-[#881337]/20 uppercase text-[10px] tracking-[3em]"> Romantic Dusty Rose </footer>
         </motion.main>
       )}
 

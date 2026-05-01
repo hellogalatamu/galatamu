@@ -6,7 +6,7 @@ import { Disc, Heart, MapPin, Calendar, Gift, Send, Sparkles } from "lucide-reac
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function JawaJogjaTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function GoldenWhiteTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function GoldenWhiteTheme({ data, previewMode = false, guestName 
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-[#4a3f35]/60 leading-relaxed font-light">
             <FadeIn>
               <p className="text-2xl font-serif italic tracking-widest leading-loose">
-                {data.quote || "“Love is a golden thread that binds two souls in harmony. It's the light that leads us home and the peace that fills our days.”"}
+                {data.quote || "Love is a golden thread that binds two souls in harmony. It's the light that leads us home and the peace that fills our days."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function GoldenWhiteTheme({ data, previewMode = false, guestName 
             </div>
           </section>
 
-          <footer className="py-40 text-center text-[#d4af37]/20 uppercase text-[9px] tracking-[4em]">— Golden White —</footer>
+          <footer className="py-40 text-center text-[#d4af37]/20 uppercase text-[9px] tracking-[4em]"> Golden White </footer>
         </motion.main>
       )}
 

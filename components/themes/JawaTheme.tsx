@@ -6,8 +6,11 @@ import { Disc, Gift, Send, Heart, MapPin, Sparkles } from "lucide-react";
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import VideoPlayer from "../VideoPlayer";
+import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
+import { Video } from "lucide-react";
 
 export default function JawaTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -43,7 +46,7 @@ export default function JawaTheme({ data, previewMode = false, guestName = "Tamu
         .gunungan-reveal { background: radial-gradient(circle at center, #3d2317 0%, #1a0f0a 100%); }
       `}</style>
 
-      {/* ── GUNUNGAN OPENING (COVER) ── */}
+      {/*  GUNUNGAN OPENING (COVER)  */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
@@ -231,7 +234,7 @@ export default function JawaTheme({ data, previewMode = false, guestName = "Tamu
           <footer className="py-40 text-center relative overflow-hidden">
              <div className="h-px w-32 bg-[#d4a373]/20 mx-auto mb-20" />
              <h2 className="font-script text-7xl md:text-9xl mb-10">{data.bride_data.groom} &amp; {data.bride_data.bride}</h2>
-             <p className="font-ethnic text-[9px] tracking-[1em] text-[#d4a373]/40">— GALATAMU JAWI —</p>
+             <p className="font-ethnic text-[9px] tracking-[1em] text-[#d4a373]/40"> GALATAMU JAWI </p>
           </footer>
         </motion.main>
       )}

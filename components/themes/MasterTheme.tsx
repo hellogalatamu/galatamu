@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Countdown from '../logic/Countdown';
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 
 interface MasterThemeProps {
   data: InvitationData;

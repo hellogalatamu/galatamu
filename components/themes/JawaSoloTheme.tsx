@@ -6,7 +6,7 @@ import { Disc, Heart, MapPin, Calendar, Gift, Send, Sparkles } from "lucide-reac
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function JawaSoloTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -161,7 +161,7 @@ export default function JawaSoloTheme({ data, previewMode = false, guestName = "
 
           <footer className="py-32 text-center border-t border-white/5">
              <h2 className="text-5xl italic font-bold text-white mb-4">{data.bride_data.groom} & {data.bride_data.bride}</h2>
-             <p className="text-[10px] uppercase tracking-[0.6em] text-[#d7ccc8]/30">— Surakarta Hadiningrat Classic —</p>
+             <p className="text-[10px] uppercase tracking-[0.6em] text-[#d7ccc8]/30"> Surakarta Hadiningrat Classic </p>
           </footer>
         </motion.main>
       )}

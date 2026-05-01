@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function BugisTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function BugisTheme({ data, previewMode = false, guestName = "Tam
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-[#f2cc8f]/60 leading-relaxed font-light">
             <FadeIn>
               <p className="text-2xl italic">
-                {data.quote || "“Sikali Mappaccing, Dua Kali Mappacci, Telu Kali Mappacci. Kesucian hati membawa berkah selamanya dalam ikatan yang sakral.”"}
+                {data.quote || "Sikali Mappaccing, Dua Kali Mappacci, Telu Kali Mappacci. Kesucian hati membawa berkah selamanya dalam ikatan yang sakral."}
               </p>
             </FadeIn>
           </section>
@@ -80,7 +80,7 @@ export default function BugisTheme({ data, previewMode = false, guestName = "Tam
                    <div className="aspect-[3/4] border-8 border-[#f2cc8f]/10 p-4 shadow-2xl relative grayscale group-hover:grayscale-0 transition duration-1000 bg-[#072a1f]"><img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"} className="w-full h-full object-cover opacity-80 group-hover:opacity-100" /></div>
                 </div>
                 <h3 className="text-5xl font-bold uppercase text-white mb-4 tracking-tighter">{data.bride_data.groom}</h3>
-                <p className="text-[#f2cc8f]/60 uppercase text-[10px] tracking-[0.4em] font-bold mb-4 italic">Ana’na saking</p>
+                <p className="text-[#f2cc8f]/60 uppercase text-[10px] tracking-[0.4em] font-bold mb-4 italic">Anana saking</p>
                 <p className="text-2xl font-bold italic text-[#f2cc8f]">{data.bride_data.parents_groom}</p>
              </FadeIn>
              <FadeIn className="text-center" delay={0.2}>
@@ -89,7 +89,7 @@ export default function BugisTheme({ data, previewMode = false, guestName = "Tam
                    <div className="aspect-[3/4] border-8 border-[#f2cc8f]/10 p-4 shadow-2xl relative grayscale group-hover:grayscale-0 transition duration-1000 bg-[#072a1f]"><img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"} className="w-full h-full object-cover opacity-80 group-hover:opacity-100" /></div>
                 </div>
                 <h3 className="text-5xl font-bold uppercase text-white mb-4 tracking-tighter">{data.bride_data.bride}</h3>
-                <p className="text-[#f2cc8f]/60 uppercase text-[10px] tracking-[0.4em] font-bold mb-4 italic">Ana’na saking</p>
+                <p className="text-[#f2cc8f]/60 uppercase text-[10px] tracking-[0.4em] font-bold mb-4 italic">Anana saking</p>
                 <p className="text-2xl font-bold italic text-[#f2cc8f]">{data.bride_data.parents_bride}</p>
              </FadeIn>
           </section>
@@ -218,7 +218,7 @@ export default function BugisTheme({ data, previewMode = false, guestName = "Tam
             </div>
           </section>
 
-          <footer className="py-40 text-center text-[#f2cc8f]/20 uppercase text-[10px] tracking-[2.5em]">— Bugis Makassar Pride —</footer>
+          <footer className="py-40 text-center text-[#f2cc8f]/20 uppercase text-[10px] tracking-[2.5em]"> Bugis Makassar Pride </footer>
         </motion.main>
       )}
 

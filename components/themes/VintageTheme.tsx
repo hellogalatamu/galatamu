@@ -6,8 +6,11 @@ import { Disc, Gift, Send, Heart, MapPin, Printer } from "lucide-react";
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import VideoPlayer from "../VideoPlayer";
+import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
+import { Video } from "lucide-react";
 
 export default function VintageTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -42,14 +45,14 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
         .newspaper-double-border { border-top: 3px double #000; border-bottom: 3px double #000; }
       `}</style>
 
-      {/* ── ENVELOPE (COVER) ── */}
+      {/*  ENVELOPE (COVER)  */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
             <motion.div initial={{ opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} transition={{ duration: 0.8 }}
               className="fixed inset-0 z-50 bg-[#e8e4d9] paper-texture flex items-center justify-center p-6">
               <div className="max-w-md w-full bg-[#fdfcf8] p-10 shadow-[20px_20px_60px_rgba(0,0,0,0.1)] newspaper-border text-center">
-                 <p className="font-paper text-[10px] uppercase tracking-[0.4em] mb-8 border-b border-black pb-2">Volume I — Special Edition</p>
+                 <p className="font-paper text-[10px] uppercase tracking-[0.4em] mb-8 border-b border-black pb-2">Volume I  Special Edition</p>
                  <h1 className="font-display text-5xl font-black mb-4">THE DAILY WEDDING</h1>
                  <p className="font-paper italic text-sm mb-12 border-y border-black py-1">Est. {new Date().getFullYear()}</p>
                  <div className="mb-12">
@@ -100,7 +103,7 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
                    <h2 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-6">A Journey of Love: Two Hearts Finally Unite in Sacred Bond</h2>
                    <div className="flex gap-4 border-t border-black pt-4 mb-6 italic text-sm">
                       <span>By Galatamu Press</span>
-                      <span>•</span>
+                      <span></span>
                       <span>{data.event_data.akad_location}</span>
                    </div>
                    <p className="font-paper text-lg leading-relaxed text-justify first-letter:text-7xl first-letter:font-display first-letter:float-left first-letter:mr-3 first-letter:mt-1">
@@ -143,6 +146,17 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
                       ))}
                    </div>
                 </section>
+
+                {/* Exclusive Video Feature */}
+                {data.video && (
+                  <section className="pt-10 border-t border-black">
+                    <h3 className="font-display text-3xl font-bold mb-8 uppercase tracking-tighter">Exclusive Video Footage</h3>
+                    <div className="border border-black p-1">
+                      <VideoPlayer url={data.video} />
+                    </div>
+                    <p className="font-paper text-[10px] mt-2 italic text-center">Press Play to view the full documentary</p>
+                  </section>
+                )}
              </div>
 
              {/* Sidebar (Right) */}
@@ -240,7 +254,7 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
              <div className="newspaper-double-border py-2 text-[10px] font-paper font-bold uppercase max-w-xs mx-auto">
                 END OF THIS EDITION
              </div>
-             <p className="font-paper text-[9px] opacity-40 italic">PUBLISHED BY GALATAMU PRESS — ALL RIGHTS RESERVED 2024</p>
+             <p className="font-paper text-[9px] opacity-40 italic">PUBLISHED BY GALATAMU PRESS  ALL RIGHTS RESERVED 2024</p>
           </footer>
         </motion.main>
       )}

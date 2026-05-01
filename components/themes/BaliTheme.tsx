@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function BaliTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function BaliTheme({ data, previewMode = false, guestName = "Tamu
           <section className="py-24 px-6 text-center italic max-w-2xl mx-auto text-white/50 leading-relaxed font-light">
             <FadeIn>
               <p className="text-xl">
-                {data.quote || "“Grhayastam Kusala Bhavantu. Semoga terwujud keluarga yang sejahtera, bahagia, dan damai dalam lindungan Ida Sang Hyang Widhi Wasa.”"}
+                {data.quote || "Grhayastam Kusala Bhavantu. Semoga terwujud keluarga yang sejahtera, bahagia, dan damai dalam lindungan Ida Sang Hyang Widhi Wasa."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function BaliTheme({ data, previewMode = false, guestName = "Tamu
             </div>
           </section>
 
-          <footer className="py-32 text-center text-[#d4af37]/40 uppercase text-[9px] tracking-[2em]">— Balinese Signature —</footer>
+          <footer className="py-32 text-center text-[#d4af37]/40 uppercase text-[9px] tracking-[2em]"> Balinese Signature </footer>
         </motion.main>
       )}
 

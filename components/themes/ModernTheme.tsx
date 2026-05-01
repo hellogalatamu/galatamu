@@ -6,8 +6,11 @@ import { Disc, Gift, Send, Terminal, Cpu, Database, Activity, Code, MapPin, Exte
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import VideoPlayer from "../VideoPlayer";
+import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
+import { Video } from "lucide-react";
 
 export default function ModernTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -45,7 +48,7 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
       
       <div className="scanline" />
 
-      {/* ── BOOT SEQUENCE (COVER) ── */}
+      {/*  BOOT SEQUENCE (COVER)  */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
@@ -152,6 +155,17 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
              </div>
           </section>
 
+          {/* VISUAL_LOGS (VIDEO) */}
+          {data.video && (
+            <section className="border-tech bg-tech p-10">
+              <div className="flex items-center gap-4 mb-10">
+                <Video size={20} />
+                <h3 className="text-xl font-bold tracking-widest uppercase">Visual_Logs.mp4</h3>
+              </div>
+              <VideoPlayer url={data.video} />
+            </section>
+          )}
+
           {/* EVENTS SECTION */}
           <section className="grid md:grid-cols-2 gap-6">
              <FadeIn className="border-tech p-10 bg-tech">
@@ -176,11 +190,31 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
                    <div className="flex justify-between text-xs"><span>TIME</span><span>{data.event_data.resepsi_time}</span></div>
                    <div className="flex justify-between text-xs"><span>LOC</span><span className="text-right">{data.event_data.resepsi_location.toUpperCase()}</span></div>
                 </div>
-                <a href={data.event_data.resepsi_map} target="_blank" className="mt-8 flex items-center justify-center gap-2 w-full py-3 border-tech text-[10px] hover:bg-[#00ff41] hover:text-black transition-all font-bold">
-                   <MapPin size={12} /> INITIALIZE_MAPS
-                </a>
+                <div className="grid grid-cols-1 gap-2 mt-8">
+                  <a href={data.event_data.resepsi_map} target="_blank" className="flex items-center justify-center gap-2 w-full py-3 border-tech text-[10px] hover:bg-[#00ff41] hover:text-black transition-all font-bold tracking-widest">
+                     <MapPin size={12} /> INITIALIZE_MAPS
+                  </a>
+                  <div className="flex gap-2">
+                    <a href={generateGoogleCalendarLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)} target="_blank" className="flex-1 flex items-center justify-center py-2 border-tech text-[8px] hover:bg-[#00ff41] hover:text-black transition-all font-bold">
+                       SYNC_GOOGLE
+                    </a>
+                    <a href={generateICalLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)} className="flex-1 flex items-center justify-center py-2 border-tech text-[8px] hover:bg-[#00ff41] hover:text-black transition-all font-bold">
+                       SYNC_ICAL
+                    </a>
+                  </div>
+                </div>
              </FadeIn>
           </section>
+
+          {/* REMOTE_CONNECTION (LIVE) */}
+          {data.event_data.live_stream && (
+            <FadeIn className="border-tech bg-tech p-10 text-center">
+              <h4 className="text-[10px] opacity-40 mb-6 tracking-[0.5em]">REMOTE_ACCESS_AVAILABLE</h4>
+              <a href={data.event_data.live_stream} target="_blank" className="inline-flex items-center gap-3 px-8 py-4 bg-[#00ff41] text-black font-bold text-xs tracking-[0.3em] hover:bg-black hover:text-[#00ff41] border border-[#00ff41] transition-all shadow-[0_0_20px_rgba(0,255,65,0.3)]">
+                <Video size={16} /> ESTABLISH_LIVE_CONNECTION
+              </a>
+            </FadeIn>
+          )}
 
           {/* GALLERY SECTION */}
           <section className="border-tech bg-tech p-10">
@@ -253,7 +287,7 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
           <footer className="border-tech p-10 text-center space-y-4 bg-tech">
              <p className="text-[10px] opacity-30">END_OF_TRANSMISSION</p>
              <h2 className="text-2xl font-bold tracking-[0.5em]">{data.bride_data.groom.toUpperCase()} &amp; {data.bride_data.bride.toUpperCase()}</h2>
-             <p className="text-[8px] opacity-20 italic">© GALATAMU_CORE_OS_v2.0.4</p>
+             <p className="text-[8px] opacity-20 italic"> GALATAMU_CORE_OS_v2.0.4</p>
           </footer>
         </motion.main>
       )}

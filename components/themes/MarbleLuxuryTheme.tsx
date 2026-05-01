@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function MarbleLuxuryTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function MarbleLuxuryTheme({ data, previewMode = false, guestName
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-[#1a1a1a]/40 leading-relaxed font-light">
             <FadeIn>
               <p className="text-2xl tracking-widest leading-loose">
-                {data.quote || "“Love is the beauty of the soul. In every grain of marble, in every whisper of the wind, I find you.”"}
+                {data.quote || "Love is the beauty of the soul. In every grain of marble, in every whisper of the wind, I find you."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function MarbleLuxuryTheme({ data, previewMode = false, guestName
             </div>
           </section>
 
-          <footer className="py-40 text-center text-[#d4af37]/20 uppercase text-[9px] tracking-[4em]">— Marble White Luxury —</footer>
+          <footer className="py-40 text-center text-[#d4af37]/20 uppercase text-[9px] tracking-[4em]"> Marble White Luxury </footer>
         </motion.main>
       )}
 

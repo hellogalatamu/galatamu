@@ -6,7 +6,7 @@ import { Disc, Heart, MapPin, Calendar, Gift, Send, Sparkles } from "lucide-reac
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function JawaModernTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -48,14 +48,14 @@ export default function JawaModernTheme({ data, previewMode = false, guestName =
               <div className="absolute inset-0 bg-gradient-to-br from-white via-[#fdfbf7] to-white"></div>
               <FadeIn className="z-10 text-center px-6">
                  <div className="mb-12">
-                    <span className="text-[10px] uppercase tracking-[0.6em] text-[#af944d] font-bold">ꦩꦤꦸꦁꦱꦩꦸꦭꦾ</span>
+                    <span className="text-[10px] uppercase tracking-[0.6em] text-[#af944d] font-bold"></span>
                  </div>
                  <p className="tracking-[0.4em] uppercase text-[9px] mb-8 text-gray-400">Pernikahan Mulia</p>
                  <h1 className="text-6xl font-serif font-light mb-16 text-[#1a1a1a] italic tracking-tighter">
                    {data.bride_data.groom} <br/> <span className="text-2xl not-italic font-sans text-[#af944d] opacity-50">&</span> <br/> {data.bride_data.bride}
                  </h1>
                  <div className="mb-16">
-                    <p className="text-[10px] uppercase tracking-widest text-gray-300 mb-4 italic">— Spesial kagem —</p>
+                    <p className="text-[10px] uppercase tracking-widest text-gray-300 mb-4 italic"> Spesial kagem </p>
                     <h2 className="text-4xl font-serif font-bold italic text-[#1a1a1a]">{guestName}</h2>
                  </div>
                  <button onClick={openInvitation} className="group relative px-12 py-5 overflow-hidden rounded-full border border-[#af944d] transition-all hover:bg-[#af944d]">
@@ -107,7 +107,7 @@ export default function JawaModernTheme({ data, previewMode = false, guestName =
                    <p className="text-sm tracking-widest text-[#af944d] mb-4 uppercase font-bold">Putra saking</p>
                    <p className="text-lg text-gray-400 italic">{data.bride_data.parents_groom}</p>
                 </FadeIn>
-                <div className="text-6xl text-[#af944d]/20 font-serif italic hidden md:block">ꦱꦩꦾ</div>
+                <div className="text-6xl text-[#af944d]/20 font-serif italic hidden md:block"></div>
                 <FadeIn className="flex-1 text-left" delay={0.2}>
                    <div className="aspect-[3/4] rounded-full overflow-hidden shadow-2xl mb-8 border-[12px] border-white">
                       <img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-1000" alt="Bride" />
@@ -122,7 +122,7 @@ export default function JawaModernTheme({ data, previewMode = false, guestName =
           <section className="py-32 px-6">
              <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16">
                 <FadeIn className="bg-white p-16 shadow-2xl rounded-3xl border-t-8 border-[#af944d]">
-                   <h4 className="text-[10px] uppercase tracking-[0.5em] text-[#af944d] mb-8 font-bold">ꦄꦏꦢ꧀ꦤꦶꦏꦃ</h4>
+                   <h4 className="text-[10px] uppercase tracking-[0.5em] text-[#af944d] mb-8 font-bold"></h4>
                    <h3 className="text-4xl font-serif italic font-bold mb-8">Akad Nikah</h3>
                    <div className="space-y-6 mb-12">
                       <div>
@@ -139,7 +139,7 @@ export default function JawaModernTheme({ data, previewMode = false, guestName =
                    </a>
                 </FadeIn>
                 <FadeIn className="bg-white p-16 shadow-2xl rounded-3xl border-t-8 border-[#af944d]" delay={0.2}>
-                   <h4 className="text-[10px] uppercase tracking-[0.5em] text-[#af944d] mb-8 font-bold">ꦫꦺꦱꦺꦥ꧀ꦱꦶ</h4>
+                   <h4 className="text-[10px] uppercase tracking-[0.5em] text-[#af944d] mb-8 font-bold"></h4>
                    <h3 className="text-4xl font-serif italic font-bold mb-8">Resepsi</h3>
                    <div className="space-y-6 mb-12">
                       <div>
@@ -212,7 +212,7 @@ export default function JawaModernTheme({ data, previewMode = false, guestName =
 
           <footer className="py-32 text-center">
              <h2 className="text-5xl font-serif italic mb-4">{data.bride_data.groom} & {data.bride_data.bride}</h2>
-             <p className="text-[10px] uppercase tracking-[0.5em] text-gray-300">— Galatamu Jawi Moderen —</p>
+             <p className="text-[10px] uppercase tracking-[0.5em] text-gray-300"> Galatamu Jawi Moderen </p>
           </footer>
         </motion.main>
       )}

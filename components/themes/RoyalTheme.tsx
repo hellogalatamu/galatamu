@@ -6,8 +6,10 @@ import { Disc, Gift, Send, Crown, Gem, Heart, MapPin, Video } from "lucide-react
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import VideoPlayer from "../VideoPlayer";
+import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
 
 export default function RoyalTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -43,7 +45,7 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
         .ornament { color: #c8973e; opacity: 0.5; }
       `}</style>
 
-      {/* ── CURTAIN REVEAL (COVER) ── */}
+      {/*  CURTAIN REVEAL (COVER)  */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
@@ -233,7 +235,7 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
           <footer className="py-40 text-center royal-gradient">
              <div className="h-px w-64 bg-[#c8973e]/20 mx-auto mb-20" />
              <h2 className="font-script text-7xl md:text-9xl mb-10 leading-none">{data.bride_data.groom} &amp; {data.bride_data.bride}</h2>
-             <p className="font-royal text-[9px] tracking-[1em] text-[#c8973e]/40">— SUPREME COLLECTION —</p>
+             <p className="font-royal text-[9px] tracking-[1em] text-[#c8973e]/40"> SUPREME COLLECTION </p>
           </footer>
         </motion.main>
       )}

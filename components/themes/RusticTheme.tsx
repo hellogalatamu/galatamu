@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Leaf 
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 interface RusticThemeProps {
@@ -58,7 +58,7 @@ export default function RusticTheme({ data, previewMode = false, guestName = "Ta
 
   return (
     <div className={`bg-[#f4efe6] min-h-screen text-[#4a3f35] font-serif selection:bg-[#4a3f35] selection:text-white ${previewMode ? 'relative' : ''}`}>
-      {/* Cover / Hero Overlay — hidden in preview mode */}
+      {/* Cover / Hero Overlay  hidden in preview mode */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
@@ -104,7 +104,7 @@ export default function RusticTheme({ data, previewMode = false, guestName = "Ta
       {/* Preview Mode Banner */}
       {previewMode && (
         <div className="bg-[#4a3f35] text-[#f4efe6] text-center py-2 text-xs uppercase tracking-widest font-sans sticky top-0 z-20">
-          ✦ Mode Preview — Tema Rustic Botanical ✦
+           Mode Preview  Tema Rustic Botanical 
         </div>
       )}
 

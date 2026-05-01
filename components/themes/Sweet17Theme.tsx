@@ -118,7 +118,7 @@ export default function Sweet17Theme({ data, previewMode = false, guestName = "T
 
   return (
     <div className={`bg-black min-h-screen text-pink-500 font-sans selection:bg-[#1a1a1a] selection:text-white ${previewMode ? 'relative' : ''}`}>
-      {/* Cover / Hero Overlay — hidden in preview mode */}
+      {/* Cover / Hero Overlay  hidden in preview mode */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
@@ -157,7 +157,7 @@ export default function Sweet17Theme({ data, previewMode = false, guestName = "T
       {/* Preview Mode Banner */}
       {previewMode && (
         <div className="bg-[#1a1a1a] text-white text-center py-2 text-xs uppercase tracking-widest sticky top-0 z-20">
-          ✦ Mode Preview — Tema Amara Premium ✦
+           Mode Preview  Tema Amara Premium 
         </div>
       )}
 
@@ -420,7 +420,7 @@ export default function Sweet17Theme({ data, previewMode = false, guestName = "T
           {/* Footer */}
           <footer className="py-12 text-center bg-[#1a1a1a] text-zinc-400 border-t border-white/10">
             <p className="font-serif text-2xl text-white mb-4">{data.bride_data.groom} & {data.bride_data.bride}</p>
-            <p className="text-sm">Made with ❤️ by Galatamu</p>
+            <p className="text-sm">Made with  by Galatamu</p>
             <p className="text-xs mt-2 opacity-50">Masa Aktif Undangan: 6 Bulan Sejak Acara</p>
           </footer>
         </motion.main>

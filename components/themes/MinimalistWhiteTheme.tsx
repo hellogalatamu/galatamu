@@ -2,12 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Disc, Heart, ArrowRight } from "lucide-react";
+import { Disc, Heart, ArrowRight, Video } from "lucide-react";
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import VideoPlayer from "../VideoPlayer";
+import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
 
 export default function MinimalistWhiteTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -113,9 +115,32 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
                    <p className="font-ultra text-[10px] tracking-ultra uppercase mb-12 text-gray-300">02. Reception</p>
                    <p className="font-playfair text-5xl italic mb-8">{data.event_data.resepsi_time}</p>
                    <p className="font-ultra text-sm text-gray-500 leading-relaxed mb-12 max-w-xs">{data.event_data.resepsi_location}</p>
-                   <a href={data.event_data.resepsi_map} className="font-ultra text-[10px] border-b border-black pb-1 tracking-widest hover:border-gray-200 transition-all">LOCATION</a>
+                   <div className="flex flex-wrap gap-x-8 gap-y-4">
+                     <a href={data.event_data.resepsi_map} className="font-ultra text-[10px] border-b border-black pb-1 tracking-widest hover:border-gray-200 transition-all">LOCATION</a>
+                     <a 
+                       href={generateGoogleCalendarLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)} 
+                       target="_blank"
+                       className="font-ultra text-[10px] border-b border-gray-100 pb-1 tracking-widest hover:border-black transition-all text-gray-400"
+                     >
+                       GOOGLE CALENDAR
+                     </a>
+                     <a 
+                       href={generateICalLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)}
+                       className="font-ultra text-[10px] border-b border-gray-100 pb-1 tracking-widest hover:border-black transition-all text-gray-400"
+                     >
+                       ICAL
+                     </a>
+                   </div>
                 </FadeIn>
              </div>
+
+             {data.event_data.live_stream && (
+               <FadeIn className="mt-20 text-center">
+                 <a href={data.event_data.live_stream} target="_blank" className="font-ultra text-[11px] tracking-[0.6em] uppercase hover:opacity-50 transition-all flex items-center justify-center gap-4">
+                   <Video size={14} /> Live Stream
+                 </a>
+               </FadeIn>
+             )}
           </section>
 
           {/* Section 4: Gallery */}
@@ -129,6 +154,13 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
                 itemClassName="aspect-video grayscale hover:grayscale-0 transition-all duration-700 bg-gray-50"
                 imgClassName="w-full h-full object-cover"
              />
+             
+             {data.video && (
+                <div className="mt-20">
+                  <p className="font-ultra text-[10px] tracking-ultra mb-12 text-gray-400 text-center uppercase">Motion</p>
+                  <VideoPlayer url={data.video} />
+                </div>
+              )}
           </section>
 
           {/* Section 5: Gifts */}
@@ -185,7 +217,7 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
 
           {/* Footer */}
           <footer className="py-40 text-center">
-             <p className="font-ultra text-[8px] tracking-ultra text-gray-200">© ULTRA MINIMAL SERIES — GALATAMU</p>
+             <p className="font-ultra text-[8px] tracking-ultra text-gray-200"> ULTRA MINIMAL SERIES  GALATAMU</p>
           </footer>
         </motion.main>
       )}

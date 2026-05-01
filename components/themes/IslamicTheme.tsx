@@ -6,7 +6,7 @@ import { Disc, Gift, Send } from "lucide-react";
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 // Islamic geometric star SVG pattern as inline background
@@ -43,7 +43,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
         .arch-clip { clip-path: ellipse(50% 58% at 50% 42%); }
         .arch-frame { border-radius: 50% 50% 4px 4px / 60% 60% 4px 4px; }
         .islamic-border { border: 2px solid #c8973e; position: relative; }
-        .islamic-border::before { content: '✦'; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #fdfcf0; padding: 0 8px; color: #c8973e; font-size: 18px; }
+        .islamic-border::before { content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #fdfcf0; padding: 0 8px; color: #c8973e; font-size: 18px; }
         .ornament-divider { display: flex; align-items: center; gap: 16px; }
         .ornament-divider::before, .ornament-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, #c8973e, transparent); }
       `}</style>
@@ -60,10 +60,10 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
               <div className="absolute inset-6 border border-[#c8973e]/10 pointer-events-none" />
               {/* Corner ornaments */}
               {["top-3 left-3","top-3 right-3","bottom-3 left-3","bottom-3 right-3"].map((pos, i) => (
-                <div key={i} className={`absolute ${pos} text-[#c8973e]/50 text-2xl`}>✦</div>
+                <div key={i} className={`absolute ${pos} text-[#c8973e]/50 text-2xl`}></div>
               ))}
               <FadeIn className="text-center px-8 max-w-lg relative z-10">
-                <div className="text-[#c8973e] text-5xl mb-6 font-amiri">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
+                <div className="text-[#c8973e] text-5xl mb-6 font-amiri">   </div>
                 <p className="font-lato text-[#c8973e]/70 text-[10px] tracking-[0.4em] uppercase mb-10">In The Name of Allah, The Most Gracious</p>
                 <div className="ornament-divider mb-10"><span className="text-[#c8973e] text-xs tracking-widest">THE WEDDING OF</span></div>
                 <h1 className="font-amiri text-5xl md:text-7xl text-[#fdfcf0] italic mb-3 leading-tight">{data.bride_data.groom}</h1>
@@ -72,7 +72,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
                 <p className="font-lato text-[#fdfcf0]/50 text-xs tracking-widest mb-12">Kepada Yth. <span className="text-[#c8973e] font-bold">{guestName}</span></p>
                 <button onClick={openInvitation}
                   className="font-lato px-12 py-4 bg-[#c8973e] text-[#0d2b1a] font-bold text-xs tracking-[0.4em] uppercase hover:bg-[#fdfcf0] transition-all shadow-[0_0_30px_rgba(200,151,62,0.4)]">
-                  Buka Undangan ✦
+                  Buka Undangan 
                 </button>
               </FadeIn>
             </motion.div>
@@ -83,14 +83,14 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
       {(isOpen || previewMode) && (
         <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }} className="pb-20">
 
-          {/* ── HERO ── Islamic arch hero */}
+          {/*  HERO  Islamic arch hero */}
           <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden"
             style={{ backgroundImage: STAR_PATTERN, backgroundColor: "#fdfcf0" }}>
             {/* Top decorative strip */}
             <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#1a4d2e] via-[#c8973e] to-[#1a4d2e]" />
             <div className="absolute inset-4 border border-[#1a4d2e]/10 pointer-events-none" />
             <FadeIn className="relative z-10 px-6 max-w-2xl mx-auto pt-16">
-              <div className="text-[#c8973e] font-amiri text-4xl mb-4">﷽</div>
+              <div className="text-[#c8973e] font-amiri text-4xl mb-4"></div>
               <p className="font-lato text-[10px] tracking-[0.5em] uppercase text-[#1a4d2e]/60 mb-12">Mengundang dengan penuh kebahagiaan</p>
               {/* Arch photo frame */}
               {data.hero_image && (
@@ -113,7 +113,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
             <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-[#1a4d2e] via-[#c8973e] to-[#1a4d2e]" />
           </section>
 
-          {/* ── QUOTE ── */}
+          {/*  QUOTE  */}
           <section className="py-20 px-6 bg-[#1a4d2e] text-center relative overflow-hidden">
             <div className="absolute inset-0 opacity-5" style={{ backgroundImage: STAR_PATTERN }} />
             <FadeIn className="relative z-10 max-w-3xl mx-auto">
@@ -121,11 +121,11 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
               <p className="font-amiri text-xl md:text-2xl italic text-[#fdfcf0]/90 leading-relaxed mb-6">
                 {data.quote || "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya."}
               </p>
-              <p className="font-lato text-[#c8973e]/70 text-xs tracking-widest">— QS. Ar-Rum: 21 —</p>
+              <p className="font-lato text-[#c8973e]/70 text-xs tracking-widest"> QS. Ar-Rum: 21 </p>
             </FadeIn>
           </section>
 
-          {/* ── MEMPELAI ── Arch-framed portraits */}
+          {/*  MEMPELAI  Arch-framed portraits */}
           <section className="py-24 px-6" style={{ backgroundImage: STAR_PATTERN, backgroundColor: "#fdfcf0" }}>
             <FadeIn className="text-center mb-16">
               <div className="ornament-divider max-w-xs mx-auto mb-6"><span className="font-amiri text-[#c8973e] text-2xl italic">Mempelai</span></div>
@@ -151,7 +151,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
             </div>
           </section>
 
-          {/* ── LOVE STORY ── */}
+          {/*  LOVE STORY  */}
           {data.love_story && data.love_story.length > 0 && (
             <section className="py-24 px-6 bg-[#1a4d2e] relative overflow-hidden">
               <div className="absolute inset-0 opacity-5" style={{ backgroundImage: STAR_PATTERN }} />
@@ -176,7 +176,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
             </section>
           )}
 
-          {/* ── ACARA ── Mosque-window style cards */}
+          {/*  ACARA  Mosque-window style cards */}
           <section className="py-24 px-6" style={{ backgroundImage: STAR_PATTERN, backgroundColor: "#fdfcf0" }}>
             <FadeIn className="text-center mb-16">
               <div className="ornament-divider max-w-xs mx-auto mb-6"><span className="font-amiri text-[#c8973e] text-2xl italic">Waktu & Tempat</span></div>
@@ -191,7 +191,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
                   <div className="relative bg-white shadow-xl overflow-hidden" style={{ borderRadius: "50% 50% 4px 4px / 30% 30% 4px 4px", paddingTop: "2rem" }}>
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1a4d2e] via-[#c8973e] to-[#1a4d2e]" />
                     <div className="px-8 pb-10 pt-6">
-                      <div className="text-[#c8973e] text-3xl mb-3">✦</div>
+                      <div className="text-[#c8973e] text-3xl mb-3"></div>
                       <p className="font-lato text-[10px] tracking-[0.4em] uppercase text-[#c8973e] mb-4">{ev.label}</p>
                       <p className="font-amiri text-3xl italic text-[#1a4d2e] mb-3">{ev.time}</p>
                       <p className="font-lato text-sm text-[#1a4d2e]/60 leading-relaxed mb-6">{ev.loc}</p>
@@ -208,13 +208,13 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
               <FadeIn className="text-center mt-10">
                 <a href={data.event_data.live_stream} target="_blank"
                   className="font-lato inline-block px-10 py-3 bg-[#1a4d2e] text-[#c8973e] text-xs tracking-widest uppercase hover:bg-[#0d2b1a] transition-all">
-                  ▶ Live Streaming
+                   Live Streaming
                 </a>
               </FadeIn>
             )}
           </section>
 
-          {/* ── GALLERY ── */}
+          {/*  GALLERY  */}
           <GalleryLightbox
             images={data.gallery || []}
             title="Gallery Foto"
@@ -225,7 +225,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
             imgClassName="w-full h-full object-cover group-hover:scale-105 transition duration-700"
           />
 
-          {/* ── VIDEO ── */}
+          {/*  VIDEO  */}
           {data.video && (
             <section className="py-24 px-6 text-center" style={{ backgroundImage: STAR_PATTERN, backgroundColor: "#fdfcf0" }}>
               <FadeIn>
@@ -237,7 +237,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
             </section>
           )}
 
-          {/* ── AMPLOP DIGITAL ── */}
+          {/*  AMPLOP DIGITAL  */}
           {data.gifts && data.gifts.length > 0 && (
             <section className="py-24 px-6 bg-[#1a4d2e] text-center relative overflow-hidden">
               <div className="absolute inset-0 opacity-5" style={{ backgroundImage: STAR_PATTERN }} />
@@ -259,7 +259,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
             </section>
           )}
 
-          {/* ── RSVP ── */}
+          {/*  RSVP  */}
           <section className="py-24 px-6" style={{ backgroundImage: STAR_PATTERN, backgroundColor: "#fdfcf0" }}>
             <div className="max-w-xl mx-auto">
               <FadeIn className="text-center mb-12">
@@ -272,7 +272,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
                   if (!data.slug) return;
                   setIsSubmitting(true);
                   const w: WishData = { name: rsvpName || guestName, presence: rsvpPresence, message: rsvpMessage, timestamp: new Date().toISOString() };
-                  try { const ok = await submitWish(data.slug, w); if (ok) { setWishes([...wishes, w]); setRsvpMessage(""); setRsvpPresence(""); alert("Jazakallah khairan! 🌿"); } }
+                  try { const ok = await submitWish(data.slug, w); if (ok) { setWishes([...wishes, w]); setRsvpMessage(""); setRsvpPresence(""); alert("Jazakallah khairan! "); } }
                   finally { setIsSubmitting(false); }
                 }}>
                   <input type="text" value={rsvpName} onChange={e => setRsvpName(e.target.value)} placeholder="Nama Lengkap"
@@ -280,7 +280,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
                   <select value={rsvpPresence} onChange={e => setRsvpPresence(e.target.value)}
                     className="w-full px-5 py-4 border-2 border-[#1a4d2e]/20 bg-white font-lato text-sm focus:outline-none focus:border-[#c8973e] text-[#1a4d2e]" required>
                     <option value="">Konfirmasi Kehadiran</option>
-                    <option value="hadir">Insya Allah Hadir ✓</option>
+                    <option value="hadir">Insya Allah Hadir </option>
                     <option value="tidak">Mohon Maaf, Berhalangan</option>
                   </select>
                   <textarea rows={3} value={rsvpMessage} onChange={e => setRsvpMessage(e.target.value)} placeholder="Tuliskan doa & ucapan..."
@@ -297,7 +297,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
                     <div key={i} className="border-l-4 border-[#c8973e] pl-5 py-2">
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-amiri text-lg italic text-[#1a4d2e]">{w.name}</span>
-                        <span className="font-lato text-[10px] uppercase tracking-widest text-[#c8973e]">{w.presence === "hadir" ? "Hadir ✓" : "Absen"}</span>
+                        <span className="font-lato text-[10px] uppercase tracking-widest text-[#c8973e]">{w.presence === "hadir" ? "Hadir " : "Absen"}</span>
                       </div>
                       <p className="font-lato text-sm text-[#1a4d2e]/60 italic">&ldquo;{w.message}&rdquo;</p>
                     </div>
@@ -307,16 +307,16 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
             </div>
           </section>
 
-          {/* ── FOOTER ── */}
+          {/*  FOOTER  */}
           <footer className="py-16 text-center bg-[#1a4d2e] relative overflow-hidden">
             <div className="absolute inset-0 opacity-5" style={{ backgroundImage: STAR_PATTERN }} />
             <div className="relative z-10">
-              <div className="text-[#c8973e] font-amiri text-4xl mb-4">بَارَكَ اللَّهُ لَكُمَا</div>
+              <div className="text-[#c8973e] font-amiri text-4xl mb-4">  </div>
               <p className="font-lato text-[#fdfcf0]/40 text-xs tracking-widest uppercase mb-4">Barakallahu Lakuma wa Baraka Alaikuma</p>
               <div className="ornament-divider max-w-xs mx-auto">
                 <span className="font-amiri text-xl italic text-[#c8973e]">{data.bride_data.groom} & {data.bride_data.bride}</span>
               </div>
-              <p className="font-lato text-[#fdfcf0]/30 text-[10px] tracking-widest mt-6">— Galatamu —</p>
+              <p className="font-lato text-[#fdfcf0]/30 text-[10px] tracking-widest mt-6"> Galatamu </p>
             </div>
           </footer>
         </motion.main>

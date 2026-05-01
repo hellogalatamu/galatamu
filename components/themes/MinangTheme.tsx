@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 interface MinangThemeProps {
@@ -324,7 +324,7 @@ export default function MinangTheme({ data, previewMode = false, guestName = "Ta
           <footer className="py-32 text-center relative overflow-hidden">
              <div className="relative z-10">
                 <h2 className="text-6xl font-bold italic text-white mb-4 tracking-tighter">{data.bride_data.groom} & {data.bride_data.bride}</h2>
-                <p className="tracking-[0.8em] uppercase text-[10px] text-[#f2cc8f]/60">— Galatamu Minang —</p>
+                <p className="tracking-[0.8em] uppercase text-[10px] text-[#f2cc8f]/60"> Galatamu Minang </p>
              </div>
           </footer>
 

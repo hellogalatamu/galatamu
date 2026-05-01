@@ -750,6 +750,28 @@ export default function AdminDashboard() {
                       />
                     </div>
                   </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1 uppercase">Video URL (YouTube)</label>
+                      <input 
+                        type="text" 
+                        value={editingItem.video || ""} 
+                        onChange={(e) => setEditingItem({ ...editingItem, video: e.target.value })}
+                        placeholder="https://youtube.com/watch?v=..."
+                        className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-gray-500 mb-1 uppercase">Live Stream URL</label>
+                      <input 
+                        type="text" 
+                        value={editingItem.event_data?.live_stream || ""} 
+                        onChange={(e) => setEditingItem({ ...editingItem, event_data: { ...editingItem.event_data, live_stream: e.target.value } })}
+                        placeholder="https://youtube.com/live/..."
+                        className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none"
+                      />
+                    </div>
+                  </div>
                 </div>
               </section>
 

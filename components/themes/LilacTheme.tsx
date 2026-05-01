@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function LilacTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function LilacTheme({ data, previewMode = false, guestName = "Tam
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-[#4c1d95]/60 leading-relaxed font-light">
             <FadeIn>
               <p className="text-2xl font-serif">
-                {data.quote || "“I love you because the entire universe conspired to help me find you.”"}
+                {data.quote || "I love you because the entire universe conspired to help me find you."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function LilacTheme({ data, previewMode = false, guestName = "Tam
             </div>
           </section>
 
-          <footer className="py-40 text-center text-[#4c1d95]/20 uppercase text-[10px] tracking-[3em]">— Lilac Sweet Romance —</footer>
+          <footer className="py-40 text-center text-[#4c1d95]/20 uppercase text-[10px] tracking-[3em]"> Lilac Sweet Romance </footer>
         </motion.main>
       )}
 

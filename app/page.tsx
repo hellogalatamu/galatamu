@@ -2,11 +2,17 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, X, Music, Heart, MapPin, Camera, Mail, Sparkles, ChevronRight, Menu } from "lucide-react";
+import { Eye, X, Music, Heart, MapPin, Camera, Mail, Sparkles, ChevronRight, Menu, CreditCard } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import PhoneMockup from "@/components/PhoneMockup";
+import PremiumPhoneMockup from "@/components/PremiumPhoneMockup";
 import Link from "next/link";
+
+import PricingTable from "@/components/PricingTable";
+import FAQ from "@/components/FAQ";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
+import HowToOrder from "@/components/HowToOrder";
 
 // Demo Data for Live Preview
 const DEMO_DATA = {
@@ -22,7 +28,9 @@ const DEMO_DATA = {
     akad_location: "Masjid Raya",
     resepsi_time: "11:00 - Selesai",
     resepsi_location: "Gedung Serbaguna",
+    live_stream: "https://youtube.com/live/demo",
   },
+  video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   gallery: [
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80",
@@ -38,20 +46,6 @@ const CATEGORIES = ["Semua", "Pernikahan"];
 
 const THEMES: any[] = [
   {
-    id: "marble_luxury_01",
-    name: "Marble Luxury",
-    category: "Pernikahan",
-    tagline: "Ultra Luxe, Serenity & Marble",
-    bg: "bg-white",
-    border: "border-[#d4af37]/20",
-    textColor: "text-[#1a1a1a]",
-    tagColor: "text-[#d4af37]",
-    previewBg: "from-white via-[#fcfaf2] to-[#d4af37]/10",
-    previewText: "text-[#1a1a1a]",
-    btnBorder: "border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Marble Luxury* untuk pernikahan saya.`,
-  },
-  {
     id: "amara_01",
     name: "Amara Premium",
     category: "Pernikahan",
@@ -66,6 +60,19 @@ const THEMES: any[] = [
     waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Amara Premium* dan ingin memesan undangan digital untuk pernikahan saya.\n\nBoleh saya tahu detailnya? 🙏`,
   },
   {
+    id: "terracotta_01",
+    name: "Terracotta Warmth",
+    category: "Pernikahan",
+    tagline: "Earthy, Boho & Warm Tones",
+    bg: "bg-[#fff7ed]",
+    border: "border-[#fed7aa]/20",
+    textColor: "text-[#7c2d12]",
+    tagColor: "text-[#ea580c]",
+    previewBg: "from-[#fed7aa] to-[#fff7ed]",
+    previewText: "text-[#7c2d12]",
+    btnBorder: "border-[#ea580c] text-[#ea580c] hover:bg-[#ea580c] hover:text-white",
+  },
+  {
     id: "modern_01",
     name: "Modern Editorial",
     category: "Pernikahan",
@@ -77,7 +84,19 @@ const THEMES: any[] = [
     previewBg: "from-[#0a0a0a] to-[#1a1a1a]",
     previewText: "text-white",
     btnBorder: "border-[#ff6b6b] text-[#ff6b6b] hover:bg-[#ff6b6b] hover:text-[#0a0a0a]",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Modern Editorial* untuk pernikahan saya.`,
+  },
+  {
+    id: "royal_01",
+    name: "Royal Baroque",
+    category: "Pernikahan",
+    tagline: "Grand, Split-Screen & Cinematic",
+    bg: "bg-[#06060f]",
+    border: "border-[#c8973e]/40",
+    textColor: "text-[#e8d5a3]",
+    tagColor: "text-[#c8973e]",
+    previewBg: "from-[#06060f] to-[#12102a]",
+    previewText: "text-[#e8d5a3]",
+    btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#06060f]",
   },
   {
     id: "minimalist_white_01",
@@ -93,18 +112,17 @@ const THEMES: any[] = [
     btnBorder: "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white",
   },
   {
-    id: "royal_01",
-    name: "Royal Baroque",
+    id: "jawa_01",
+    name: "Jawa Traditional",
     category: "Pernikahan",
-    tagline: "Grand, Split-Screen & Cinematic",
-    bg: "bg-[#06060f]",
-    border: "border-[#c8973e]/40",
-    textColor: "text-[#e8d5a3]",
-    tagColor: "text-[#c8973e]",
-    previewBg: "from-[#06060f] to-[#12102a]",
-    previewText: "text-[#e8d5a3]",
-    btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#06060f]",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Royal Baroque* untuk pernikahan saya.`,
+    tagline: "Klasik, Sakral & Nuansa Adat",
+    bg: "bg-[#2d1b10]",
+    border: "border-[#d4af37]/20",
+    textColor: "text-[#d4af37]",
+    tagColor: "text-[#d4af37]",
+    previewBg: "from-[#2d1b10] to-[#1a0f0a]",
+    previewText: "text-[#d4af37]",
+    btnBorder: "border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white",
   },
   {
     id: "islamic_01",
@@ -118,70 +136,16 @@ const THEMES: any[] = [
     previewBg: "from-[#0d2b1a] to-[#1a4d2e]",
     previewText: "text-[#fdfcf0]",
     btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#0d2b1a]",
-    waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Islamic Syar'i Barakah* untuk pernikahan saya.`,
-  },
-  {
-    id: "sunda_01",
-    name: "Sunda Traditional",
-    category: "Pernikahan",
-    tagline: "Megah, Klasik & Nuansa Adat",
-    bg: "bg-[#f5f5f5]",
-    border: "border-[#a67c00]/20",
-    textColor: "text-[#1a1a1a]",
-    tagColor: "text-[#a67c00]",
-    previewBg: "from-[#a67c00] to-[#ffd700]",
-    previewText: "text-white",
-    btnBorder: "border-[#a67c00] text-[#a67c00] hover:bg-[#a67c00] hover:text-white",
-  },
-
-  {
-    id: "jawa_02",
-    name: "Jawa Jogja Royal",
-    category: "Pernikahan",
-    tagline: "Keraton, Mewah & Batik Parang",
-    bg: "bg-[#002b24]",
-    border: "border-[#d4af37]/20",
-    textColor: "text-[#d4af37]",
-    tagColor: "text-[#d4af37]",
-    previewBg: "from-[#002b24] to-[#004d40]",
-    previewText: "text-white",
-    btnBorder: "border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white",
-  },
-  {
-    id: "jawa_03",
-    name: "Jawa Solo Classic",
-    category: "Pernikahan",
-    tagline: "Sogan, Klasik & Sidomukti",
-    bg: "bg-[#4e342e]",
-    border: "border-[#d7ccc8]/20",
-    textColor: "text-[#d7ccc8]",
-    tagColor: "text-[#d7ccc8]",
-    previewBg: "from-[#4e342e] to-[#3e2723]",
-    previewText: "text-white",
-    btnBorder: "border-[#d7ccc8] text-[#d7ccc8] hover:bg-[#d7ccc8] hover:text-white",
-  },
-  {
-    id: "jawa_04",
-    name: "Jawa Modern Minimalist",
-    category: "Pernikahan",
-    tagline: "Clean, Gold & Javanese Script",
-    bg: "bg-white",
-    border: "border-[#af944d]/20",
-    textColor: "text-[#1a1a1a]",
-    tagColor: "text-[#af944d]",
-    previewBg: "from-white to-[#fdfbf7]",
-    previewText: "text-[#1a1a1a]",
-    btnBorder: "border-[#af944d] text-[#af944d] hover:bg-[#af944d] hover:text-white",
   }
 ];
 
 const FEATURES = [
   { icon: <Music className="w-6 h-6" />, title: "Musik Otomatis", desc: "Alunan musik indah yang berputar secara otomatis saat undangan dibuka." },
-  { icon: <Heart className="w-6 h-6" />, title: "Cerita Cinta", desc: "Bagikan perjalanan kisah cinta Anda dengan tata letak yang romantis." },
+  { icon: <Sparkles className="w-6 h-6" />, title: "Fitur Premium", desc: "Dilengkapi fitur Calendar Sync, Video Player, dan Live Streaming link." },
   { icon: <MapPin className="w-6 h-6" />, title: "Navigasi Lokasi", desc: "Integrasi Google Maps untuk memudahkan tamu menemukan lokasi acara." },
   { icon: <Camera className="w-6 h-6" />, title: "Galeri Eksklusif", desc: "Tampilkan foto-foto pre-wedding terbaik Anda dalam galeri yang memukau." },
   { icon: <Mail className="w-6 h-6" />, title: "RSVP & Ucapan", desc: "Tamu dapat mengonfirmasi kehadiran dan memberikan ucapan doa secara langsung." },
-  { icon: <Sparkles className="w-6 h-6" />, title: "Amplop Digital", desc: "Fitur cashless (transfer bank/E-wallet) untuk mempermudah pemberian hadiah." },
+  { icon: <CreditCard className="w-6 h-6" />, title: "Amplop Digital", desc: "Fitur cashless (transfer bank/E-wallet) untuk mempermudah pemberian hadiah." },
 ];
 
 export default function LandingPage() {
@@ -200,11 +164,13 @@ export default function LandingPage() {
           <Link href="/" className="font-serif text-2xl font-bold tracking-wider italic">Galatamu.</Link>
           
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-10 text-sm font-medium tracking-wide uppercase">
-            <a href="#beranda" className="text-gray-500 hover:text-[#1a1a1a] transition">Beranda</a>
-            <a href="#fitur" className="text-gray-500 hover:text-[#1a1a1a] transition">Fitur</a>
-            <a href="#katalog" className="text-gray-500 hover:text-[#1a1a1a] transition">Katalog Tema</a>
-            <Link href="/editor" className="px-6 py-2.5 bg-[#1a1a1a] text-white rounded-full hover:bg-gray-800 transition shadow-sm">
+          <div className="hidden md:flex items-center gap-10 text-[10px] font-bold tracking-[0.2em] uppercase">
+            <a href="#beranda" className="text-gray-400 hover:text-[#1a1a1a] transition">Beranda</a>
+            <a href="#fitur" className="text-gray-400 hover:text-[#1a1a1a] transition">Fitur</a>
+            <a href="#katalog" className="text-gray-400 hover:text-[#1a1a1a] transition">Katalog</a>
+            <a href="#harga" className="text-gray-400 hover:text-[#1a1a1a] transition">Harga</a>
+            <a href="#faq" className="text-gray-400 hover:text-[#1a1a1a] transition">FAQ</a>
+            <Link href="/editor" className="px-8 py-3 bg-[#1a1a1a] text-white rounded-full hover:bg-gray-800 transition shadow-xl shadow-gray-200">
               Buat Undangan
             </Link>
           </div>
@@ -222,8 +188,10 @@ export default function LandingPage() {
           </button>
           <a href="#beranda" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Beranda</a>
           <a href="#fitur" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Fitur</a>
-          <a href="#katalog" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Katalog Tema</a>
-          <Link href="/editor" onClick={() => setIsMobileMenuOpen(false)} className="mt-4 px-10 py-4 bg-[#1a1a1a] text-white rounded-full font-bold uppercase tracking-widest text-sm shadow-xl">
+          <a href="#katalog" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Katalog</a>
+          <a href="#harga" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Harga</a>
+          <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">FAQ</a>
+          <Link href="/editor" onClick={() => setIsMobileMenuOpen(false)} className="mt-4 px-10 py-4 bg-[#1a1a1a] text-white rounded-full font-bold uppercase tracking-widest text-xs shadow-xl">
             Buat Undangan
           </Link>
         </div>
@@ -239,28 +207,35 @@ export default function LandingPage() {
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center pt-20">
           <FadeIn>
-            <span className="inline-block py-1.5 px-5 bg-white/60 backdrop-blur-sm border border-gray-200 rounded-full text-xs font-bold uppercase tracking-widest text-gray-500 mb-8 shadow-sm">
-              Undangan Digital Premium
+            <span className="inline-block py-1.5 px-5 bg-white/60 backdrop-blur-sm border border-gray-200 rounded-full text-[10px] font-bold uppercase tracking-[0.4em] text-gray-500 mb-8 shadow-sm">
+              Undangan Digital Premium #1
             </span>
           </FadeIn>
           <FadeIn delay={0.2}>
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-[#1a1a1a] leading-tight px-2">
-              Sempurnakan <br className="hidden sm:block"/>Hari Bahagia Anda.
+            <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter mb-8 text-[#1a1a1a] leading-[0.9] px-2 italic">
+              Simple. Mewah. <br className="hidden sm:block"/>Berkesan.
             </h1>
           </FadeIn>
           <FadeIn delay={0.4}>
             <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-2xl mx-auto font-light leading-relaxed">
-              Sebarkan kabar bahagia Anda melalui undangan digital eksklusif, mewah, dan praktis. Desain berkelas yang akan selalu diingat oleh setiap tamu undangan Anda.
+              Buat undangan digital eksklusif hanya dalam 10 menit. Tanpa ribet, langsung aktif, dan bisa diisi sendiri. Harga mulai <span className="font-bold text-[#1a1a1a]">Rp 69.000</span>.
             </p>
           </FadeIn>
           <FadeIn delay={0.6}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="#katalog" className="w-full sm:w-auto px-8 py-4 bg-[#1a1a1a] text-white rounded-full font-medium tracking-wide hover:bg-gray-800 transition-all shadow-xl hover:-translate-y-1 flex items-center justify-center gap-2">
+              <a href="#katalog" className="w-full sm:w-auto px-10 py-5 bg-[#1a1a1a] text-white rounded-full font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition-all shadow-2xl hover:-translate-y-1 flex items-center justify-center gap-2">
                 Lihat Katalog <ChevronRight size={18} />
               </a>
-              <Link href="/editor" className="w-full sm:w-auto px-8 py-4 bg-white border border-gray-200 text-[#1a1a1a] rounded-full font-medium tracking-wide hover:bg-gray-50 transition-all shadow-sm flex items-center justify-center">
+              <Link href="/editor" className="w-full sm:w-auto px-10 py-5 bg-white border border-gray-200 text-[#1a1a1a] rounded-full font-bold uppercase tracking-widest text-xs hover:bg-gray-50 transition-all shadow-sm flex items-center justify-center">
                 Pesan Sekarang
               </Link>
+            </div>
+            <div className="mt-12 flex items-center justify-center gap-8 opacity-40 grayscale group">
+               <div className="flex flex-col items-center"><p className="text-[9px] font-bold uppercase tracking-widest">Premium Quality</p></div>
+               <div className="w-px h-4 bg-gray-300" />
+               <div className="flex flex-col items-center"><p className="text-[9px] font-bold uppercase tracking-widest">Fast Delivery</p></div>
+               <div className="w-px h-4 bg-gray-300" />
+               <div className="flex flex-col items-center"><p className="text-[9px] font-bold uppercase tracking-widest">Self Editor</p></div>
             </div>
           </FadeIn>
         </div>
@@ -270,21 +245,21 @@ export default function LandingPage() {
       <section id="fitur" className="py-32 px-6 bg-white relative">
         <div className="max-w-7xl mx-auto">
           <FadeIn>
-            <div className="text-center mb-20">
-              <span className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3 block">Fasilitas Lengkap</span>
-              <h2 className="font-serif text-4xl md:text-5xl font-bold text-[#1a1a1a]">Fitur Premium Galatamu</h2>
+            <div className="text-center mb-24">
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-4 block italic">Our Ecosystem</span>
+              <h2 className="font-serif text-4xl md:text-6xl font-bold text-[#1a1a1a]">Fitur Modern & Eksklusif</h2>
             </div>
           </FadeIn>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20">
             {FEATURES.map((feat, idx) => (
               <FadeIn key={idx} delay={idx * 0.1}>
                 <div className="group flex flex-col items-center text-center">
-                  <div className="w-20 h-20 bg-[#faf9f6] border border-gray-100 rounded-3xl flex items-center justify-center text-[#1a1a1a] mb-6 group-hover:scale-110 group-hover:bg-[#1a1a1a] group-hover:text-white transition-all duration-500 shadow-sm">
+                  <div className="w-24 h-24 bg-[#faf9f6] border border-gray-100 rounded-[2.5rem] flex items-center justify-center text-[#1a1a1a] mb-8 group-hover:scale-110 group-hover:bg-[#1a1a1a] group-hover:text-white transition-all duration-700 shadow-xl shadow-gray-100/50">
                     {feat.icon}
                   </div>
-                  <h3 className="font-serif text-2xl font-bold mb-3 text-[#1a1a1a]">{feat.title}</h3>
-                  <p className="text-gray-500 font-light leading-relaxed max-w-sm">{feat.desc}</p>
+                  <h3 className="font-serif text-2xl font-bold mb-4 text-[#1a1a1a]">{feat.title}</h3>
+                  <p className="text-gray-400 font-light leading-relaxed max-w-xs text-sm">{feat.desc}</p>
                 </div>
               </FadeIn>
             ))}
@@ -292,27 +267,30 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* How To Order */}
+      <HowToOrder />
+
       {/* Katalog Tema */}
       <section id="katalog" className="py-32 px-6 bg-[#faf9f6]">
         <div className="max-w-7xl mx-auto">
           <FadeIn>
             <div className="text-center mb-20">
-              <span className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3 block">Karya Kami</span>
-              <h2 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a]">Katalog Tema Eksklusif</h2>
-              <p className="text-gray-500 font-light max-w-2xl mx-auto text-lg mb-10">
-                Pilih desain yang paling mencerminkan kepribadian Anda. Semua tema dirancang secara hati-hati untuk memberikan pengalaman visual yang memukau.
+              <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-gray-400 mb-4 block italic">Our Gallery</span>
+              <h2 className="font-serif text-4xl md:text-6xl font-bold mb-8 text-[#1a1a1a]">Pilih Tema Impian</h2>
+              <p className="text-gray-500 font-light max-w-2xl mx-auto text-lg mb-12">
+                Desain eksklusif yang dirancang oleh desainer profesional untuk memastikan undangan Anda tampil memukau di layar tamu.
               </p>
               
               {/* Category Filter */}
-              <div className="flex flex-wrap justify-center gap-2 sm:gap-3 px-4">
+              <div className="flex flex-wrap justify-center gap-3">
                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-5 sm:px-6 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all ${
+                    className={`px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
                       activeCategory === cat 
-                        ? "bg-[#1a1a1a] text-white shadow-md" 
-                        : "bg-white text-gray-500 border border-gray-200 hover:bg-gray-50 hover:text-[#1a1a1a]"
+                        ? "bg-[#1a1a1a] text-white shadow-2xl shadow-gray-400" 
+                        : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50 hover:text-[#1a1a1a]"
                     }`}
                   >
                     {cat}
@@ -322,52 +300,69 @@ export default function LandingPage() {
             </div>
           </FadeIn>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
             {filteredThemes.map((theme, idx) => (
               <FadeIn key={theme.id} delay={0.2 + idx * 0.1}>
-                <div className={`group rounded-[2rem] overflow-hidden ${theme.bg} border ${theme.border} shadow-sm hover:shadow-2xl transition-all duration-500`}>
+                <div className={`group rounded-[3rem] overflow-hidden ${theme.bg} border ${theme.border} shadow-2xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-700 hover:-translate-y-2`}>
                   {/* Preview Area */}
-                  <div className={`aspect-[3/4] relative overflow-hidden p-6 bg-gradient-to-br ${theme.previewBg} flex items-center justify-center cursor-pointer group`} onClick={() => !theme.isPlaceholder && setPreviewTheme(theme.id)}>
-                    <div className="w-full h-full relative group-hover:scale-105 transition-transform duration-700">
-                      <PhoneMockup className="border-[#333] shadow-lg" innerClassName="bg-white">
-                         <div className={`w-full h-full flex flex-col items-center justify-center p-4 text-center ${theme.bg}`}>
-                            <span className={`font-serif text-xl ${theme.previewText} opacity-40 italic mb-2`}>Galatamu.</span>
-                            <h4 className={`font-serif text-lg font-bold ${theme.textColor} leading-tight`}>{theme.name}</h4>
-                            <div className="mt-4 w-8 h-px bg-current opacity-20" />
+                  <div className={`aspect-[3/4] relative overflow-hidden p-8 bg-gradient-to-br ${theme.previewBg} flex items-center justify-center cursor-pointer group`} onClick={() => setPreviewTheme(theme.id)}>
+                    <div className="w-full h-full relative group-hover:scale-105 transition-transform duration-1000">
+                      <PremiumPhoneMockup className="scale-[0.8] origin-top">
+                         <div className={`w-full h-full flex flex-col p-4 ${theme.bg} overflow-hidden`}>
+                            {/* Timeline-like Preview */}
+                            <div className="flex gap-4 h-full">
+                               <div className="w-px bg-gray-200 relative">
+                                  <div className="absolute top-10 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border border-gray-200 rounded-full flex items-center justify-center">
+                                     <Heart size={8} className="text-red-400 fill-current" />
+                                  </div>
+                                  <div className="absolute top-48 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border border-gray-200 rounded-full flex items-center justify-center">
+                                     <Heart size={8} className="text-red-400 fill-current" />
+                                  </div>
+                               </div>
+                               <div className="flex-1 space-y-6 pt-4">
+                                  <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                                     <div className="aspect-video bg-gray-100">
+                                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80" alt="Preview" className="w-full h-full object-cover" />
+                                     </div>
+                                     <div className="p-4">
+                                        <h5 className={`font-serif font-bold text-xs ${theme.textColor}`}>The Wedding of</h5>
+                                        <p className="text-[8px] text-gray-400 mt-1">20 December 2026</p>
+                                        <p className="text-[8px] text-gray-500 mt-2 line-clamp-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor...</p>
+                                     </div>
+                                  </div>
+
+                                  <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                                     <div className="aspect-video bg-gray-100">
+                                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80" alt="Preview" className="w-full h-full object-cover" />
+                                     </div>
+                                     <div className="p-4">
+                                        <h5 className={`font-serif font-bold text-xs ${theme.textColor}`}>Our Journey</h5>
+                                        <p className="text-[8px] text-gray-500 mt-2 line-clamp-2">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore...</p>
+                                     </div>
+                                  </div>
+                               </div>
+                            </div>
                          </div>
-                      </PhoneMockup>
+                      </PremiumPhoneMockup>
                     </div>
 
-                    {!theme.isPlaceholder && (
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center z-[140]">
-                        <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full flex items-center gap-2 shadow-xl text-[#1a1a1a] text-xs font-bold transform translate-y-4 group-hover:translate-y-0">
-                          <Eye size={14} /> Lihat Demo
-                        </div>
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-500 flex items-center justify-center z-[140]">
+                      <div className="opacity-0 group-hover:opacity-100 transition-all duration-500 bg-white px-8 py-4 rounded-full flex items-center gap-3 shadow-2xl text-[#1a1a1a] text-[10px] font-bold uppercase tracking-widest transform translate-y-8 group-hover:translate-y-0">
+                        <Eye size={16} /> Live Preview
                       </div>
-                    )}
+                    </div>
                   </div>
 
-                  <div className={`p-8 text-center bg-white border-t border-gray-100`}>
-                    <div className="flex justify-center mb-3">
-                      <span className="text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-gray-100 text-gray-600 rounded-full">{theme.category}</span>
-                    </div>
-                    <h3 className={`font-serif font-bold text-2xl ${theme.textColor} mb-2`}>{theme.name}</h3>
-                    <p className={`${theme.tagColor} text-xs mb-8 font-bold uppercase tracking-widest`}>{theme.tagline}</p>
-                    <div className="flex gap-3">
-                      {theme.isPlaceholder ? (
-                        <button disabled className="w-full py-3.5 bg-gray-100 text-gray-400 rounded-xl font-medium cursor-not-allowed text-sm">
-                          Tahap Desain
-                        </button>
-                      ) : (
-                        <>
-                          <button onClick={() => setPreviewTheme(theme.id)} className={`flex-1 py-3.5 border ${theme.btnBorder} rounded-xl font-medium transition-colors duration-300 flex items-center justify-center gap-2 text-sm`}>
-                            <Eye size={16} /> Preview
-                          </button>
-                          <Link href={`/editor?theme=${theme.id}`} className={`flex-1 py-3.5 bg-[#1a1a1a] text-white rounded-xl font-medium transition-colors duration-300 text-center text-sm shadow-md hover:bg-gray-800`}>
-                            Gunakan
-                          </Link>
-                        </>
-                      )}
+                  <div className={`p-10 text-center bg-white`}>
+                    <h3 className={`font-serif font-bold text-3xl ${theme.textColor} mb-3 italic`}>{theme.name}</h3>
+                    <p className={`${theme.tagColor} text-[10px] mb-10 font-bold uppercase tracking-[0.3em] opacity-60`}>{theme.tagline}</p>
+                    <div className="flex gap-4">
+                       <button onClick={() => setPreviewTheme(theme.id)} className={`flex-1 py-4 border ${theme.btnBorder} rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-all duration-500 flex items-center justify-center gap-2`}>
+                         Preview
+                       </button>
+                       <Link href={`/editor?theme=${theme.id}`} className={`flex-1 py-4 bg-[#1a1a1a] text-white rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-all duration-500 text-center shadow-xl hover:bg-orange-500`}>
+                         Gunakan
+                       </Link>
                     </div>
                   </div>
                 </div>
@@ -377,49 +372,63 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Pricing Table */}
+      <PricingTable />
+
+      {/* FAQ Section */}
+      <FAQ />
 
       {/* CTA Section */}
-      <section className="py-32 px-6 bg-[#1a1a1a] text-white text-center relative overflow-hidden">
+      <section className="py-40 px-6 bg-[#1a1a1a] text-white text-center relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
-        <div className="max-w-3xl mx-auto relative z-10">
+        <div className="max-w-4xl mx-auto relative z-10">
           <FadeIn>
-            <h2 className="font-serif text-4xl md:text-6xl font-bold mb-8">Siap Memulai Perjalanan Anda?</h2>
-            <p className="text-gray-400 font-light text-lg mb-12">Buat undangan impian Anda sekarang, proses cepat, mudah, dan langsung jadi.</p>
-            <Link href="/editor" className="inline-flex px-10 py-5 bg-white text-[#1a1a1a] rounded-full font-bold tracking-widest uppercase text-sm hover:bg-gray-100 transition-all shadow-2xl hover:scale-105">
-              Buat Undangan Saya Sekarang
+             <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/30 mb-8 block italic">Limited Offer</span>
+            <h2 className="font-serif text-5xl md:text-8xl font-bold mb-10 tracking-tighter leading-none italic">Abadikan Momen <br/> Terbaik Anda.</h2>
+            <p className="text-white/40 font-light text-xl mb-16 max-w-2xl mx-auto leading-relaxed">Jangan tunda kebahagiaan Anda. Buat undangan digital premium sekarang dan nikmati penawaran spesial kami.</p>
+            <Link href="/editor" className="inline-flex px-12 py-6 bg-white text-[#1a1a1a] rounded-full font-bold tracking-[0.4em] uppercase text-xs hover:bg-orange-500 hover:text-white transition-all shadow-2xl hover:scale-105 active:scale-95">
+              Buat Undangan Saya
             </Link>
           </FadeIn>
         </div>
       </section>
 
+      {/* WhatsApp Floating */}
+      <WhatsAppFloat />
+
       {/* Footer */}
-      <footer className="bg-[#1a1a1a] border-t border-white/10 pt-20 pb-10 px-6 text-white">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 mb-16">
+      <footer className="bg-[#1a1a1a] border-t border-white/5 pt-32 pb-16 px-6 text-white">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-4 gap-16 mb-24">
           <div className="md:col-span-2">
-            <h2 className="font-serif text-3xl font-bold tracking-wider italic mb-6">Galatamu.</h2>
-            <p className="text-gray-400 font-light max-w-sm leading-relaxed">
-              Platform pembuatan undangan digital premium terpercaya. Kami membantu menyempurnakan hari bahagia Anda dengan desain eksklusif dan fitur modern.
+            <h2 className="font-serif text-4xl font-bold tracking-wider italic mb-8">Galatamu.</h2>
+            <p className="text-white/30 font-light max-w-sm leading-relaxed text-sm">
+              Solusi undangan digital premium untuk hari spesial Anda. Kami menggabungkan seni desain klasik dengan kemudahan teknologi modern untuk menciptakan pengalaman yang tak terlupakan.
             </p>
           </div>
           <div>
-            <h3 className="font-bold uppercase tracking-widest text-xs mb-6 text-gray-300">Tautan Cepat</h3>
-            <ul className="space-y-4 text-gray-400 font-light text-sm">
+            <h3 className="font-bold uppercase tracking-[0.3em] text-[10px] mb-8 text-white/50">Navigasi</h3>
+            <ul className="space-y-4 text-white/30 font-medium text-xs tracking-widest uppercase">
               <li><a href="#beranda" className="hover:text-white transition">Beranda</a></li>
-              <li><a href="#fitur" className="hover:text-white transition">Fitur Premium</a></li>
-              <li><a href="#katalog" className="hover:text-white transition">Katalog Tema</a></li>
+              <li><a href="#fitur" className="hover:text-white transition">Fitur</a></li>
+              <li><a href="#katalog" className="hover:text-white transition">Katalog</a></li>
+              <li><a href="#harga" className="hover:text-white transition">Harga</a></li>
             </ul>
           </div>
           <div>
-            <h3 className="font-bold uppercase tracking-widest text-xs mb-6 text-gray-300">Kontak Kami</h3>
-            <ul className="space-y-4 text-gray-400 font-light text-sm">
+            <h3 className="font-bold uppercase tracking-[0.3em] text-[10px] mb-8 text-white/50">Connect</h3>
+            <ul className="space-y-4 text-white/30 font-medium text-xs tracking-widest uppercase">
               <li><a href="https://wa.me/6289687934761" className="hover:text-white transition">WhatsApp Admin</a></li>
-              <li><a href="mailto:hello@galatamu.com" className="hover:text-white transition">hello@galatamu.com</a></li>
-              <li>Jakarta, Indonesia</li>
+              <li><a href="https://instagram.com/galatamu" className="hover:text-white transition">Instagram</a></li>
+              <li><a href="mailto:hello@galatamu.com" className="hover:text-white transition">Email Support</a></li>
             </ul>
           </div>
         </div>
-        <div className="text-center border-t border-white/10 pt-10 text-xs text-gray-500 font-light tracking-widest uppercase">
-          &copy; {new Date().getFullYear()} Galatamu Invitation. Hak Cipta Dilindungi.
+        <div className="text-center border-t border-white/5 pt-16 flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] text-white/20 font-bold tracking-[0.5em] uppercase">
+          <p>&copy; {new Date().getFullYear()} Galatamu Invitation — All Rights Reserved.</p>
+          <div className="flex gap-8">
+             <span>Terms</span>
+             <span>Privacy</span>
+          </div>
         </div>
       </footer>
 
@@ -439,9 +448,9 @@ export default function LandingPage() {
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm h-full max-h-[850px] z-10"
+              className="relative w-full max-w-sm h-full max-h-[850px] z-10 flex items-center justify-center"
             >
-              <PhoneMockup className="border-[#222]">
+              <PremiumPhoneMockup className="h-full">
                 {/* Theme Content */}
                 <div className="w-full h-full overflow-y-auto custom-scrollbar bg-white">
                   <ThemeRegistry 
@@ -475,7 +484,7 @@ export default function LandingPage() {
                     </Link>
                   </div>
                 </div>
-              </PhoneMockup>
+              </PremiumPhoneMockup>
 
               {/* Outside Close Button (Desktop) */}
               <button

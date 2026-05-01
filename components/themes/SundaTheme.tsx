@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function SundaTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -206,7 +206,7 @@ export default function SundaTheme({ data, previewMode = false, guestName = "Tam
             </div>
           </section>
 
-          <footer className="py-24 text-center opacity-40 uppercase text-[10px] tracking-[1.5em]">— Sunda Parahyangan —</footer>
+          <footer className="py-24 text-center opacity-40 uppercase text-[10px] tracking-[1.5em]"> Sunda Parahyangan </footer>
         </motion.main>
       )}
 

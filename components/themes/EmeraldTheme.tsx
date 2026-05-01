@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function EmeraldTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -67,7 +67,7 @@ export default function EmeraldTheme({ data, previewMode = false, guestName = "T
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-white/50 leading-relaxed font-light">
             <FadeIn>
               <p className="text-xl italic">
-                {data.quote || "“And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy.”"}
+                {data.quote || "And of His signs is that He created for you from yourselves mates that you may find tranquility in them; and He placed between you affection and mercy."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function EmeraldTheme({ data, previewMode = false, guestName = "T
             </div>
           </section>
 
-          <footer className="py-40 text-center text-white/10 uppercase text-[10px] tracking-[3em]">— Emerald Green Glow —</footer>
+          <footer className="py-40 text-center text-white/10 uppercase text-[10px] tracking-[3em]"> Emerald Green Glow </footer>
         </motion.main>
       )}
 

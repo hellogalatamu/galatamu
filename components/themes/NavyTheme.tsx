@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function NavyTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function NavyTheme({ data, previewMode = false, guestName = "Tamu
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-white/40 leading-relaxed font-light">
             <FadeIn>
               <p className="text-xl tracking-widest leading-loose">
-                {data.quote || "“I have found the one whom my soul loves. Our love is like the ocean, vast and deep, steady and eternal.”"}
+                {data.quote || "I have found the one whom my soul loves. Our love is like the ocean, vast and deep, steady and eternal."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function NavyTheme({ data, previewMode = false, guestName = "Tamu
             </div>
           </section>
 
-          <footer className="py-40 text-center text-white/5 uppercase text-[9px] tracking-[4em]">— Navy Blue Signature —</footer>
+          <footer className="py-40 text-center text-white/5 uppercase text-[9px] tracking-[4em]"> Navy Blue Signature </footer>
         </motion.main>
       )}
 

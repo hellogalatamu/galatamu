@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,7 +6,7 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
 
 export default function BatakTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
@@ -68,7 +68,7 @@ export default function BatakTheme({ data, previewMode = false, guestName = "Tam
           <section className="py-24 px-6 text-center italic max-w-3xl mx-auto text-white/60">
             <FadeIn>
               <p className="text-xl leading-relaxed">
-                {data.quote || "“Sai songon pargaulan ni bagot ma hamu, sai saksang sitiruon, sai ripe sonang ma hamu na mardongan tubu. Panggabean parhorasan di hamu saluhutna.”"}
+                {data.quote || "Sai songon pargaulan ni bagot ma hamu, sai saksang sitiruon, sai ripe sonang ma hamu na mardongan tubu. Panggabean parhorasan di hamu saluhutna."}
               </p>
             </FadeIn>
           </section>
@@ -216,7 +216,7 @@ export default function BatakTheme({ data, previewMode = false, guestName = "Tam
             </div>
           </section>
 
-          <footer className="py-24 text-center opacity-40 uppercase text-[10px] tracking-[2em]">— Batak Horas Pride —</footer>
+          <footer className="py-24 text-center opacity-40 uppercase text-[10px] tracking-[2em]"> Batak Horas Pride </footer>
         </motion.main>
       )}
 

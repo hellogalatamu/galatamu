@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,8 +6,10 @@ import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, Spark
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
-import { InvitationData, WishData } from "./AmaraTheme";
+import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import VideoPlayer from "../VideoPlayer";
+import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
 
 export default function TerracottaTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -68,7 +70,7 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
           <section className="py-32 px-6 text-center italic max-w-2xl mx-auto text-[#7c2d12]/70 leading-relaxed font-light">
             <FadeIn>
               <p className="text-2xl font-serif">
-                {data.quote || "“Love is not about how many days, months, or years you have been together. Love is about how much you love each other every single day.”"}
+                {data.quote || "Love is not about how many days, months, or years you have been together. Love is about how much you love each other every single day."}
               </p>
             </FadeIn>
           </section>
@@ -125,10 +127,36 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
                   <p className="tracking-[0.8em] uppercase text-[9px] mb-12 text-[#ea580c] font-bold italic opacity-60">The Grand Celebration</p>
                   <p className="text-5xl font-bold italic text-[#7c2d12] mb-8">{data.event_data.resepsi_time}</p>
                   <p className="text-[#7c2d12]/60 italic mb-12 text-xl max-w-xs mx-auto leading-relaxed">{data.event_data.resepsi_location}</p>
-                  <a href={data.event_data.resepsi_map} target="_blank" className="inline-block px-12 py-5 bg-[#c2410c] text-white font-bold uppercase tracking-[0.4em] text-[9px] rounded-full hover:bg-[#7c2d12] transition-all shadow-xl shadow-orange-200">View Map</a>
+                  <div className="flex flex-col items-center gap-4">
+                    <a href={data.event_data.resepsi_map} target="_blank" className="inline-block px-12 py-5 bg-[#c2410c] text-white font-bold uppercase tracking-[0.4em] text-[9px] rounded-full hover:bg-[#7c2d12] transition-all shadow-xl shadow-orange-200">View Map</a>
+                    <div className="flex gap-4">
+                      <a 
+                        href={generateGoogleCalendarLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)} 
+                        target="_blank"
+                        className="text-[9px] font-bold tracking-widest text-[#ea580c] hover:text-[#7c2d12] transition-all"
+                      >
+                        + Google Calendar
+                      </a>
+                      <a 
+                        href={generateICalLink(`Wedding of ${data.bride_data.groom} & ${data.bride_data.bride}`, data.event_data.date, data.event_data.resepsi_location)}
+                        className="text-[9px] font-bold tracking-widest text-[#ea580c] hover:text-[#7c2d12] transition-all"
+                      >
+                        + iCal
+                      </a>
+                    </div>
+                  </div>
                </FadeIn>
             </div>
+
+            {data.event_data.live_stream && (
+              <FadeIn className="mt-20 text-center">
+                <a href={data.event_data.live_stream} target="_blank" className="inline-flex items-center gap-3 px-12 py-5 bg-white border-2 border-[#ea580c] text-[#ea580c] font-bold uppercase tracking-[0.4em] text-[9px] rounded-full hover:bg-[#ea580c] hover:text-white transition-all shadow-xl">
+                  <Video size={14} /> Join Live Streaming
+                </a>
+              </FadeIn>
+            )}
           </section>
+
           <GalleryLightbox
             images={data.gallery || []}
             title="Gallery Foto"
@@ -142,8 +170,8 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
           {data.video && (
             <section className="py-32 px-6 text-center">
               <FadeIn><h3 className="text-3xl italic font-bold text-[#7c2d12] mb-16 tracking-widest uppercase opacity-40">Love Documentation</h3></FadeIn>
-              <div className="max-w-5xl mx-auto aspect-video border-[16px] border-[#fed7aa]/20 shadow-2xl rounded-[4rem] overflow-hidden bg-black">
-                <iframe className="w-full h-full opacity-90 hover:opacity-100 transition duration-700" src={`https://www.youtube.com/embed/${data.video.includes('v=') ? data.video.split('v=')[1].split('&')[0] : data.video.split('/').pop()}`} title="Wedding Video" frameBorder="0" allowFullScreen></iframe>
+              <div className="max-w-5xl mx-auto border-[16px] border-[#fed7aa]/20 shadow-2xl rounded-[4rem] overflow-hidden">
+                <VideoPlayer url={data.video} />
               </div>
             </section>
           )}
@@ -215,7 +243,7 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
             </div>
           </section>
 
-          <footer className="py-40 text-center text-[#7c2d12]/20 uppercase text-[10px] tracking-[3em]">— Terracotta Boho —</footer>
+          <footer className="py-40 text-center text-[#7c2d12]/20 uppercase text-[10px] tracking-[3em]"> Terracotta Boho </footer>
         </motion.main>
       )}
 
@@ -227,4 +255,3 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
     </div>
   );
 }
-
