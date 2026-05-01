@@ -182,19 +182,28 @@ export default function AdminDashboard() {
     
     setIsLoading(true);
     try {
-      const result = await deleteInvitation(inv.id, inv.slug);
-      
-      if (result === true) {
-        setInvitations(prev => prev.filter(item => 
-          (inv.id && item.id !== inv.id) || (item.slug !== inv.slug)
-        ));
-        alert("Undangan berhasil dihapus.");
+      if (isDummy) {
+        const result = await deleteInvitation(inv.id, inv.slug);
+        if (result === true) {
+          setInvitations(prev => prev.filter(item => item.slug !== inv.slug));
+          alert("Undangan berhasil dihapus (Local).");
+        } else {
+          alert("Gagal menghapus (Local): " + result);
+        }
       } else {
-        alert("Gagal menghapus: " + result);
+        // CLIENT-SIDE DELETE for Firebase (to ensure auth rules pass)
+        const { deleteDoc, doc } = await import("firebase/firestore");
+        if (inv.id) {
+          await deleteDoc(doc(db, "invitations", inv.id));
+          setInvitations(prev => prev.filter(item => item.id !== inv.id));
+          alert("Undangan berhasil dihapus.");
+        } else {
+          alert("Gagal menghapus: ID dokumen tidak ditemukan.");
+        }
       }
     } catch (err: any) {
       console.error("Delete handler error:", err);
-      alert("Terjadi kesalahan sistem saat menghapus.");
+      alert("Terjadi kesalahan: " + (err.message || "Gagal menghapus."));
     } finally {
       setIsLoading(false);
       fetchData(); // Ensure UI is in sync
