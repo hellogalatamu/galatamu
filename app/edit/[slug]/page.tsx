@@ -30,6 +30,10 @@ function EditForm() {
   const [copied, setCopied] = useState(false);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [audioPreview, setAudioPreview] = useState<HTMLAudioElement | null>(null);
+  
+  // Guest Tool state
+  const [isGuestToolOpen, setIsGuestToolOpen] = useState(false);
+  const [guestNames, setGuestNames] = useState("");
 
   useEffect(() => {
     return () => {
@@ -249,16 +253,22 @@ function EditForm() {
               <ExternalLink size={18} /> Lihat Undangan
             </a>
             <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({ title: `Undangan ${formData.bride_data.groom} & ${formData.bride_data.bride}`, url: invitationUrl });
-                } else {
-                  handleCopy();
-                }
-              }}
-              className="flex-1 flex items-center justify-center gap-2 py-3 border border-[#1a1a1a] text-[#1a1a1a] rounded-xl font-medium hover:bg-gray-50 transition"
+              onClick={() => setIsGuestToolOpen(true)}
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition shadow-md"
             >
-              <Share2 size={18} /> Bagikan
+              <Share2 size={18} /> Kirim ke Tamu (Nama Custom)
+            </button>
+          </div>
+
+          {/* Guest Tool Section */}
+          <div className="mt-8 pt-8 border-t border-gray-100">
+            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Ingin mengirim ke tamu tertentu?</h3>
+            <p className="text-sm text-gray-500 mb-4 font-light">Gunakan alat di bawah ini untuk membuat link khusus dengan nama tamu.</p>
+            <button 
+              onClick={() => setIsGuestToolOpen(true)}
+              className="w-full py-4 border-2 border-dashed border-purple-200 text-purple-600 rounded-2xl font-medium hover:bg-purple-50 hover:border-purple-300 transition"
+            >
+              Buka Guest Name Tool
             </button>
           </div>
 
@@ -577,6 +587,97 @@ function EditForm() {
           </button>
         </div>
       </div>
+      {/* Guest Name Tool Modal */}
+      {isGuestToolOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300">
+            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-serif font-bold italic">Guest Tool</h2>
+                <p className="text-xs text-gray-400 uppercase tracking-widest mt-1">Buat Link Khusus Nama Tamu</p>
+              </div>
+              <button onClick={() => setIsGuestToolOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto space-y-6">
+              <div className="bg-purple-50 border border-purple-100 p-4 rounded-xl">
+                <p className="text-xs text-purple-700 leading-relaxed font-medium">
+                  <strong>Tips:</strong> Masukkan nama tamu di kotak bawah (satu nama per baris). Kami akan membuatkan link otomatis untuk setiap tamu tersebut.
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-widest">Daftar Nama Tamu</label>
+                <textarea 
+                  rows={5}
+                  value={guestNames}
+                  onChange={(e) => setGuestNames(e.target.value)}
+                  placeholder="Contoh:&#10;Bapak Budi & Ibu&#10;Keluarga Besar Ahmad&#10;Santi & Partner"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a1a1a] focus:bg-white focus:outline-none transition-all text-sm font-medium"
+                ></textarea>
+              </div>
+
+              {guestNames.trim() && (
+                <div className="space-y-4">
+                  <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Link Personal Berhasil Dibuat</h3>
+                  <div className="space-y-3">
+                    {guestNames.split('\n').filter(name => name.trim()).map((name, idx) => {
+                      const encodedName = encodeURIComponent(name.trim());
+                      const personalUrl = `${window.location.origin}/${slug}?to=${encodedName}`;
+                      const waMsg = encodeURIComponent(
+                        `Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i *${name.trim()}* untuk hadir di acara pernikahan kami.\n\n` +
+                        `Berikut link undangan digital kami:\n${personalUrl}\n\n` +
+                        `Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\n` +
+                        `Terima kasih.`
+                      );
+                      
+                      return (
+                        <div key={idx} className="p-4 bg-white border border-gray-100 rounded-2xl flex items-center justify-between gap-4 shadow-sm">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-bold text-[#1a1a1a] truncate">{name.trim()}</p>
+                            <p className="text-[10px] text-gray-400 truncate">{personalUrl}</p>
+                          </div>
+                          <div className="flex gap-2">
+                            <button 
+                              onClick={() => {
+                                navigator.clipboard.writeText(personalUrl);
+                                alert(`Link untuk ${name.trim()} disalin!`);
+                              }}
+                              className="p-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition"
+                              title="Salin Link"
+                            >
+                              <Copy size={14} />
+                            </button>
+                            <a 
+                              href={`https://wa.me/?text=${waMsg}`}
+                              target="_blank"
+                              className="p-2 bg-[#25D366] text-white rounded-lg hover:bg-[#1ebe5d] transition"
+                              title="Kirim ke WhatsApp"
+                            >
+                              <Share2 size={14} />
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="p-6 border-t border-gray-100">
+              <button 
+                onClick={() => setIsGuestToolOpen(false)}
+                className="w-full py-4 bg-[#1a1a1a] text-white rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-gray-800 transition shadow-lg"
+              >
+                Selesai & Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
