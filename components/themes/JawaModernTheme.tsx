@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Disc, Heart, MapPin, Calendar, Gift, Send, Sparkles, Instagram } from "lucide-react";
+import { Disc, Heart, MapPin, Calendar, Gift, Send, Sparkles } from "lucide-react";
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
