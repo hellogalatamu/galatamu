@@ -130,13 +130,6 @@ function EditorContent() {
         'batak_01': 'Batak Traditional',
         'bali_01': 'Bali Traditional',
         'bugis_01': 'Bugis Traditional',
-        'aqiqah_01': 'Baby Pastel Breeze (Aqiqah)',
-        'syukuran_01': 'Warm Minimalist (Syukuran)',
-        'corporate_01': 'Corporate Nexus',
-        'education_01': 'Golden Graduation',
-        'adult_bd_01': 'Luxury Minimalist (Ulang Tahun)',
-        'kids_01': 'Ceria Playground (Anak)',
-        'sweet17_01': 'Midnight Glamour (Sweet 17)',
       };
       const themeName = THEMES_MAP[formData.theme_id || ''] || formData.theme_id;
       const waMessage = encodeURIComponent(

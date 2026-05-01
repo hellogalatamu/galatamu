@@ -32,7 +32,7 @@ const DEMO_DATA = {
 };
 
 // Theme Catalog Data
-const CATEGORIES = ["Semua", "Pernikahan", "Lainnya"];
+const CATEGORIES = ["Semua", "Pernikahan"];
 
 const THEMES: any[] = [
   {
@@ -131,45 +131,7 @@ const THEMES: any[] = [
     previewText: "text-white",
     btnBorder: "border-[#a67c00] text-[#a67c00] hover:bg-[#a67c00] hover:text-white",
   },
-  {
-    id: "aqiqah_01",
-    name: "Baby Pastel Breeze",
-    category: "Lainnya",
-    tagline: "Soft, Cute & Playful (Aqiqah)",
-    bg: "bg-[#fdf2f8]",
-    border: "border-pink-100",
-    textColor: "text-pink-600",
-    tagColor: "text-pink-400",
-    previewBg: "from-pink-100 to-blue-50",
-    previewText: "text-pink-600",
-    btnBorder: "border-pink-400 text-pink-400 hover:bg-pink-400 hover:text-white",
-  },
-  {
-    id: "kids_01",
-    name: "Ceria Playground",
-    category: "Lainnya",
-    tagline: "Dunia Anak Penuh Warna",
-    bg: "bg-[#fffbeb]",
-    border: "border-yellow-200",
-    textColor: "text-yellow-700",
-    tagColor: "text-yellow-500",
-    previewBg: "from-yellow-200 to-orange-100",
-    previewText: "text-yellow-700",
-    btnBorder: "border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white",
-  },
-  {
-    id: "corporate_01",
-    name: "Corporate Nexus",
-    category: "Lainnya",
-    tagline: "Professional, Bold & Structured",
-    bg: "bg-[#f8fafc]",
-    border: "border-slate-200",
-    textColor: "text-slate-900",
-    tagColor: "text-slate-500",
-    previewBg: "from-slate-800 to-slate-900",
-    previewText: "text-white",
-    btnBorder: "border-slate-800 text-slate-800 hover:bg-slate-800 hover:text-white",
-  },
+
   {
     id: "jawa_02",
     name: "Jawa Jogja Royal",
