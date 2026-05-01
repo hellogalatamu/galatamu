@@ -459,12 +459,40 @@ export default function LandingPage() {
             <div className="absolute inset-0 cursor-pointer" onClick={() => setPreviewTheme(null)} />
 
             <motion.div 
-              initial={{ scale: 0.9, y: 20 }}
+              initial={{ scale: 0.8, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm h-full max-h-[850px] z-10 flex items-center justify-center"
+              exit={{ scale: 0.8, y: 20 }}
+              className="relative w-full max-w-sm h-full max-h-[750px] z-10 flex items-center justify-center scale-[0.85] sm:scale-100 origin-center"
             >
-              <PremiumPhoneMockup className="h-full">
+              <PremiumPhoneMockup 
+                className="h-full"
+                showPedestal={false}
+                fixedFooter={
+                  <div className="w-full p-6 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
+                    <div className="flex gap-3">
+                      <button 
+                        onClick={() => setPreviewTheme(null)} 
+                        className="px-4 py-3.5 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-white/30 transition-all shadow-lg"
+                      >
+                        Tutup
+                      </button>
+                      <a 
+                        href={`/demo/${previewTheme}`}
+                        target="_blank"
+                        className="flex-1 py-3.5 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-xl font-bold uppercase tracking-widest text-[9px] flex items-center justify-center gap-2 hover:bg-white/30 transition-all text-center shadow-lg"
+                      >
+                        Fullscreen
+                      </a>
+                      <Link 
+                        href={`/editor?theme=${previewTheme}`}
+                        className="flex-1 py-3.5 bg-white text-[#1a1a1a] rounded-xl font-bold uppercase tracking-widest text-[9px] text-center hover:bg-gray-100 transition-all shadow-2xl active:scale-95"
+                      >
+                        Gunakan
+                      </Link>
+                    </div>
+                  </div>
+                }
+              >
                 {/* Theme Content */}
                 <div className="w-full h-full overflow-y-auto custom-scrollbar bg-white">
                   <ThemeRegistry 
@@ -472,31 +500,6 @@ export default function LandingPage() {
                     data={{ ...DEMO_DATA, theme_id: previewTheme, slug: "demo" }} 
                     previewMode={true} 
                   />
-                </div>
-                
-                {/* Action Bar inside Phone */}
-                <div className="absolute bottom-0 w-full p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[150]">
-                  <div className="flex gap-3">
-                    <button 
-                      onClick={() => setPreviewTheme(null)} 
-                      className="px-4 py-3.5 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-white/20 transition-all"
-                    >
-                      Tutup
-                    </button>
-                    <a 
-                      href={`/demo/${previewTheme}`}
-                      target="_blank"
-                      className="flex-1 py-3.5 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl font-bold uppercase tracking-widest text-[9px] flex items-center justify-center gap-2 hover:bg-white/20 transition-all text-center"
-                    >
-                      Fullscreen
-                    </a>
-                    <Link 
-                      href={`/editor?theme=${previewTheme}`}
-                      className="flex-1 py-3.5 bg-white text-[#1a1a1a] rounded-xl font-bold uppercase tracking-widest text-[9px] text-center hover:bg-gray-100 transition-all shadow-xl"
-                    >
-                      Gunakan
-                    </Link>
-                  </div>
                 </div>
               </PremiumPhoneMockup>
 
