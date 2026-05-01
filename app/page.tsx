@@ -58,6 +58,8 @@ const THEMES: any[] = [
     previewText: "text-gray-600",
     btnBorder: "border-[#1a1a1a] text-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-white",
     waText: `Assalamu'alaikum, Kak Admin Galatamu 👋\n\nSaya tertarik dengan *Tema Amara Premium* dan ingin memesan undangan digital untuk pernikahan saya.\n\nBoleh saya tahu detailnya? 🙏`,
+    thumbnail: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80",
+    thumbnail2: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80"
   },
   {
     id: "terracotta_01",
@@ -71,6 +73,8 @@ const THEMES: any[] = [
     previewBg: "from-[#fed7aa] to-[#fff7ed]",
     previewText: "text-[#7c2d12]",
     btnBorder: "border-[#ea580c] text-[#ea580c] hover:bg-[#ea580c] hover:text-white",
+    thumbnail: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80",
+    thumbnail2: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&q=80"
   },
   {
     id: "modern_01",
@@ -84,6 +88,8 @@ const THEMES: any[] = [
     previewBg: "from-[#0a0a0a] to-[#1a1a1a]",
     previewText: "text-white",
     btnBorder: "border-[#ff6b6b] text-[#ff6b6b] hover:bg-[#ff6b6b] hover:text-[#0a0a0a]",
+    thumbnail: "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80",
+    thumbnail2: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&q=80"
   },
   {
     id: "royal_01",
@@ -97,6 +103,8 @@ const THEMES: any[] = [
     previewBg: "from-[#06060f] to-[#12102a]",
     previewText: "text-[#e8d5a3]",
     btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#06060f]",
+    thumbnail: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80",
+    thumbnail2: "https://images.unsplash.com/photo-1510076857177-74700760be49?auto=format&fit=crop&q=80"
   },
   {
     id: "minimalist_white_01",
@@ -110,6 +118,8 @@ const THEMES: any[] = [
     previewBg: "from-white to-gray-50",
     previewText: "text-gray-900",
     btnBorder: "border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white",
+    thumbnail: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&q=80",
+    thumbnail2: "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80"
   },
   {
     id: "jawa_01",
@@ -123,6 +133,8 @@ const THEMES: any[] = [
     previewBg: "from-[#2d1b10] to-[#1a0f0a]",
     previewText: "text-[#d4af37]",
     btnBorder: "border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-white",
+    thumbnail: "https://images.unsplash.com/photo-1505944357431-27579db47558?auto=format&fit=crop&q=80",
+    thumbnail2: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80"
   },
   {
     id: "islamic_01",
@@ -136,6 +148,8 @@ const THEMES: any[] = [
     previewBg: "from-[#0d2b1a] to-[#1a4d2e]",
     previewText: "text-[#fdfcf0]",
     btnBorder: "border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#0d2b1a]",
+    thumbnail: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80",
+    thumbnail2: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80"
   }
 ];
 
@@ -322,7 +336,7 @@ export default function LandingPage() {
                                <div className="flex-1 space-y-6 pt-4">
                                   <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
                                      <div className="aspect-video bg-gray-100">
-                                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80" alt="Preview" className="w-full h-full object-cover" />
+                                        <img src={theme.thumbnail} alt="Preview" className="w-full h-full object-cover" />
                                      </div>
                                      <div className="p-4">
                                         <h5 className={`font-serif font-bold text-xs ${theme.textColor}`}>The Wedding of</h5>
@@ -333,7 +347,7 @@ export default function LandingPage() {
 
                                   <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
                                      <div className="aspect-video bg-gray-100">
-                                        <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80" alt="Preview" className="w-full h-full object-cover" />
+                                        <img src={theme.thumbnail2} alt="Preview" className="w-full h-full object-cover" />
                                      </div>
                                      <div className="p-4">
                                         <h5 className={`font-serif font-bold text-xs ${theme.textColor}`}>Our Journey</h5>
