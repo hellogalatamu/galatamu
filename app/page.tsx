@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Eye, X, Music, Heart, MapPin, Camera, Mail, Sparkles, ChevronRight, Menu } from "lucide-react";
 import FadeIn from "@/components/FadeIn";
 import ThemeRegistry from "@/components/ThemeRegistry";
+import PhoneMockup from "@/components/PhoneMockup";
 import Link from "next/link";
 
 // Demo Data for Live Preview
@@ -325,17 +327,24 @@ export default function LandingPage() {
               <FadeIn key={theme.id} delay={0.2 + idx * 0.1}>
                 <div className={`group rounded-[2rem] overflow-hidden ${theme.bg} border ${theme.border} shadow-sm hover:shadow-2xl transition-all duration-500`}>
                   {/* Preview Area */}
-                  <div className={`aspect-[3/4] relative overflow-hidden ${theme.isPlaceholder ? '' : 'cursor-pointer'}`} onClick={() => !theme.isPlaceholder && setPreviewTheme(theme.id)}>
-                    <div className={`absolute inset-0 bg-gradient-to-tr ${theme.previewBg} flex flex-col items-center justify-center gap-4 group-hover:scale-105 transition-transform duration-700`}>
-                      <span className={`font-serif text-3xl ${theme.previewText} opacity-80 italic tracking-wider`}>{theme.isPlaceholder ? 'Segera Hadir' : 'Galatamu.'}</span>
-                      {!theme.isPlaceholder && (
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                          <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/95 backdrop-blur-sm px-8 py-4 rounded-full flex items-center gap-2 shadow-xl text-[#1a1a1a] font-medium transform translate-y-4 group-hover:translate-y-0">
-                            <Eye size={18} /> Lihat Live Preview
-                          </div>
-                        </div>
-                      )}
+                  <div className={`aspect-[3/4] relative overflow-hidden p-6 bg-gradient-to-br ${theme.previewBg} flex items-center justify-center cursor-pointer group`} onClick={() => !theme.isPlaceholder && setPreviewTheme(theme.id)}>
+                    <div className="w-full h-full relative group-hover:scale-105 transition-transform duration-700">
+                      <PhoneMockup className="border-[#333] shadow-lg" innerClassName="bg-white">
+                         <div className={`w-full h-full flex flex-col items-center justify-center p-4 text-center ${theme.bg}`}>
+                            <span className={`font-serif text-xl ${theme.previewText} opacity-40 italic mb-2`}>Galatamu.</span>
+                            <h4 className={`font-serif text-lg font-bold ${theme.textColor} leading-tight`}>{theme.name}</h4>
+                            <div className="mt-4 w-8 h-px bg-current opacity-20" />
+                         </div>
+                      </PhoneMockup>
                     </div>
+
+                    {!theme.isPlaceholder && (
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-300 flex items-center justify-center z-[140]">
+                        <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 bg-white/95 backdrop-blur-sm px-6 py-3 rounded-full flex items-center gap-2 shadow-xl text-[#1a1a1a] text-xs font-bold transform translate-y-4 group-hover:translate-y-0">
+                          <Eye size={14} /> Lihat Demo
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className={`p-8 text-center bg-white border-t border-gray-100`}>
@@ -415,41 +424,70 @@ export default function LandingPage() {
       </footer>
 
       {/* Live Preview Modal */}
-      {previewTheme && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 transition-all">
-          <div className="relative w-full max-w-sm h-[90vh] bg-white rounded-[2rem] overflow-hidden shadow-2xl flex flex-col animate-in fade-in zoom-in duration-300">
-            {/* Close Button */}
-            <button
-              onClick={() => setPreviewTheme(null)}
-              className="absolute top-4 right-4 z-[110] p-2.5 bg-black/10 backdrop-blur-md rounded-full text-[#1a1a1a] hover:bg-black/20 transition-all pointer-events-auto"
-            >
-              <X size={20} />
-            </button>
+      <AnimatePresence>
+        {previewTheme && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8"
+          >
+            {/* Close Button Overlay */}
+            <div className="absolute inset-0 cursor-pointer" onClick={() => setPreviewTheme(null)} />
 
-            {/* Theme Preview */}
-            <div className="flex-1 overflow-y-auto">
-              <ThemeRegistry themeId={previewTheme} data={{ ...DEMO_DATA, theme_id: previewTheme, slug: "demo" }} previewMode={true} />
-            </div>
-            
-            <div className="absolute bottom-0 w-full p-6 bg-gradient-to-t from-black/95 via-black/70 to-transparent z-[100] pointer-events-none">
-              <div className="flex gap-3 pointer-events-auto">
-                <button 
-                  onClick={() => setPreviewTheme(null)} 
-                  className="flex-1 py-4 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-2xl font-bold uppercase tracking-widest text-[10px] hover:bg-white/20 transition-all"
-                >
-                  Tutup
-                </button>
-                <Link 
-                  href={`/editor?theme=${previewTheme}`}
-                  className="flex-1 py-4 bg-white text-[#1a1a1a] rounded-2xl font-bold uppercase tracking-widest text-[10px] text-center hover:bg-gray-100 transition-all shadow-xl"
-                >
-                  Gunakan Desain
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              className="relative w-full max-w-sm h-full max-h-[850px] z-10"
+            >
+              <PhoneMockup className="border-[#222]">
+                {/* Theme Content */}
+                <div className="w-full h-full overflow-y-auto custom-scrollbar bg-white">
+                  <ThemeRegistry 
+                    themeId={previewTheme} 
+                    data={{ ...DEMO_DATA, theme_id: previewTheme, slug: "demo" }} 
+                    previewMode={true} 
+                  />
+                </div>
+                
+                {/* Action Bar inside Phone */}
+                <div className="absolute bottom-0 w-full p-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[150]">
+                  <div className="flex gap-3">
+                    <button 
+                      onClick={() => setPreviewTheme(null)} 
+                      className="px-4 py-3.5 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-white/20 transition-all"
+                    >
+                      Tutup
+                    </button>
+                    <a 
+                      href={`/demo/${previewTheme}`}
+                      target="_blank"
+                      className="flex-1 py-3.5 bg-white/10 backdrop-blur-md text-white border border-white/20 rounded-xl font-bold uppercase tracking-widest text-[9px] flex items-center justify-center gap-2 hover:bg-white/20 transition-all text-center"
+                    >
+                      Fullscreen
+                    </a>
+                    <Link 
+                      href={`/editor?theme=${previewTheme}`}
+                      className="flex-1 py-3.5 bg-white text-[#1a1a1a] rounded-xl font-bold uppercase tracking-widest text-[9px] text-center hover:bg-gray-100 transition-all shadow-xl"
+                    >
+                      Gunakan
+                    </Link>
+                  </div>
+                </div>
+              </PhoneMockup>
+
+              {/* Outside Close Button (Desktop) */}
+              <button
+                onClick={() => setPreviewTheme(null)}
+                className="absolute -top-12 -right-12 hidden md:flex p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all"
+              >
+                <X size={24} />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

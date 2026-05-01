@@ -1,74 +1,30 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { Disc, MapPin, Calendar as CalendarIcon, Video, Gift, Heart, Send, ArrowRight } from "lucide-react";
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import GalleryLightbox from "../GalleryLightbox";
+import { InvitationData, WishData } from "./AmaraTheme";
 
-export interface WishData {
-  name: string;
-  presence: string;
-  message: string;
-  timestamp: string;
-}
-
-export interface InvitationData {
-  slug?: string;
-  theme_id?: string;
-  category?: string;
-  bride_data: {
-    groom: string;
-    bride: string;
-    parents_groom: string;
-    parents_bride: string;
-    groom_ig?: string;
-    bride_ig?: string;
-  };
-  event_data: {
-    date: string;
-    akad_time: string;
-    akad_location: string;
-    akad_map?: string;
-    resepsi_time: string;
-    resepsi_location: string;
-    resepsi_map?: string;
-    live_stream?: string;
-  };
-  hero_image?: string;
-  bg_middle?: string;
-  bg_bottom?: string;
-  bride_photo?: string;
-  groom_photo?: string;
-  love_story?: { year: string; title: string; desc: string }[];
-  gallery?: string[];
-  video?: string;
-  gifts?: { bank: string; acc: string; name: string }[];
-  music_url?: string;
-  quote?: string;
-  is_paid?: boolean;
-  wishes?: WishData[];
-}
-
-interface AmaraThemeProps {
-  data: InvitationData;
-  previewMode?: boolean;
-  guestName?: string;
-}
-
-export default function AmaraTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: AmaraThemeProps) {
-  const [isOpen, setIsOpen] = useState(previewMode); // Auto-open in preview mode
+export default function AmaraTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
+  const [isOpen, setIsOpen] = useState(previewMode);
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const containerRef = useRef(null);
 
-  // RSVP State
   const [wishes, setWishes] = useState<WishData[]>(data.wishes || []);
   const [rsvpName, setRsvpName] = useState(guestName !== "Tamu Undangan" ? guestName : "");
   const [rsvpPresence, setRsvpPresence] = useState("");
   const [rsvpMessage, setRsvpMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
 
   useEffect(() => {
     if (!previewMode) {
@@ -76,13 +32,8 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
       audioRef.current = new Audio(musicSrc);
       audioRef.current.loop = true;
     }
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, [previewMode]);
+    return () => { if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; } };
+  }, [previewMode, data.music_url]);
 
   const openInvitation = () => {
     setIsOpen(true);
@@ -98,62 +49,47 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
   };
 
   const eventDate = data.event_data.date ? new Date(data.event_data.date) : new Date();
-  const calendarDateStr = eventDate.toISOString().split('T')[0].replace(/-/g, '');
-  const calendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+${encodeURIComponent(data.bride_data.groom)}+%26+${encodeURIComponent(data.bride_data.bride)}&dates=${calendarDateStr}/${calendarDateStr}`;
-
-  // Dummy fallback data if missing
-  const gallery = (data.gallery?.filter(img => img)?.length) ? data.gallery.filter(img => img) : [
-    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?auto=format&fit=crop&q=80"
-  ];
-  
-  const loveStory = data.love_story?.length ? data.love_story : [
-    { year: "2020", title: "Awal Bertemu", desc: "Kami bertemu secara tidak sengaja di sebuah kafe kopi." },
-    { year: "2022", title: "Berkomitmen", desc: "Kami memutuskan untuk menjalin hubungan yang lebih serius." },
-    { year: "2024", title: "Lamaran", desc: "Hari yang indah saat dua keluarga saling bertemu." }
-  ];
 
   return (
-    <div className={`bg-[#faf9f6] min-h-screen text-[#1a1a1a] font-sans selection:bg-[#1a1a1a] selection:text-white ${previewMode ? 'relative' : ''}`}>
-      {/* Cover / Hero Overlay — hidden in preview mode */}
+    <div ref={containerRef} className="bg-[#faf9f6] min-h-screen text-[#1a1a1a] font-sans selection:bg-[#1a1a1a] selection:text-white overflow-hidden">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;600&display=swap');
+        .font-serif-display { font-family: 'Playfair Display', serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .text-huge { font-size: clamp(4rem, 15vw, 12rem); line-height: 0.8; }
+        .outline-text { -webkit-text-stroke: 1px #1a1a1a; color: transparent; }
+      `}</style>
+
+      {/* ── ENVELOPE / COVER ── */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
-            <motion.div
-              initial={{ opacity: 1 }}
-              exit={{ opacity: 0, y: "-100%" }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-              className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#1a1a1a] text-white overflow-hidden"
+            <motion.div 
+              initial={{ opacity: 1 }} 
+              exit={{ y: "-100%", opacity: 0 }} 
+              transition={{ duration: 1.2, ease: [0.77, 0, 0.175, 1] }}
+              className="fixed inset-0 z-[100] bg-[#1a1a1a] flex items-center justify-center overflow-hidden"
             >
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-overlay"
+              <motion.div 
+                initial={{ scale: 1.2, opacity: 0 }} 
+                animate={{ scale: 1, opacity: 0.4 }} 
+                transition={{ duration: 2 }}
+                className="absolute inset-0 bg-cover bg-center"
                 style={{ backgroundImage: `url('${data.hero_image || 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80'}')` }}
-              ></div>
-              <div className="relative z-10 text-center px-6">
-                <FadeIn delay={0.2}>
-                  <p className="tracking-widest uppercase text-xs mb-2 text-gray-300">The Wedding Of</p>
-                </FadeIn>
-                <FadeIn delay={0.4}>
-                  <h1 className="font-serif text-5xl md:text-7xl font-bold mb-4">
-                    {data.bride_data.groom || "Groom"} & {data.bride_data.bride || "Bride"}
+              />
+              <div className="relative z-10 text-center text-white px-6">
+                <FadeIn delay={0.5}>
+                  <p className="font-inter tracking-[0.5em] uppercase text-[10px] mb-8 text-white/60">Private Invitation</p>
+                  <h1 className="font-serif-display text-huge mb-12 italic">
+                    {data.bride_data.groom.split(' ')[0]} <span className="text-white/20">&</span> {data.bride_data.bride.split(' ')[0]}
                   </h1>
-                </FadeIn>
-                <FadeIn delay={0.6}>
-                  <p className="text-sm font-light text-gray-300 mb-4 max-w-md mx-auto italic whitespace-pre-wrap">
-                    {data.quote || `"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya."`}
-                  </p>
-                  <p className="text-sm font-light text-gray-300 mb-8">Kpd Bpk/Ibu/Saudara/i <br/><span className="font-bold text-lg mt-1 block tracking-wider">{guestName}</span></p>
-                </FadeIn>
-                <FadeIn delay={0.8}>
+                  <p className="font-inter text-sm tracking-widest mb-16 text-white/80">FOR <span className="font-bold border-b border-white/30 pb-1">{guestName}</span></p>
                   <button 
                     onClick={openInvitation}
-                    className="px-8 py-3 bg-white text-[#1a1a1a] rounded-full font-medium hover:bg-gray-200 transition-colors shadow-lg flex items-center gap-2 mx-auto"
+                    className="group relative px-12 py-5 bg-white text-black font-inter text-[10px] uppercase tracking-[0.4em] overflow-hidden transition-all hover:pr-16"
                   >
-                    Buka Undangan
+                    <span className="relative z-10">Open Invitation</span>
+                    <ArrowRight className="absolute right-6 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all" size={16} />
                   </button>
                 </FadeIn>
               </div>
@@ -162,296 +98,238 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
         </AnimatePresence>
       )}
 
-      {/* Preview Mode Banner */}
-      {previewMode && (
-        <div className="bg-[#1a1a1a] text-white text-center py-2 text-xs uppercase tracking-widest sticky top-0 z-20">
-          ✦ Mode Preview — Tema Amara Premium ✦
-        </div>
-      )}
-
-      {/* Main Content */}
+      {/* ── MAIN CONTENT ── */}
       {(isOpen || previewMode) && (
-        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: previewMode ? 0 : 1 }} className="pb-32">
+        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative">
           
-          {/* Hero Section */}
-          <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
-            <div className="absolute inset-0 z-0">
-              <img src={data.hero_image || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80"} alt="Hero" className="w-full h-full object-cover opacity-10" />
+          {/* Section 1: Hero Editorial */}
+          <section className="relative min-h-screen flex flex-col justify-end p-8 md:p-20">
+            <div className="absolute top-0 right-0 w-full md:w-2/3 h-2/3 md:h-full z-0 overflow-hidden">
+               <motion.img 
+                initial={{ scale: 1.1 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 1.5 }}
+                src={data.hero_image || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80"} 
+                className="w-full h-full object-cover grayscale brightness-90"
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-[#faf9f6] via-transparent to-transparent md:bg-gradient-to-r md:from-[#faf9f6] md:via-transparent" />
             </div>
-            <div className="relative z-10">
-              <FadeIn><p className="tracking-widest uppercase text-sm mb-4 text-gray-500">We Are Getting Married</p></FadeIn>
-              <FadeIn delay={0.2}>
-                <h2 className="font-serif text-4xl sm:text-6xl md:text-8xl font-bold mb-6 px-4">{data.bride_data.groom || "Groom"} & {data.bride_data.bride || "Bride"}</h2>
-              </FadeIn>
-              <FadeIn delay={0.4}>
-                <p className="text-lg text-gray-600 italic font-serif mb-12">
-                  {eventDate.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-                </p>
-              </FadeIn>
-              <FadeIn delay={0.6}>
-                <Countdown targetDate={eventDate} />
-              </FadeIn>
-            </div>
-          </section>
 
-          {/* Profil Mempelai */}
-          <section className="relative py-24 px-6 bg-white text-center overflow-hidden">
-            {data.bg_middle && (
-              <div className="absolute inset-0 z-0">
-                <img src={data.bg_middle} alt="Background Middle" className="w-full h-full object-cover opacity-10" />
-              </div>
-            )}
-            <div className="max-w-4xl mx-auto relative z-10">
+            <div className="relative z-10 max-w-4xl">
               <FadeIn>
-                <h3 className="font-serif text-4xl mb-6">Mempelai</h3>
-                <p className="text-gray-600 mb-16 font-light max-w-2xl mx-auto">Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk menghadiri resepsi pernikahan kami.</p>
-              </FadeIn>
-              <div className="grid md:grid-cols-2 gap-16">
-                <FadeIn delay={0.2}>
-                  <div className="flex flex-col items-center">
-                    <div className="w-48 h-48 rounded-full overflow-hidden mb-6 bg-gray-100 shadow-md">
-                      <img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"} alt="Groom" className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                    <h4 className="font-serif text-3xl font-bold mb-2">{data.bride_data.groom || "Groom"}</h4>
-                    <p className="text-sm text-gray-500 mb-4">Putra dari {data.bride_data.parents_groom || "Nama Orang Tua"}</p>
-                    {data.bride_data.groom_ig && (
-                      <a href={`https://instagram.com/${data.bride_data.groom_ig}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-sm hover:bg-gray-100 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                        @{data.bride_data.groom_ig}
-                      </a>
-                    )}
-                  </div>
-                </FadeIn>
-                <FadeIn delay={0.4}>
-                  <div className="flex flex-col items-center">
-                    <div className="w-48 h-48 rounded-full overflow-hidden mb-6 bg-gray-100 shadow-md">
-                      <img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"} alt="Bride" className="w-full h-full object-cover grayscale hover:grayscale-0 transition duration-500" />
-                    </div>
-                    <h4 className="font-serif text-3xl font-bold mb-2">{data.bride_data.bride || "Bride"}</h4>
-                    <p className="text-sm text-gray-500 mb-4">Putri dari {data.bride_data.parents_bride || "Nama Orang Tua"}</p>
-                    {data.bride_data.bride_ig && (
-                      <a href={`https://instagram.com/${data.bride_data.bride_ig}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-full text-sm hover:bg-gray-100 transition">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                        @{data.bride_data.bride_ig}
-                      </a>
-                    )}
-                  </div>
-                </FadeIn>
-              </div>
-            </div>
-          </section>
-
-          {/* Love Story */}
-          <section className="py-24 px-6 bg-[#f4f2e9] relative">
-            <div className="max-w-2xl mx-auto">
-              <FadeIn><h3 className="font-serif text-4xl mb-16 text-center">Love Story</h3></FadeIn>
-              <div className="space-y-12 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
-                {loveStory.map((story, i) => (
-                  <FadeIn key={i} delay={i * 0.2}>
-                    <div className={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active`}>
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-[#1a1a1a] text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-                        <Heart size={16} />
-                      </div>
-                      <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                        <span className="text-sm font-medium text-gray-400 block mb-1">{story.year}</span>
-                        <h4 className="font-serif text-xl font-bold mb-2">{story.title}</h4>
-                        <p className="text-gray-600 font-light text-sm">{story.desc}</p>
-                      </div>
-                    </div>
-                  </FadeIn>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Jadwal Acara */}
-          <section className="relative py-24 px-6 bg-white text-center overflow-hidden">
-            {data.bg_middle && (
-              <div className="absolute inset-0 z-0">
-                <img src={data.bg_middle} alt="Background Middle" className="w-full h-full object-cover opacity-10" />
-              </div>
-            )}
-            <div className="relative z-10">
-              <FadeIn><h3 className="font-serif text-4xl mb-12">Detail Acara</h3></FadeIn>
-              <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 mb-12">
-              <FadeIn delay={0.2}>
-                <div className="p-10 border border-gray-100 rounded-[2rem] bg-[#faf9f6] shadow-sm relative overflow-hidden group hover:shadow-md transition">
-                  <h4 className="font-serif text-3xl mb-4">Akad Nikah</h4>
-                  <p className="font-medium text-xl mb-1">{data.event_data.akad_time || "Waktu Akad"}</p>
-                  <p className="text-gray-500 font-light mb-6">{data.event_data.akad_location || "Lokasi Akad"}</p>
-                  <a href={data.event_data.akad_map || "https://maps.google.com"} target="_blank" className="inline-flex items-center justify-center gap-2 w-full py-3 bg-[#1a1a1a] text-white rounded-full font-medium"><MapPin size={18}/> Google Maps</a>
-                </div>
-              </FadeIn>
-              <FadeIn delay={0.4}>
-                <div className="p-10 border border-gray-100 rounded-[2rem] bg-[#faf9f6] shadow-sm relative overflow-hidden group hover:shadow-md transition">
-                  <h4 className="font-serif text-3xl mb-4">Resepsi</h4>
-                  <p className="font-medium text-xl mb-1">{data.event_data.resepsi_time || "Waktu Resepsi"}</p>
-                  <p className="text-gray-500 font-light mb-6">{data.event_data.resepsi_location || "Lokasi Resepsi"}</p>
-                  <a href={data.event_data.resepsi_map || "https://maps.google.com"} target="_blank" className="inline-flex items-center justify-center gap-2 w-full py-3 bg-[#1a1a1a] text-white rounded-full font-medium"><MapPin size={18}/> Google Maps</a>
+                <p className="font-inter tracking-[0.4em] uppercase text-[10px] text-gray-400 mb-6">The Wedding Of</p>
+                <h2 className="font-serif-display text-huge mb-6">
+                  {data.bride_data.groom}
+                  <span className="block outline-text italic -mt-4 mb-4">& {data.bride_data.bride}</span>
+                </h2>
+                <div className="flex flex-col md:flex-row md:items-end gap-8 mt-12">
+                   <div className="border-l border-black/10 pl-6 py-2">
+                      <p className="font-serif-display text-3xl italic">{eventDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                      <p className="font-inter text-[10px] tracking-widest uppercase text-gray-400 mt-2">Save the date</p>
+                   </div>
+                   <div className="md:mb-1">
+                      <Countdown targetDate={eventDate} />
+                   </div>
                 </div>
               </FadeIn>
             </div>
-            
-            <FadeIn delay={0.6}>
-              <div className="flex flex-wrap justify-center gap-4 max-w-lg mx-auto">
-                <a href={calendarLink} target="_blank" className="flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-full hover:bg-gray-50 transition font-medium"><CalendarIcon size={18}/> Simpan Kalender</a>
-                <a href={data.event_data.live_stream || "#"} target="_blank" className="flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-full hover:bg-gray-50 transition font-medium"><Video size={18}/> Live Streaming</a>
-              </div>
+          </section>
+
+          {/* Section 2: Split Profiles */}
+          <section className="py-32 px-8 md:px-20 bg-white">
+            <div className="grid md:grid-cols-2 gap-20 items-center">
+              <FadeIn>
+                <div className="relative aspect-[3/4] overflow-hidden group">
+                  <img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute bottom-0 left-0 p-8 text-white z-10">
+                    <p className="font-inter text-[9px] tracking-[0.5em] uppercase mb-2 text-white/60">Groom</p>
+                    <h3 className="font-serif-display text-4xl italic">{data.bride_data.groom}</h3>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+                <p className="font-inter text-sm text-gray-400 mt-6 max-w-xs leading-relaxed italic">Putra dari Bapak {data.bride_data.parents_groom.split('&')[0]} & Ibu {data.bride_data.parents_groom.split('&')[1] || data.bride_data.parents_groom}</p>
+              </FadeIn>
+
+              <FadeIn delay={0.2} className="md:mt-40">
+                <div className="relative aspect-[3/4] overflow-hidden group">
+                  <img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute bottom-0 left-0 p-8 text-white z-10">
+                    <p className="font-inter text-[9px] tracking-[0.5em] uppercase mb-2 text-white/60">Bride</p>
+                    <h3 className="font-serif-display text-4xl italic text-[#d4af37]">{data.bride_data.bride}</h3>
+                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                </div>
+                <p className="font-inter text-sm text-gray-400 mt-6 max-w-xs leading-relaxed italic md:ml-auto md:text-right">Putri dari Bapak {data.bride_data.parents_bride.split('&')[0]} & Ibu {data.bride_data.parents_bride.split('&')[1] || data.bride_data.parents_bride}</p>
               </FadeIn>
             </div>
           </section>
 
-          {/* Galeri */}
+          {/* Section 3: Love Story Editorial */}
+          <section className="py-32 px-8 md:px-20 bg-[#faf9f6]">
+            <div className="max-w-6xl mx-auto">
+               <FadeIn className="mb-20">
+                  <h2 className="font-serif-display text-7xl md:text-9xl outline-text italic">Our Journey</h2>
+               </FadeIn>
+               
+               <div className="space-y-40">
+                  {data.love_story?.map((story, i) => (
+                    <FadeIn key={i} className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 items-center`}>
+                      <div className="w-full md:w-1/2 aspect-video bg-gray-200 overflow-hidden grayscale">
+                         <img src={data.gallery?.[i] || "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80"} className="w-full h-full object-cover opacity-80" />
+                      </div>
+                      <div className="w-full md:w-1/2">
+                         <p className="font-serif-display text-6xl text-gray-200 mb-4">{story.year}</p>
+                         <h4 className="font-inter text-xl font-bold tracking-widest uppercase mb-6">{story.title}</h4>
+                         <p className="font-inter text-gray-500 leading-relaxed font-light text-lg">{story.desc}</p>
+                      </div>
+                    </FadeIn>
+                  ))}
+               </div>
+            </div>
+          </section>
+
+          {/* Section 4: Event Details Asymmetric */}
+          <section className="py-32 px-8 md:px-20 bg-white">
+            <div className="grid md:grid-cols-2 gap-px bg-black/5 border border-black/5">
+               <FadeIn className="p-16 bg-white flex flex-col justify-between min-h-[400px]">
+                  <div>
+                    <p className="font-inter tracking-[0.5em] uppercase text-[9px] mb-8 text-gray-300 font-bold">The Ceremony</p>
+                    <h3 className="font-serif-display text-4xl mb-6">Akad Nikah</h3>
+                    <p className="font-inter text-2xl font-light mb-2">{data.event_data.akad_time}</p>
+                    <p className="font-inter text-gray-400 italic text-sm leading-relaxed max-w-xs">{data.event_data.akad_location}</p>
+                  </div>
+                  <a href={data.event_data.akad_map} target="_blank" className="mt-12 flex items-center gap-4 font-inter text-[10px] uppercase tracking-widest text-black/40 hover:text-black transition-all">
+                     <span className="w-10 h-px bg-black/10" /> View On Maps
+                  </a>
+               </FadeIn>
+
+               <FadeIn className="p-16 bg-white flex flex-col justify-between min-h-[400px]" delay={0.2}>
+                  <div>
+                    <p className="font-inter tracking-[0.5em] uppercase text-[9px] mb-8 text-gray-300 font-bold">The Celebration</p>
+                    <h3 className="font-serif-display text-4xl mb-6 italic text-[#d4af37]">Resepsi</h3>
+                    <p className="font-inter text-2xl font-light mb-2">{data.event_data.resepsi_time}</p>
+                    <p className="font-inter text-gray-400 italic text-sm leading-relaxed max-w-xs">{data.event_data.resepsi_location}</p>
+                  </div>
+                  <a href={data.event_data.resepsi_map} target="_blank" className="mt-12 flex items-center gap-4 font-inter text-[10px] uppercase tracking-widest text-black/40 hover:text-black transition-all">
+                     <span className="w-10 h-px bg-black/10" /> View On Maps
+                  </a>
+               </FadeIn>
+            </div>
+          </section>
+
+          {/* Section 5: Gallery Mosaic */}
           <GalleryLightbox
-            images={gallery}
-            title="Gallery Foto"
-            titleClassName="font-serif text-4xl mb-12 text-center"
-            sectionClassName="py-24 px-6 bg-[#faf9f6]"
-            gridClassName="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto"
-            itemClassName="aspect-square rounded-2xl overflow-hidden bg-gray-200 group cursor-pointer relative"
-            imgClassName="w-full h-full object-cover group-hover:scale-110 transition duration-700"
+            images={data.gallery || []}
+            title="The Memories"
+            titleClassName="font-serif-display text-7xl md:text-9xl text-center mb-24 outline-text italic"
+            sectionClassName="py-32 px-4 md:px-20 bg-[#faf9f6]"
+            gridClassName="columns-2 md:columns-3 gap-4 space-y-4 max-w-7xl mx-auto"
+            itemClassName="break-inside-avoid overflow-hidden group cursor-pointer relative bg-gray-100"
+            imgClassName="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-1000"
           />
 
-          {/* Amplop Digital */}
-          <section className="py-24 px-6 bg-white text-center">
+          {/* Section 6: Gift Section Modern */}
+          <section className="py-32 px-8 md:px-20 bg-white text-center">
             <div className="max-w-2xl mx-auto">
-              <FadeIn>
-                <div className="w-16 h-16 bg-gray-50 text-gray-800 rounded-full flex items-center justify-center mx-auto mb-6"><Gift size={28}/></div>
-                <h3 className="font-serif text-4xl mb-4">Amplop Digital</h3>
-                <p className="text-gray-600 mb-10 font-light">Doa restu Anda merupakan karunia yang sangat berarti bagi kami. Dan jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberi kado secara cashless.</p>
-              </FadeIn>
-              
-              <div className="grid sm:grid-cols-2 gap-6">
-                {(data.gifts?.length ? data.gifts : [{bank: "BCA", acc: "123456789", name: "Groom Name"}]).map((gift, i) => (
-                  <FadeIn key={i} delay={0.2}>
-                    <div className="p-6 border border-gray-200 rounded-2xl bg-gray-50">
-                      <p className="font-bold text-xl mb-2">{gift.bank}</p>
-                      <p className="text-lg tracking-widest mb-1">{gift.acc}</p>
-                      <p className="text-sm text-gray-500 uppercase">{gift.name}</p>
-                    </div>
-                  </FadeIn>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          {/* Video Undangan */}
-          {data.video && (
-            <section className="py-24 px-6 bg-white text-center">
-              <FadeIn><h3 className="font-serif text-4xl mb-12">Video Undangan</h3></FadeIn>
-              <div className="max-w-4xl mx-auto aspect-video rounded-3xl overflow-hidden border-8 border-gray-50 shadow-2xl">
-                <iframe 
-                  className="w-full h-full"
-                  src={`https://www.youtube.com/embed/${data.video.includes('v=') ? data.video.split('v=')[1].split('&')[0] : data.video.split('/').pop()}`}
-                  title="Wedding Video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
-              </div>
-            </section>
-          )}
-
-          {/* RSVP & Wedding Wish */}
-          <section className="relative py-24 px-6 bg-[#1a1a1a] text-white overflow-hidden">
-            {data.bg_bottom && (
-              <div className="absolute inset-0 z-0">
-                <img src={data.bg_bottom} alt="Background Bottom" className="w-full h-full object-cover opacity-20" />
-              </div>
-            )}
-            <div className="max-w-2xl mx-auto relative z-10">
-              <FadeIn>
-                <h3 className="font-serif text-4xl mb-4 text-center">RSVP & Ucapan</h3>
-                <p className="text-gray-400 mb-10 text-center font-light">Tinggalkan pesan hangat untuk kedua mempelai.</p>
-              </FadeIn>
-              
-              <FadeIn delay={0.2}>
-                <form 
-                  className="space-y-4 mb-16" 
-                  onSubmit={async (e) => { 
-                    e.preventDefault(); 
-                    if (previewMode) {
-                      alert("Mode preview: Form tidak dikirim.");
-                      return;
-                    }
-                    if (!data.slug) return;
-                    setIsSubmitting(true);
-                    
-                    const newWish: WishData = {
-                      name: rsvpName || guestName,
-                      presence: rsvpPresence,
-                      message: rsvpMessage,
-                      timestamp: new Date().toISOString()
-                    };
-
-                    try {
-                      const success = await submitWish(data.slug, newWish);
-                      if (success) {
-                        setWishes([...wishes, newWish]);
-                        setRsvpMessage("");
-                        setRsvpPresence("");
-                        alert("Ucapan berhasil dikirim!");
-                      } else {
-                        alert("Gagal mengirim ucapan, coba lagi.");
-                      }
-                    } catch (error) {
-                      console.error(error);
-                      alert("Terjadi kesalahan sistem.");
-                    } finally {
-                      setIsSubmitting(false);
-                    }
-                  }}
-                >
-                  <input type="text" value={rsvpName} onChange={(e) => setRsvpName(e.target.value)} placeholder="Nama Anda" className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-white text-white placeholder:text-gray-400" required />
-                  <select value={rsvpPresence} onChange={(e) => setRsvpPresence(e.target.value)} className="w-full px-4 py-3 bg-[#1a1a1a] border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-white text-white" required>
-                    <option value="">Konfirmasi Kehadiran</option>
-                    <option value="hadir">Ya, Saya akan hadir</option>
-                    <option value="tidak">Maaf, tidak bisa hadir</option>
-                  </select>
-                  <textarea rows={4} value={rsvpMessage} onChange={(e) => setRsvpMessage(e.target.value)} placeholder="Tuliskan ucapan & doa Anda..." className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-white text-white placeholder:text-gray-400" required></textarea>
-                  <button type="submit" disabled={isSubmitting} className="w-full py-4 bg-white text-[#1a1a1a] font-medium rounded-xl flex justify-center items-center gap-2 hover:bg-gray-200 transition disabled:opacity-50"><Send size={18}/> {isSubmitting ? "Mengirim..." : "Kirim Ucapan"}</button>
-                </form>
-              </FadeIn>
-
-              {/* Menampilkan List Ucapan */}
-              <FadeIn delay={0.4}>
-                <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                  {wishes.length > 0 ? (
-                    [...wishes].reverse().map((wish, idx) => (
-                      <div key={idx} className="bg-white/5 p-4 rounded-xl border border-white/10">
-                        <div className="flex items-center justify-between mb-2">
-                          <span className="font-bold text-lg">{wish.name}</span>
-                          <span className={`text-xs px-2 py-1 rounded-full ${wish.presence === 'hadir' ? 'bg-green-500/20 text-green-300' : 'bg-red-500/20 text-red-300'}`}>
-                            {wish.presence === 'hadir' ? 'Hadir' : 'Tidak Hadir'}
-                          </span>
+               <FadeIn>
+                  <p className="font-inter tracking-[0.4em] uppercase text-[10px] text-gray-300 mb-8 font-bold">Digital Envelope</p>
+                  <h3 className="font-serif-display text-5xl mb-12 italic">Wedding Gift</h3>
+                  <p className="font-inter text-gray-400 font-light mb-16 leading-relaxed">Kehadiran Anda adalah hadiah terbaik bagi kami. Namun jika ingin memberikan tanda kasih, silakan melalui saluran berikut:</p>
+               </FadeIn>
+               
+               <div className="space-y-6">
+                  {data.gifts?.map((gift, i) => (
+                    <FadeIn key={i} delay={i * 0.1}>
+                      <div className="p-12 border border-black/5 bg-[#faf9f6] flex flex-col items-center group relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                           <Gift size={24} />
                         </div>
-                        <p className="text-gray-300 font-light text-sm mb-2">{wish.message}</p>
-                        <p className="text-gray-500 text-xs text-right">
-                          {new Date(wish.timestamp).toLocaleDateString("id-ID", { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit' })}
-                        </p>
+                        <p className="font-inter text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 mb-4 italic">{gift.bank}</p>
+                        <p className="font-inter text-3xl font-light mb-2 tracking-widest">{gift.acc}</p>
+                        <p className="font-inter text-xs text-gray-500 font-bold uppercase tracking-widest">{gift.name}</p>
                       </div>
-                    ))
-                  ) : (
-                    <p className="text-center text-gray-500 font-light">Belum ada ucapan. Jadilah yang pertama!</p>
-                  )}
-                </div>
-              </FadeIn>
+                    </FadeIn>
+                  ))}
+               </div>
             </div>
           </section>
 
-          {/* Footer */}
-          <footer className="py-12 text-center bg-[#1a1a1a] text-gray-500 border-t border-white/10">
-            <p className="font-serif text-2xl text-white mb-4">{data.bride_data.groom} & {data.bride_data.bride}</p>
-            <p className="text-sm">Made with ❤️ by Galatamu</p>
-            <p className="text-xs mt-2 opacity-50">Masa Aktif Undangan: 6 Bulan Sejak Acara</p>
+          {/* Section 7: RSVP Dark Editorial */}
+          <section className="py-32 px-8 md:px-20 bg-[#1a1a1a] text-white">
+             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-20">
+                <FadeIn>
+                   <h2 className="font-serif-display text-6xl md:text-8xl italic text-white/20 mb-8 leading-none">The RSVP</h2>
+                   <p className="font-inter text-white/40 leading-relaxed font-light mb-12 italic">Mohon konfirmasi kehadiran Anda untuk membantu kami dalam persiapan acara yang lebih baik. Terima kasih.</p>
+                   
+                   <div className="space-y-8 mt-20 hidden md:block">
+                      <div className="w-12 h-px bg-white/20" />
+                      <p className="font-serif-display text-4xl italic text-white/60">We can't wait to see you there.</p>
+                   </div>
+                </FadeIn>
+
+                <FadeIn delay={0.2}>
+                   <form className="space-y-8" onSubmit={async (e) => {
+                      e.preventDefault();
+                      if (previewMode) return alert("Preview.");
+                      if (!data.slug) return;
+                      setIsSubmitting(true);
+                      const w: WishData = { name: rsvpName || guestName, presence: rsvpPresence, message: rsvpMessage, timestamp: new Date().toISOString() };
+                      try {
+                        const success = await submitWish(data.slug, w);
+                        if (success) { setWishes([...wishes, w]); setRsvpMessage(""); setRsvpPresence(""); alert("Sent."); }
+                      } finally { setIsSubmitting(false); }
+                   }}>
+                      <div className="space-y-1">
+                        <label className="text-[9px] uppercase tracking-widest text-white/30 font-bold ml-1">Name</label>
+                        <input type="text" value={rsvpName} onChange={(e) => setRsvpName(e.target.value)} className="w-full bg-white/5 border-b border-white/10 px-4 py-5 focus:outline-none focus:border-white transition-all text-sm font-inter" placeholder="Enter your name" required />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] uppercase tracking-widest text-white/30 font-bold ml-1">Attendance</label>
+                        <select value={rsvpPresence} onChange={(e) => setRsvpPresence(e.target.value)} className="w-full bg-[#1a1a1a] border-b border-white/10 px-4 py-5 focus:outline-none focus:border-white transition-all text-sm font-inter" required>
+                            <option value="">Will you attend?</option>
+                            <option value="hadir">I am attending</option>
+                            <option value="tidak">I am unable to attend</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[9px] uppercase tracking-widest text-white/30 font-bold ml-1">Message</label>
+                        <textarea rows={4} value={rsvpMessage} onChange={(e) => setRsvpMessage(e.target.value)} className="w-full bg-white/5 border-b border-white/10 px-4 py-5 focus:outline-none focus:border-white transition-all text-sm font-inter resize-none" placeholder="Leave a warm wish" required></textarea>
+                      </div>
+                      <button type="submit" disabled={isSubmitting} className="w-full py-6 bg-white text-black font-inter text-[10px] uppercase tracking-[0.5em] font-bold hover:bg-gray-200 transition-all disabled:opacity-30">
+                        {isSubmitting ? "Processing..." : "Send Wishes"}
+                      </button>
+                   </form>
+                </FadeIn>
+             </div>
+
+             <FadeIn className="mt-32 border-t border-white/5 pt-20">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                   {wishes.slice(0, 6).map((wish, idx) => (
+                      <div key={idx} className="bg-white/[0.03] p-8 border border-white/[0.05]">
+                         <div className="flex justify-between items-start mb-6">
+                            <h4 className="font-serif-display text-xl italic">{wish.name}</h4>
+                            <span className="text-[8px] uppercase tracking-widest text-white/20 border border-white/10 px-2 py-1">{wish.presence === 'hadir' ? 'Attending' : 'Absent'}</span>
+                         </div>
+                         <p className="text-white/40 font-inter text-sm leading-relaxed italic">&ldquo;{wish.message}&rdquo;</p>
+                      </div>
+                   ))}
+                </div>
+             </FadeIn>
+          </section>
+
+          {/* Footer Minimalist */}
+          <footer className="py-32 px-8 bg-white text-center">
+            <h2 className="font-serif-display text-4xl italic mb-6">
+               {data.bride_data.groom.split(' ')[0]} <span className="text-gray-200">&</span> {data.bride_data.bride.split(' ')[0]}
+            </h2>
+            <p className="font-inter text-[9px] tracking-[0.8em] text-gray-300 uppercase">Editorial Series — Galatamu</p>
           </footer>
         </motion.main>
       )}
 
-      {/* Floating Music Player */}
       {isOpen && !previewMode && (
-        <button onClick={toggleMusic} className="fixed bottom-6 right-6 z-40 p-4 rounded-full bg-white/30 backdrop-blur-md border border-white/40 shadow-lg text-[#1a1a1a] hover:bg-white/50 transition-all">
-          <Disc className={`w-6 h-6 ${isPlaying ? 'animate-[spin_3s_linear_infinite]' : ''}`} />
+        <button onClick={toggleMusic} className="fixed bottom-10 right-10 z-40 p-5 rounded-full bg-black text-white shadow-2xl transition-all hover:scale-110">
+          <Disc className={`w-5 h-5 ${isPlaying ? 'animate-[spin_4s_linear_infinite]' : ''}`} />
         </button>
       )}
     </div>

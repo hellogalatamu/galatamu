@@ -1,7 +1,8 @@
 "use client";
+
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Disc, Gift, Send, Crown } from "lucide-react";
+import { Disc, Gift, Send, Crown, Gem, Heart, MapPin, Video } from "lucide-react";
 import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
@@ -31,301 +32,215 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
   const eventDate = data.event_data.date ? new Date(data.event_data.date) : new Date();
 
   return (
-    <div className={`min-h-screen bg-[#06060f] text-[#e8d5a3] ${previewMode ? "relative" : ""}`}>
+    <div className={`min-h-screen bg-[#06060f] text-[#e8d5a3] selection:bg-[#e8d5a3] selection:text-black ${previewMode ? "relative" : ""}`}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600;1,700&family=Cinzel:wght@400;600;700&display=swap');
-        .font-cinzel { font-family: 'Cinzel', 'Times New Roman', serif; letter-spacing: 0.12em; }
-        .font-cormorant { font-family: 'Cormorant Garamond', Georgia, serif; }
-        .gold-line { background: linear-gradient(90deg, transparent, #c8973e, transparent); height: 1px; }
-        .royal-bg { background: radial-gradient(ellipse at top, #12102a 0%, #06060f 70%); }
-        .baroque-corner::before, .baroque-corner::after { content: ''; position: absolute; border: 1px solid rgba(200,151,62,0.25); }
-        .baroque-corner::before { top: 8px; left: 8px; right: 8px; bottom: 8px; }
-        .baroque-corner::after { top: 16px; left: 16px; right: 16px; bottom: 16px; }
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+        .font-royal { font-family: 'Cinzel', serif; }
+        .font-script { font-family: 'Pinyon Script', cursive; }
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        .royal-gradient { background: linear-gradient(135deg, #0c0b1e 0%, #06060f 100%); }
+        .gold-border { border: 1px solid #c8973e; }
+        .ornament { color: #c8973e; opacity: 0.5; }
       `}</style>
 
-      {/* COVER */}
+      {/* ── CURTAIN REVEAL (COVER) ── */}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
             <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1.5 }}
-              className="fixed inset-0 z-50 royal-bg overflow-hidden flex">
-              {/* Left — full photo */}
-              <div className="hidden md:block w-1/2 relative overflow-hidden">
-                <img src={data.hero_image || "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80"}
-                  alt="Cover" className="w-full h-full object-cover opacity-50" />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#06060f]" />
-              </div>
-              {/* Right — text */}
-              <div className="flex-1 flex flex-col justify-center items-center text-center px-10 relative">
-                <div className="absolute inset-6 border border-[#c8973e]/20 pointer-events-none baroque-corner" />
-                <FadeIn delay={0.3} className="relative z-10">
-                  <Crown className="w-10 h-10 text-[#c8973e] mx-auto mb-8 opacity-60" />
-                  <p className="font-cinzel text-[9px] tracking-[0.6em] text-[#c8973e]/60 mb-10">The Royal Wedding</p>
-                  <h1 className="font-cormorant text-6xl md:text-8xl italic text-[#e8d5a3] leading-tight mb-2">{data.bride_data.groom}</h1>
-                  <div className="gold-line my-6 mx-auto w-32" />
-                  <h1 className="font-cormorant text-6xl md:text-8xl italic text-[#e8d5a3] leading-tight mb-10">{data.bride_data.bride}</h1>
-                  <p className="font-cinzel text-[9px] tracking-[0.3em] text-[#e8d5a3]/40 mb-14">{guestName}</p>
-                  <button onClick={openInvitation}
-                    className="font-cinzel text-[9px] tracking-[0.5em] px-12 py-5 border border-[#c8973e] text-[#c8973e] hover:bg-[#c8973e] hover:text-[#06060f] transition-all duration-500 shadow-[0_0_40px_rgba(200,151,62,0.15)]">
-                    Enter The Ceremony
-                  </button>
-                </FadeIn>
-              </div>
+              className="fixed inset-0 z-50 royal-gradient flex overflow-hidden">
+               {/* Left Curtain */}
+               <motion.div exit={{ x: "-100%" }} transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1] }}
+                 className="flex-1 bg-[#1a0b0b] border-r border-[#c8973e]/30 relative">
+                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')] opacity-20" />
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 ornament"><Crown size={40} /></div>
+               </motion.div>
+               {/* Right Curtain */}
+               <motion.div exit={{ x: "100%" }} transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1] }}
+                 className="flex-1 bg-[#1a0b0b] border-l border-[#c8973e]/30 relative">
+                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')] opacity-20" />
+                  <div className="absolute left-4 top-1/2 -translate-y-1/2 ornament"><Crown size={40} /></div>
+               </motion.div>
+               {/* Center content on top of curtains */}
+               <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10 px-6">
+                  <FadeIn>
+                     <Gem className="w-12 h-12 text-[#c8973e] mb-10 animate-pulse" />
+                     <p className="font-royal text-[10px] tracking-[0.8em] mb-12 text-[#c8973e]">The Royal Proclamation</p>
+                     <h1 className="font-script text-7xl md:text-9xl mb-8 leading-none">{data.bride_data.groom} <span className="font-serif italic text-4xl block my-4">&amp;</span> {data.bride_data.bride}</h1>
+                     <p className="font-royal text-[10px] tracking-[0.5em] mb-16 text-[#e8d5a3]/40">FOR {guestName.toUpperCase()}</p>
+                     <button onClick={openInvitation}
+                       className="px-16 py-5 border border-[#c8973e] text-[#c8973e] font-royal text-[10px] uppercase tracking-[0.6em] hover:bg-[#c8973e] hover:text-black transition-all duration-700 shadow-[0_0_40px_rgba(200,151,62,0.15)]">
+                       Reveal Invitation
+                     </button>
+                  </FadeIn>
+               </div>
             </motion.div>
           )}
         </AnimatePresence>
       )}
 
       {(isOpen || previewMode) && (
-        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2 }} className="pb-20">
-
-          {/* HERO — editorial split */}
-          <section className="min-h-screen flex overflow-hidden royal-bg">
-            {/* Left: photo full height */}
-            <div className="w-1/2 relative overflow-hidden hidden md:block">
-              <img src={data.hero_image || "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80"}
-                alt="Hero" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#06060f]" />
-              {/* Date overlay on photo */}
-              <div className="absolute bottom-16 left-10">
-                <p className="font-cinzel text-[10px] tracking-[0.4em] text-white/50 mb-2">
-                  {eventDate.toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" }).toUpperCase()}
-                </p>
-              </div>
-            </div>
-            {/* Right: text + countdown */}
-            <div className="flex-1 flex flex-col justify-center px-10 md:px-16 py-24 relative">
-              <div className="absolute inset-6 border border-[#c8973e]/10 pointer-events-none" />
-              <FadeIn>
-                <Crown className="w-8 h-8 text-[#c8973e]/50 mb-10" />
-                <p className="font-cinzel text-[9px] tracking-[0.6em] text-[#c8973e]/60 mb-8">The Wedding Of</p>
-                <h2 className="font-cormorant text-5xl md:text-7xl italic text-[#e8d5a3] leading-tight mb-3">{data.bride_data.groom}</h2>
-                <div className="gold-line w-24 my-5" />
-                <h2 className="font-cormorant text-5xl md:text-7xl italic text-[#e8d5a3] leading-tight mb-10">{data.bride_data.bride}</h2>
-                <div className="max-w-xs">
-                  <Countdown targetDate={eventDate} />
+        <motion.main initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pb-32 overflow-hidden">
+          
+          {/* HERO */}
+          <section className="relative min-h-screen flex flex-col items-center justify-center p-10 overflow-hidden">
+             <div className="absolute inset-0 z-0 opacity-20">
+                <img src={data.hero_image || "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80"} className="w-full h-full object-cover" />
+             </div>
+             <div className="relative z-10 max-w-4xl w-full border-2 border-[#c8973e]/40 p-10 md:p-20 text-center royal-gradient shadow-[0_0_100px_rgba(0,0,0,0.5)]">
+                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#06060f] px-6 py-2 border border-[#c8973e]/40">
+                   <Crown className="text-[#c8973e]" size={24} />
                 </div>
-              </FadeIn>
-            </div>
+                <FadeIn>
+                   <p className="font-royal text-[10px] tracking-[1em] mb-16 text-[#c8973e]">THE WEDDING CELEBRATION</p>
+                   <h2 className="font-script text-7xl md:text-9xl mb-4 leading-none">{data.bride_data.groom}</h2>
+                   <p className="font-serif italic text-3xl my-6 text-[#c8973e]/60">&amp;</p>
+                   <h2 className="font-script text-7xl md:text-9xl mb-16 leading-none">{data.bride_data.bride}</h2>
+                   <div className="border-t border-[#c8973e]/20 pt-12">
+                      <p className="font-royal text-xl tracking-[0.4em] mb-8">{eventDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' }).toUpperCase()}</p>
+                      <Countdown targetDate={eventDate} />
+                   </div>
+                </FadeIn>
+             </div>
           </section>
 
           {/* QUOTE */}
-          {data.quote && (
-            <section className="py-20 px-10 md:px-20 text-center border-y border-[#c8973e]/10">
-              <FadeIn>
-                <p className="font-cormorant text-2xl md:text-3xl italic text-[#e8d5a3]/70 max-w-3xl mx-auto leading-relaxed">&ldquo;{data.quote}&rdquo;</p>
-              </FadeIn>
-            </section>
-          )}
-
-          {/* COUPLE — staggered overlap */}
-          <section className="py-24 px-10 md:px-20 royal-bg">
-            <FadeIn className="text-center mb-16">
-              <Crown className="w-6 h-6 text-[#c8973e]/40 mx-auto mb-6" />
-              <h3 className="font-cinzel text-2xl text-[#e8d5a3] tracking-widest">The Couple</h3>
-              <div className="gold-line w-24 mx-auto mt-6" />
-            </FadeIn>
-            {/* Groom — offset left */}
-            <FadeIn className="max-w-5xl mx-auto mb-20">
-              <div className="flex flex-col md:flex-row items-center gap-12">
-                <div className="relative w-64 h-80 flex-shrink-0 group">
-                  <div className="absolute -inset-3 border border-[#c8973e]/20 group-hover:-inset-5 transition-all duration-700" />
-                  <img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"}
-                    alt="Groom" className="w-full h-full object-cover sepia-[0.3] group-hover:sepia-0 transition duration-1000" />
-                </div>
-                <div>
-                  <p className="font-cinzel text-[9px] tracking-[0.5em] text-[#c8973e]/60 mb-3">The Groom</p>
-                  <h4 className="font-cormorant text-5xl italic text-[#e8d5a3] mb-3">{data.bride_data.groom}</h4>
-                  <div className="gold-line w-16 mb-3" />
-                  <p className="font-cormorant text-xl italic text-[#e8d5a3]/50">Son of {data.bride_data.parents_groom}</p>
-                </div>
-              </div>
-            </FadeIn>
-            {/* Bride — offset right */}
-            <FadeIn className="max-w-5xl mx-auto" delay={0.2}>
-              <div className="flex flex-col md:flex-row-reverse items-center gap-12">
-                <div className="relative w-64 h-80 flex-shrink-0 group">
-                  <div className="absolute -inset-3 border border-[#c8973e]/20 group-hover:-inset-5 transition-all duration-700" />
-                  <img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"}
-                    alt="Bride" className="w-full h-full object-cover sepia-[0.3] group-hover:sepia-0 transition duration-1000" />
-                </div>
-                <div className="md:text-right">
-                  <p className="font-cinzel text-[9px] tracking-[0.5em] text-[#c8973e]/60 mb-3">The Bride</p>
-                  <h4 className="font-cormorant text-5xl italic text-[#e8d5a3] mb-3">{data.bride_data.bride}</h4>
-                  <div className="gold-line w-16 mb-3 md:ml-auto" />
-                  <p className="font-cormorant text-xl italic text-[#e8d5a3]/50">Daughter of {data.bride_data.parents_bride}</p>
-                </div>
-              </div>
-            </FadeIn>
+          <section className="py-32 px-10 text-center">
+             <FadeIn className="max-w-3xl mx-auto">
+                <p className="font-serif text-3xl italic leading-relaxed opacity-80">
+                   &ldquo;{data.quote || "To love is to recognize yourself in another."}&rdquo;
+                </p>
+                <div className="mt-12 h-px w-24 bg-[#c8973e]/40 mx-auto" />
+             </FadeIn>
           </section>
 
-          {/* LOVE STORY */}
-          {data.love_story && data.love_story.length > 0 && (
-            <section className="py-24 px-10 md:px-20 border-t border-[#c8973e]/10">
-              <FadeIn className="text-center mb-16">
-                <h3 className="font-cinzel text-2xl text-[#e8d5a3] tracking-widest">Our Journey</h3>
-                <div className="gold-line w-24 mx-auto mt-6" />
-              </FadeIn>
-              <div className="max-w-3xl mx-auto space-y-0">
-                {data.love_story.map((s, i) => (
-                  <FadeIn key={i} delay={i * 0.1}>
-                    <div className="flex gap-8 py-10 border-b border-[#c8973e]/10 group hover:bg-[#c8973e]/[0.02] px-4 transition">
-                      <div className="w-20 flex-shrink-0 text-right">
-                        <span className="font-cormorant text-3xl italic text-[#c8973e]/30 group-hover:text-[#c8973e]/80 transition">{s.year}</span>
-                      </div>
-                      <div className="w-px bg-[#c8973e]/20 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-cormorant text-2xl italic text-[#e8d5a3] mb-2">{s.title}</h4>
-                        <p className="font-cormorant text-lg text-[#e8d5a3]/40 leading-relaxed">{s.desc}</p>
-                      </div>
-                    </div>
-                  </FadeIn>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* ACARA */}
-          <section className="py-24 px-10 md:px-20 royal-bg border-t border-[#c8973e]/10">
-            <FadeIn className="text-center mb-16">
-              <Crown className="w-6 h-6 text-[#c8973e]/40 mx-auto mb-6" />
-              <h3 className="font-cinzel text-2xl text-[#e8d5a3] tracking-widest">The Ceremony</h3>
-              <div className="gold-line w-24 mx-auto mt-6" />
-            </FadeIn>
-            <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-1">
-              {[
-                { label: "Holy Matrimony", time: data.event_data.akad_time, loc: data.event_data.akad_location, map: data.event_data.akad_map },
-                { label: "Wedding Reception", time: data.event_data.resepsi_time, loc: data.event_data.resepsi_location, map: data.event_data.resepsi_map },
-              ].map((ev, i) => (
-                <FadeIn key={i} delay={i * 0.15}>
-                  <div className="relative border border-[#c8973e]/15 p-10 text-center group hover:border-[#c8973e]/40 transition">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#06060f] px-4">
-                      <span className="font-cormorant text-2xl italic text-[#c8973e]">✦</span>
-                    </div>
-                    <p className="font-cinzel text-[9px] tracking-[0.5em] text-[#c8973e]/60 mb-6">{ev.label}</p>
-                    <p className="font-cormorant text-3xl italic text-[#e8d5a3] mb-4">{ev.time}</p>
-                    <p className="font-cormorant text-lg text-[#e8d5a3]/40 mb-8 leading-relaxed">{ev.loc}</p>
-                    <a href={ev.map || "#"} target="_blank"
-                      className="font-cinzel text-[9px] tracking-[0.4em] px-8 py-3 border border-[#c8973e]/40 text-[#c8973e] hover:bg-[#c8973e] hover:text-[#06060f] transition-all inline-block">
-                      Location
-                    </a>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
+          {/* PROFILES */}
+          <section className="py-24 px-10 grid md:grid-cols-2 gap-20 max-w-7xl mx-auto">
+             <FadeIn className="text-center group">
+                <div className="relative aspect-[3/4] mb-12 p-4 border border-[#c8973e]/20">
+                   <div className="absolute inset-0 border-2 border-[#c8973e] m-[-8px] scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-700" />
+                   <img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"} className="w-full h-full object-cover sepia-[0.3]" />
+                </div>
+                <h3 className="font-royal text-3xl mb-4 tracking-widest">{data.bride_data.groom}</h3>
+                <p className="font-serif italic text-xl opacity-40">Son of {data.bride_data.parents_groom}</p>
+             </FadeIn>
+             <FadeIn className="text-center group" delay={0.2}>
+                <div className="relative aspect-[3/4] mb-12 p-4 border border-[#c8973e]/20">
+                   <div className="absolute inset-0 border-2 border-[#c8973e] m-[-8px] scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-700" />
+                   <img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"} className="w-full h-full object-cover sepia-[0.3]" />
+                </div>
+                <h3 className="font-royal text-3xl mb-4 tracking-widest">{data.bride_data.bride}</h3>
+                <p className="font-serif italic text-xl opacity-40">Daughter of {data.bride_data.parents_bride}</p>
+             </FadeIn>
           </section>
 
-          {/* GALLERY — masonry-feel */}
-          <GalleryLightbox
-            images={data.gallery || []}
-            title="The Royal Gallery"
-            titleClassName="font-cinzel text-2xl text-[#e8d5a3] tracking-widest text-center mb-12"
-            sectionClassName="py-24 px-10 md:px-20 border-t border-[#c8973e]/10"
-            gridClassName="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-5xl mx-auto"
-            itemClassName="overflow-hidden group cursor-pointer relative border border-[#c8973e]/10 hover:border-[#c8973e]/40 transition"
-            imgClassName="w-full h-full object-cover aspect-square sepia-[0.4] group-hover:sepia-0 group-hover:scale-105 transition duration-1000"
-          />
-
-          {/* VIDEO */}
-          {data.video && (
-            <section className="py-20 px-10 md:px-20 text-center border-t border-[#c8973e]/10">
-              <FadeIn>
-                <h3 className="font-cinzel text-2xl text-[#e8d5a3] tracking-widest mb-12">The Royal Film</h3>
-                <div className="max-w-4xl mx-auto aspect-video border border-[#c8973e]/20 overflow-hidden">
-                  <iframe className="w-full h-full" src={`https://www.youtube.com/embed/${data.video.includes("v=") ? data.video.split("v=")[1].split("&")[0] : data.video.split("/").pop()}`} frameBorder="0" allowFullScreen />
+          {/* EVENTS */}
+          <section className="py-32 px-10 royal-gradient relative overflow-hidden">
+             <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/antique-texture.png')]" />
+             <div className="max-w-5xl mx-auto border-t border-b border-[#c8973e]/30 py-20">
+                <div className="grid md:grid-cols-2 gap-16">
+                   <FadeIn className="text-center">
+                      <p className="font-royal text-[10px] tracking-[0.5em] mb-10 text-[#c8973e]">HOLY MATRIMONY</p>
+                      <h4 className="font-script text-5xl mb-6">{data.event_data.akad_time}</h4>
+                      <p className="font-serif italic text-xl mb-12 px-10 leading-relaxed opacity-60">{data.event_data.akad_location}</p>
+                      <a href={data.event_data.akad_map} className="font-royal text-[9px] border border-[#c8973e]/40 px-10 py-4 hover:bg-[#c8973e] hover:text-black transition-all">VIEW LOCATION</a>
+                   </FadeIn>
+                   <FadeIn className="text-center" delay={0.2}>
+                      <p className="font-royal text-[10px] tracking-[0.5em] mb-10 text-[#c8973e]">GRAND RECEPTION</p>
+                      <h4 className="font-script text-5xl mb-6">{data.event_data.resepsi_time}</h4>
+                      <p className="font-serif italic text-xl mb-12 px-10 leading-relaxed opacity-60">{data.event_data.resepsi_location}</p>
+                      <a href={data.event_data.resepsi_map} className="font-royal text-[9px] border border-[#c8973e]/40 px-10 py-4 hover:bg-[#c8973e] hover:text-black transition-all">VIEW LOCATION</a>
+                   </FadeIn>
                 </div>
-              </FadeIn>
-            </section>
-          )}
+             </div>
+          </section>
 
-          {/* GIFT */}
-          {data.gifts && data.gifts.length > 0 && (
-            <section className="py-20 px-10 md:px-20 royal-bg border-t border-[#c8973e]/10 text-center">
-              <div className="max-w-3xl mx-auto">
-                <FadeIn className="mb-12">
-                  <Gift className="w-8 h-8 text-[#c8973e]/40 mx-auto mb-6" />
-                  <h3 className="font-cinzel text-2xl text-[#e8d5a3] tracking-widest">Wedding Gift</h3>
-                  <div className="gold-line w-24 mx-auto mt-6" />
+          {/* GALLERY */}
+          <section className="py-32 px-10">
+             <div className="text-center mb-20">
+                <Crown size={24} className="mx-auto mb-8 ornament" />
+                <h3 className="font-royal text-3xl tracking-[0.6em] uppercase">The Royal Archives</h3>
+             </div>
+             <GalleryLightbox 
+                images={data.gallery || []}
+                title=""
+                sectionClassName=""
+                gridClassName="grid grid-cols-2 md:grid-cols-3 gap-6 max-w-7xl mx-auto"
+                itemClassName="aspect-square border border-[#c8973e]/10 hover:border-[#c8973e]/50 transition-all p-2"
+                imgClassName="w-full h-full object-cover sepia-[0.4] grayscale-[0.2] hover:sepia-0 hover:grayscale-0 transition-all duration-1000"
+             />
+          </section>
+
+          {/* GIFTS */}
+          <section className="py-32 px-10 royal-gradient">
+             <div className="max-w-4xl mx-auto text-center border border-[#c8973e]/20 p-20 relative">
+                <div className="absolute inset-2 border border-[#c8973e]/5" />
+                <FadeIn>
+                   <h3 className="font-royal text-3xl mb-12 tracking-widest text-[#c8973e]">WEDDING GIFT</h3>
+                   <p className="font-serif italic text-xl mb-16 opacity-60">Your presence is our greatest honor. However, should you wish to send a gift, we appreciate your generosity through these channels.</p>
+                   <div className="grid md:grid-cols-2 gap-10">
+                      {data.gifts?.map((g, i) => (
+                         <div key={i} className="p-10 border border-[#c8973e]/10 bg-black/20 group hover:border-[#c8973e]/40 transition-all">
+                            <p className="font-royal text-[10px] mb-6 opacity-40">{g.bank.toUpperCase()}</p>
+                            <p className="font-royal text-2xl tracking-[0.3em] mb-4 text-[#c8973e]">{g.acc}</p>
+                            <p className="font-serif italic opacity-60">A.N {g.name}</p>
+                         </div>
+                      ))}
+                   </div>
                 </FadeIn>
-                <div className="grid sm:grid-cols-2 gap-6">
-                  {data.gifts.map((g, i) => (
-                    <FadeIn key={i} delay={i * 0.1}>
-                      <div className="border border-[#c8973e]/15 p-8 hover:border-[#c8973e]/40 transition">
-                        <p className="font-cinzel text-[9px] tracking-widest text-[#c8973e]/60 mb-4">{g.bank}</p>
-                        <p className="font-cormorant text-3xl italic text-[#e8d5a3] mb-2">{g.acc}</p>
-                        <p className="font-cormorant text-lg text-[#e8d5a3]/40">a.n {g.name}</p>
-                      </div>
-                    </FadeIn>
-                  ))}
-                </div>
-              </div>
-            </section>
-          )}
+             </div>
+          </section>
 
           {/* RSVP */}
-          <section className="py-20 px-10 md:px-20 border-t border-[#c8973e]/10">
-            <div className="max-w-xl mx-auto">
-              <FadeIn className="text-center mb-12">
-                <h3 className="font-cinzel text-2xl text-[#e8d5a3] tracking-widest">Wishes & RSVP</h3>
-                <div className="gold-line w-24 mx-auto mt-6" />
-              </FadeIn>
-              <FadeIn delay={0.1}>
-                <form className="space-y-6" onSubmit={async (e) => {
-                  e.preventDefault();
-                  if (previewMode) return alert("Preview mode.");
-                  if (!data.slug) return;
-                  setIsSubmitting(true);
-                  const w: WishData = { name: rsvpName || guestName, presence: rsvpPresence, message: rsvpMessage, timestamp: new Date().toISOString() };
-                  try { const ok = await submitWish(data.slug, w); if (ok) { setWishes([...wishes, w]); setRsvpMessage(""); setRsvpPresence(""); alert("Thank you!"); } }
-                  finally { setIsSubmitting(false); }
+          <section className="py-32 px-10 max-w-3xl mx-auto text-center">
+             <FadeIn>
+                <h3 className="font-royal text-3xl mb-12 tracking-[0.4em]">ATTENDANCE REGISTRY</h3>
+                <form className="space-y-8" onSubmit={async (e) => {
+                   e.preventDefault();
+                   if (previewMode) return;
+                   setIsSubmitting(true);
+                   const w: WishData = { name: rsvpName || guestName, presence: rsvpPresence, message: rsvpMessage, timestamp: new Date().toISOString() };
+                   try { const ok = await submitWish(data.slug || "", w); if (ok) { setWishes([...wishes, w]); setRsvpMessage(""); setRsvpPresence(""); } }
+                   finally { setIsSubmitting(false); }
                 }}>
-                  <input type="text" value={rsvpName} onChange={e => setRsvpName(e.target.value)} placeholder="Your Full Name"
-                    className="w-full px-6 py-4 bg-white/5 border border-[#c8973e]/15 font-cormorant text-lg text-[#e8d5a3] placeholder:text-[#e8d5a3]/20 focus:outline-none focus:border-[#c8973e]/50 transition" required />
-                  <select value={rsvpPresence} onChange={e => setRsvpPresence(e.target.value)}
-                    className="w-full px-6 py-4 bg-[#06060f] border border-[#c8973e]/15 font-cormorant text-lg text-[#e8d5a3] focus:outline-none focus:border-[#c8973e]/50 transition" required>
-                    <option value="">Attendance Confirmation</option>
-                    <option value="hadir">I Will Attend</option>
-                    <option value="tidak">Regretfully Decline</option>
-                  </select>
-                  <textarea rows={4} value={rsvpMessage} onChange={e => setRsvpMessage(e.target.value)} placeholder="Your warmest wishes..."
-                    className="w-full px-6 py-4 bg-white/5 border border-[#c8973e]/15 font-cormorant text-lg text-[#e8d5a3] placeholder:text-[#e8d5a3]/20 focus:outline-none focus:border-[#c8973e]/50 transition resize-none" required />
-                  <button type="submit" disabled={isSubmitting}
-                    className="w-full py-5 border border-[#c8973e] text-[#c8973e] font-cinzel text-[9px] tracking-[0.5em] hover:bg-[#c8973e] hover:text-[#06060f] transition-all disabled:opacity-40 flex items-center justify-center gap-3">
-                    <Send size={12} /> {isSubmitting ? "Sending..." : "Send RSVP"}
-                  </button>
+                   <input type="text" value={rsvpName} onChange={e => setRsvpName(e.target.value)} placeholder="FULL NAME" className="w-full bg-transparent border-b border-[#c8973e]/30 px-4 py-6 font-royal text-[10px] focus:outline-none focus:border-[#c8973e] text-[#e8d5a3]" required />
+                   <select value={rsvpPresence} onChange={e => setRsvpPresence(e.target.value)} className="w-full bg-[#06060f] border-b border-[#c8973e]/30 px-4 py-6 font-royal text-[10px] focus:outline-none focus:border-[#c8973e] text-[#e8d5a3]" required>
+                      <option value="">CONFIRMATION</option>
+                      <option value="hadir">WILL ATTEND</option>
+                      <option value="tidak">REGRETFULLY DECLINE</option>
+                   </select>
+                   <textarea rows={4} value={rsvpMessage} onChange={e => setRsvpMessage(e.target.value)} placeholder="GRACIOUS WISHES" className="w-full bg-transparent border-b border-[#c8973e]/30 px-4 py-6 font-royal text-[10px] focus:outline-none focus:border-[#c8973e] text-[#e8d5a3] resize-none" required></textarea>
+                   <button type="submit" disabled={isSubmitting} className="w-full py-6 bg-[#c8973e] text-black font-royal text-[10px] font-bold tracking-[0.6em] hover:bg-white transition-all duration-500">
+                      {isSubmitting ? "TRANSMITTING..." : "SUBMIT PROTOCOL"}
+                   </button>
                 </form>
-              </FadeIn>
-              {wishes.length > 0 && (
-                <div className="mt-14 space-y-8 max-h-96 overflow-y-auto pr-2">
-                  {[...wishes].reverse().map((w, i) => (
-                    <div key={i} className="border-b border-[#c8973e]/10 pb-8">
-                      <div className="flex justify-between mb-2">
-                        <span className="font-cormorant text-xl italic text-[#e8d5a3]">{w.name}</span>
-                        <span className="font-cinzel text-[9px] tracking-widest text-[#c8973e]/60">{w.presence === "hadir" ? "Attending" : "Absent"}</span>
+             </FadeIn>
+             
+             <div className="mt-32 space-y-12 text-left">
+                {wishes.slice(0, 5).map((w, i) => (
+                   <div key={i} className="border-l border-[#c8973e]/30 pl-10">
+                      <div className="flex justify-between items-start mb-4">
+                         <span className="font-royal text-lg tracking-widest">{w.name.toUpperCase()}</span>
+                         <span className="font-serif italic opacity-40 text-sm">{w.presence === 'hadir' ? 'Attending' : 'Regrets'}</span>
                       </div>
-                      <p className="font-cormorant text-lg text-[#e8d5a3]/40 italic">&ldquo;{w.message}&rdquo;</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                      <p className="font-serif text-xl italic opacity-60 leading-relaxed">&ldquo;{w.message}&rdquo;</p>
+                   </div>
+                ))}
+             </div>
           </section>
 
           {/* FOOTER */}
-          <footer className="py-24 text-center royal-bg border-t border-[#c8973e]/10">
-            <Crown className="w-8 h-8 text-[#c8973e]/30 mx-auto mb-8" />
-            <h2 className="font-cormorant text-5xl md:text-7xl italic text-[#e8d5a3] mb-4">
-              {data.bride_data.groom} <span className="text-[#c8973e] not-italic text-3xl">&</span> {data.bride_data.bride}
-            </h2>
-            <div className="gold-line w-32 mx-auto my-6" />
-            <p className="font-cinzel text-[9px] tracking-[0.6em] text-[#e8d5a3]/20">— Galatamu Signature —</p>
+          <footer className="py-40 text-center royal-gradient">
+             <div className="h-px w-64 bg-[#c8973e]/20 mx-auto mb-20" />
+             <h2 className="font-script text-7xl md:text-9xl mb-10 leading-none">{data.bride_data.groom} &amp; {data.bride_data.bride}</h2>
+             <p className="font-royal text-[9px] tracking-[1em] text-[#c8973e]/40">— SUPREME COLLECTION —</p>
           </footer>
         </motion.main>
       )}
 
       {isOpen && !previewMode && (
-        <button onClick={toggleMusic} className="fixed bottom-10 right-10 z-40 w-14 h-14 bg-[#06060f] border border-[#c8973e]/40 rounded-full shadow-[0_0_30px_rgba(200,151,62,0.15)] flex items-center justify-center text-[#c8973e] hover:scale-110 transition-all">
-          <Disc className={`w-6 h-6 ${isPlaying ? "animate-[spin_5s_linear_infinite]" : ""}`} />
+        <button onClick={toggleMusic} className="fixed bottom-10 right-10 z-40 w-12 h-12 border border-[#c8973e]/40 bg-[#06060f] flex items-center justify-center rounded-full hover:scale-110 transition-all text-[#c8973e]">
+          <Disc className={`w-5 h-5 ${isPlaying ? 'animate-[spin_5s_linear_infinite]' : ''}`} />
         </button>
       )}
     </div>
