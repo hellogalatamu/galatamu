@@ -11,9 +11,10 @@ interface PreviewModalProps {
   onClose: () => void;
   data: InvitationData;
   themeId: string;
+  backButtonText?: string;
 }
 
-export default function PreviewModal({ isOpen, onClose, data, themeId }: PreviewModalProps) {
+export default function PreviewModal({ isOpen, onClose, data, themeId, backButtonText }: PreviewModalProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function PreviewModal({ isOpen, onClose, data, themeId }: Preview
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = "transparent")}
         >
           <ArrowLeft size={18} />
-          Kembali ke Editor
+          {backButtonText || "Kembali ke Editor"}
         </button>
 
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>

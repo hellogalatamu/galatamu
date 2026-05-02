@@ -7,6 +7,7 @@ import FadeIn from "@/components/FadeIn";
 import ThemeRegistry from "@/components/ThemeRegistry";
 import PhoneMockup from "@/components/PhoneMockup";
 import PremiumPhoneMockup from "@/components/PremiumPhoneMockup";
+import PreviewModal from "@/components/PreviewModal";
 import Link from "next/link";
 
 import PricingTable from "@/components/PricingTable";
@@ -341,73 +342,13 @@ export default function LandingPage() {
       </footer>
 
       {/* Live Preview Modal */}
-      <AnimatePresence>
-        {previewTheme && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-xl p-4 md:p-8"
-          >
-            {/* Close Button Overlay */}
-            <div className="absolute inset-0 cursor-pointer" onClick={() => setPreviewTheme(null)} />
-
-            <motion.div 
-              initial={{ scale: 0.8, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.8, y: 20 }}
-              className="relative w-full max-w-sm h-full max-h-[750px] z-10 flex items-center justify-center scale-[0.85] sm:scale-100 origin-center"
-            >
-              <PremiumPhoneMockup 
-                className="h-full"
-                showPedestal={false}
-                fixedFooter={
-                  <div className="w-full p-6 bg-gradient-to-t from-black/90 via-black/60 to-transparent">
-                    <div className="flex gap-3">
-                      <button 
-                        onClick={() => setPreviewTheme(null)} 
-                        className="px-4 py-3.5 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-xl font-bold uppercase tracking-widest text-[9px] hover:bg-white/30 transition-all shadow-lg"
-                      >
-                        Tutup
-                      </button>
-                      <a 
-                        href={`/demo/${previewTheme}`}
-                        target="_blank"
-                        className="flex-1 py-3.5 bg-white/20 backdrop-blur-md text-white border border-white/30 rounded-xl font-bold uppercase tracking-widest text-[9px] flex items-center justify-center gap-2 hover:bg-white/30 transition-all text-center shadow-lg"
-                      >
-                        Fullscreen
-                      </a>
-                      <Link 
-                        href={`/editor?theme=${previewTheme}`}
-                        className="flex-1 py-3.5 bg-white text-[#1a1a1a] rounded-xl font-bold uppercase tracking-widest text-[9px] text-center hover:bg-gray-100 transition-all shadow-2xl active:scale-95"
-                      >
-                        Gunakan
-                      </Link>
-                    </div>
-                  </div>
-                }
-              >
-                {/* Theme Content */}
-                <div className="w-full h-full overflow-y-auto custom-scrollbar bg-white">
-                  <ThemeRegistry 
-                    themeId={previewTheme} 
-                    data={{ ...DEMO_DATA, theme_id: previewTheme, slug: "demo" }} 
-                    previewMode={true} 
-                  />
-                </div>
-              </PremiumPhoneMockup>
-
-              {/* Outside Close Button (Desktop) */}
-              <button
-                onClick={() => setPreviewTheme(null)}
-                className="absolute -top-12 -right-12 hidden md:flex p-3 bg-white/10 hover:bg-white/20 rounded-full text-white transition-all"
-              >
-                <X size={24} />
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <PreviewModal
+        isOpen={!!previewTheme}
+        onClose={() => setPreviewTheme(null)}
+        data={{ ...DEMO_DATA, theme_id: previewTheme || "amara_01", slug: "demo" } as any}
+        themeId={previewTheme || "amara_01"}
+        backButtonText="Tutup Preview"
+      />
     </main>
   );
 }
