@@ -90,21 +90,22 @@ export default function LandingPage() {
           </button>
         </div>
 
-        {/* Mobile Nav Overlay */}
-        <div className={`md:hidden fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center gap-8 transition-all duration-500 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
-          <button className="absolute top-6 right-6 p-2 text-[#1a1a1a]" onClick={() => setIsMobileMenuOpen(false)}>
-            <X size={32} />
-          </button>
-          <a href="#beranda" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Beranda</a>
-          <a href="#fitur" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Fitur</a>
-          <a href="#katalog" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Katalog</a>
-          <a href="#harga" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Harga</a>
-          <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">FAQ</a>
-          <Link href="/editor" onClick={() => setIsMobileMenuOpen(false)} className="mt-4 px-10 py-4 bg-[#1a1a1a] text-white rounded-full font-bold uppercase tracking-widest text-xs shadow-xl">
-            Buat Undangan
-          </Link>
-        </div>
       </nav>
+
+      {/* Mobile Nav Overlay */}
+      <div className={`md:hidden fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center gap-8 transition-all duration-500 ${isMobileMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'}`}>
+        <button className="absolute top-6 right-6 p-2 text-[#1a1a1a]" onClick={() => setIsMobileMenuOpen(false)}>
+          <X size={32} />
+        </button>
+        <a href="#beranda" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Beranda</a>
+        <a href="#fitur" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Fitur</a>
+        <a href="#katalog" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Katalog</a>
+        <a href="#harga" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">Harga</a>
+        <a href="#faq" onClick={() => setIsMobileMenuOpen(false)} className="text-3xl font-serif font-bold text-[#1a1a1a] hover:italic transition-all">FAQ</a>
+        <Link href="/editor" onClick={() => setIsMobileMenuOpen(false)} className="mt-4 px-10 py-4 bg-[#1a1a1a] text-white rounded-full font-bold uppercase tracking-widest text-xs shadow-xl">
+          Buat Undangan
+        </Link>
+      </div>
 
       {/* Hero Section */}
       <section id="beranda" className="relative min-h-[100vh] flex items-center justify-center pt-20 overflow-hidden bg-[#faf9f6]">
