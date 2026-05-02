@@ -6,6 +6,18 @@
 }
 
 @theme inline {
+  --text-4xl: clamp(1.75rem, 4vw, 2.25rem);
+  --text-5xl: clamp(2rem, 5vw, 3rem);
+  --text-6xl: clamp(2.5rem, 6vw, 3.75rem);
+  --text-7xl: clamp(3rem, 7vw, 4.5rem);
+  --text-8xl: clamp(3.5rem, 8vw, 6rem);
+  --text-9xl: clamp(4rem, 10vw, 8rem);
+  
+  --spacing-16: clamp(2rem, 5vw, 4rem);
+  --spacing-20: clamp(2.5rem, 6vw, 5rem);
+  --spacing-24: clamp(3rem, 7vw, 6rem);
+  --spacing-32: clamp(4rem, 10vw, 8rem);
+  --spacing-40: clamp(5rem, 12vw, 10rem);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
@@ -14,9 +26,14 @@
 
 @layer base {
   html, body {
-    width: 100%;
+    width: 100vw;
     overflow-x: hidden;
     scroll-behavior: smooth;
+  }
+  
+  h1, h2, h3, h4, h5, h6, p, span, div {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
 }
 
