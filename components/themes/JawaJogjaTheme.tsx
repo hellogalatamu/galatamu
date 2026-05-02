@@ -35,6 +35,9 @@ export default function JawaJogjaTheme({ data, previewMode = false, guestName = 
 
   return (
     <div className="bg-[#002b24] min-h-screen text-[#d4af37] font-serif selection:bg-[#d4af37] selection:text-[#002b24]">
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       {/* Batik Parang Overlay */}
       <div className="fixed inset-0 opacity-[0.03] pointer-events-none z-0 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
       

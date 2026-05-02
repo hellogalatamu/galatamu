@@ -36,6 +36,9 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
 
   return (
     <div className={`min-h-screen bg-[#050505] text-[#00ff41] font-mono selection:bg-[#00ff41] selection:text-black ${previewMode ? "relative" : ""}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
         .font-mono-tech { font-family: 'JetBrains Mono', monospace; }

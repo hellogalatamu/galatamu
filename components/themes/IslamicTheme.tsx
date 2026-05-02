@@ -36,6 +36,9 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
 
   return (
     <div className={`min-h-screen bg-[#fdfcf0] text-[#1a4d2e] ${previewMode ? "relative" : ""}`} style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap');
         .font-amiri { font-family: 'Amiri', Georgia, serif; }

@@ -35,6 +35,9 @@ export default function NavyTheme({ data, previewMode = false, guestName = "Tamu
 
   return (
     <div className={`bg-[#0f172a] min-h-screen text-white font-sans selection:bg-[#334155] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
       
       {!previewMode && (

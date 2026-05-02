@@ -36,6 +36,9 @@ export default function JawaTheme({ data, previewMode = false, guestName = "Tamu
 
   return (
     <div className={`min-h-screen bg-[#1a0f0a] text-[#d4a373] selection:bg-[#d4a373] selection:text-black ${previewMode ? "relative" : ""}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Charm:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap');
         .font-ethnic { font-family: 'Cinzel Decorative', cursive; }

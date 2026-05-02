@@ -35,6 +35,9 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
 
   return (
     <div className={`bg-white min-h-screen text-black font-sans selection:bg-black selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
         .font-ultra { font-family: 'Inter', sans-serif; }

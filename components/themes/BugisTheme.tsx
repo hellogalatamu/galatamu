@@ -35,6 +35,9 @@ export default function BugisTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div className={`bg-[#0b3d2e] min-h-screen text-[#f2cc8f] font-serif selection:bg-[#f2cc8f] selection:text-black ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/weave.png')]"></div>
       
       {!previewMode && (

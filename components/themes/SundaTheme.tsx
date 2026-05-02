@@ -35,6 +35,9 @@ export default function SundaTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div className={`bg-[#f8faf2] min-h-screen text-[#2d4628] font-serif selection:bg-[#2d4628] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/bamboo.png')]"></div>
       
       {!previewMode && (

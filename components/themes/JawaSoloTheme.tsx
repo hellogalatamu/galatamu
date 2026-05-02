@@ -35,6 +35,9 @@ export default function JawaSoloTheme({ data, previewMode = false, guestName = "
 
   return (
     <div className="bg-[#4e342e] min-h-screen text-[#d7ccc8] font-serif selection:bg-[#d7ccc8] selection:text-[#4e342e]">
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       {/* Texture */}
       <div className="fixed inset-0 opacity-10 pointer-events-none z-0 bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]"></div>
       

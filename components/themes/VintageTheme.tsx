@@ -36,6 +36,9 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
 
   return (
     <div className={`min-h-screen bg-[#f1ede3] text-[#2c2c2c] font-serif selection:bg-[#2c2c2c] selection:text-white ${previewMode ? "relative" : ""}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
         .font-paper { font-family: 'Old Standard TT', serif; }

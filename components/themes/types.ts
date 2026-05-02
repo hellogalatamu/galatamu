@@ -42,6 +42,7 @@ export interface InvitationData {
     live_stream?: string;
   };
   hero_image?: string;
+  bg_image?: string;
   bg_middle?: string;
   bg_bottom?: string;
   groom_photo?: string;

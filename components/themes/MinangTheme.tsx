@@ -57,6 +57,9 @@ export default function MinangTheme({ data, previewMode = false, guestName = "Ta
 
   return (
     <div className={`bg-[#4a0404] min-h-screen text-[#f2cc8f] font-serif selection:bg-[#f2cc8f] selection:text-[#4a0404] ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       {/* Songket Pattern Overlay */}
       <div className="fixed inset-0 opacity-10 pointer-events-none z-0 bg-[url('https://www.transparenttextures.com/patterns/weave.png')]"></div>
 

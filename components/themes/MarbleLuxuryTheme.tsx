@@ -35,6 +35,9 @@ export default function MarbleLuxuryTheme({ data, previewMode = false, guestName
 
   return (
     <div className={`bg-white min-h-screen text-[#1a1a1a] font-serif selection:bg-[#d4af37] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/white-diamond.png')]"></div>
       
       {!previewMode && (

@@ -35,6 +35,9 @@ export default function LilacTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div className={`bg-[#f5f3ff] min-h-screen text-[#4c1d95] font-serif selection:bg-[#8b5cf6] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/pinstripe.png')]"></div>
       
       {!previewMode && (

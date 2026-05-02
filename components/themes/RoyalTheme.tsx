@@ -35,6 +35,9 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div className={`min-h-screen bg-[#06060f] text-[#e8d5a3] selection:bg-[#e8d5a3] selection:text-black ${previewMode ? "relative" : ""}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&display=swap');
         .font-royal { font-family: 'Cinzel', serif; }

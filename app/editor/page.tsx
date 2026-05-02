@@ -22,7 +22,7 @@ function EditorContent() {
     category: "Pernikahan",
     bride_data: { groom: "", bride: "", parents_groom: "", parents_bride: "" },
     event_data: { date: "", akad_time: "", akad_location: "", resepsi_time: "", resepsi_location: "" },
-    hero_image: "", bg_middle: "", bg_bottom: "",
+    hero_image: "", bg_image: "", bg_middle: "", bg_bottom: "",
     groom_photo: "", bride_photo: "",
     gallery: [] as string[],
     love_story: [] as { year: string; title: string; desc: string }[],
@@ -158,10 +158,13 @@ function EditorContent() {
 
           {/* Foto */}
           <div className={sectionCls}>
-            <h2 className="text-base font-bold">Foto Mempelai</h2>
+            <h2 className="text-base font-bold">Foto Mempelai & Background</h2>
             <div className="grid grid-cols-2 gap-4">
               <PhotoUpload label="Foto Pria" value={formData.groom_photo} onChange={(b) => setFormData(prev => ({ ...prev, groom_photo: b }))} onClear={() => setFormData(prev => ({ ...prev, groom_photo: "" }))} />
               <PhotoUpload label="Foto Wanita" value={formData.bride_photo} onChange={(b) => setFormData(prev => ({ ...prev, bride_photo: b }))} onClear={() => setFormData(prev => ({ ...prev, bride_photo: "" }))} />
+              <div className="col-span-2">
+                <PhotoUpload label="Background Global (Semua Halaman)" value={formData.bg_image} onChange={(b) => setFormData(prev => ({ ...prev, bg_image: b }))} onClear={() => setFormData(prev => ({ ...prev, bg_image: "" }))} />
+              </div>
             </div>
           </div>
 

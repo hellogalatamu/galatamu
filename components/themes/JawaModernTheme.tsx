@@ -35,6 +35,9 @@ export default function JawaModernTheme({ data, previewMode = false, guestName =
 
   return (
     <div className="bg-white min-h-screen text-[#1a1a1a] font-sans selection:bg-[#af944d] selection:text-white">
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       {/* Subtle Pattern */}
       <div className="fixed inset-0 opacity-[0.03] pointer-events-none z-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
       

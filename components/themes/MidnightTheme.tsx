@@ -35,6 +35,9 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
 
   return (
     <div className={`bg-[#1e1b4b] min-h-screen text-[#e0e7ff] font-sans selection:bg-[#c7d2fe] selection:text-[#1e1b4b] ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-20 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
       
       {!previewMode && (

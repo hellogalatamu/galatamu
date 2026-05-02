@@ -54,6 +54,9 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div ref={containerRef} className="bg-[#faf9f6] min-h-screen text-[#1a1a1a] font-sans selection:bg-[#1a1a1a] selection:text-white overflow-hidden">
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;600&display=swap');
         .font-serif-display { font-family: 'Playfair Display', serif; }

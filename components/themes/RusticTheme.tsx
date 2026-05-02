@@ -58,6 +58,9 @@ export default function RusticTheme({ data, previewMode = false, guestName = "Ta
 
   return (
     <div className={`bg-[#f4efe6] min-h-screen text-[#4a3f35] font-serif selection:bg-[#4a3f35] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       {/* Cover / Hero Overlay  hidden in preview mode */}
       {!previewMode && (
         <AnimatePresence>

@@ -35,6 +35,9 @@ export default function RomanticRoseTheme({ data, previewMode = false, guestName
 
   return (
     <div className={`bg-[#fff1f2] min-h-screen text-[#881337] font-serif selection:bg-[#fb7185] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/pinstripe.png')]"></div>
       
       {!previewMode && (

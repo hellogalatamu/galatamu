@@ -35,6 +35,9 @@ export default function BaliTheme({ data, previewMode = false, guestName = "Tamu
 
   return (
     <div className={`bg-[#1a1a1a] min-h-screen text-[#d4af37] font-serif selection:bg-[#d4af37] selection:text-black ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')]"></div>
       
       {!previewMode && (

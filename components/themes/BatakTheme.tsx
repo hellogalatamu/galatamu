@@ -35,6 +35,9 @@ export default function BatakTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div className={`bg-[#1a1a1a] min-h-screen text-white font-serif selection:bg-[#8b0000] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       <div className="fixed inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
       
       {!previewMode && (

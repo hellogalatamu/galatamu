@@ -71,6 +71,9 @@ export default function MasterTheme({ data, guestName = "Tamu Undangan", preview
         !isOpen ? 'h-screen overflow-hidden' : 'min-h-screen overflow-auto'
       }`}
     >
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       {/* Section 1: Hero / Cover */}
       <section 
         id="section-1"

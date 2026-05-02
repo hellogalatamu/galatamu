@@ -35,6 +35,9 @@ export default function EmeraldTheme({ data, previewMode = false, guestName = "T
 
   return (
     <div className={`bg-[#022c22] min-h-screen text-white font-serif selection:bg-[#10b981] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {data.bg_image && (
+        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      )}
       {!previewMode && (
         <AnimatePresence>
           {!isOpen && (
