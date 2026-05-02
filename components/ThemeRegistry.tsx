@@ -2,13 +2,6 @@ import React from "react";
 import AmaraTheme from "./themes/AmaraTheme";
 import { InvitationData } from "./themes/types";
 import RusticTheme from "./themes/RusticTheme";
-import AqiqahTheme from "./themes/AqiqahTheme";
-import SyukuranTheme from "./themes/SyukuranTheme";
-import CorporateTheme from "./themes/CorporateTheme";
-import EducationTheme from "./themes/EducationTheme";
-import AdultBdTheme from "./themes/AdultBdTheme";
-import KidsTheme from "./themes/KidsTheme";
-import Sweet17Theme from "./themes/Sweet17Theme";
 import ModernTheme from "./themes/ModernTheme";
 import VintageTheme from "./themes/VintageTheme";
 import RoyalTheme from "./themes/RoyalTheme";
@@ -45,20 +38,6 @@ export default function ThemeRegistry({ themeId, data, guestName, previewMode }:
       return <AmaraTheme data={data} guestName={guestName} previewMode={previewMode} />;
     case "rustic_01":
       return <RusticTheme data={data} guestName={guestName} previewMode={previewMode} />;
-    case "aqiqah_01":
-      return <AqiqahTheme data={data} guestName={guestName} previewMode={previewMode} />;
-    case "syukuran_01":
-      return <SyukuranTheme data={data} guestName={guestName} previewMode={previewMode} />;
-    case "corporate_01":
-      return <CorporateTheme data={data} guestName={guestName} previewMode={previewMode} />;
-    case "education_01":
-      return <EducationTheme data={data} guestName={guestName} previewMode={previewMode} />;
-    case "adult_bd_01":
-      return <AdultBdTheme data={data} guestName={guestName} previewMode={previewMode} />;
-    case "kids_01":
-      return <KidsTheme data={data} guestName={guestName} previewMode={previewMode} />;
-    case "sweet17_01":
-      return <Sweet17Theme data={data} guestName={guestName} previewMode={previewMode} />;
     case "modern_01":
       return <ModernTheme data={data} guestName={guestName} previewMode={previewMode} />;
     case "vintage_01":
