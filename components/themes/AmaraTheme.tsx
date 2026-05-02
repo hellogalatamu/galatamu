@@ -54,8 +54,12 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div ref={containerRef} className="bg-[#faf9f6] min-h-screen text-[#1a1a1a] font-sans selection:bg-[#1a1a1a] selection:text-white overflow-hidden">
-      {data.bg_image && (
-        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      {(data.bg_image || data.bg_middle || data.bg_bottom) && (
+        <div className="absolute inset-0 pointer-events-none z-0 flex flex-col opacity-15">
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_image ? { backgroundImage: `url('${data.bg_image}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_middle ? { backgroundImage: `url('${data.bg_middle}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_bottom ? { backgroundImage: `url('${data.bg_bottom}')` } : {}}></div></div>
+        </div>
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;600&display=swap');

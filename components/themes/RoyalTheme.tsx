@@ -35,8 +35,12 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
 
   return (
     <div className={`min-h-screen bg-[#06060f] text-[#e8d5a3] selection:bg-[#e8d5a3] selection:text-black ${previewMode ? "relative" : ""}`}>
-      {data.bg_image && (
-        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      {(data.bg_image || data.bg_middle || data.bg_bottom) && (
+        <div className="absolute inset-0 pointer-events-none z-0 flex flex-col opacity-15">
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_image ? { backgroundImage: `url('${data.bg_image}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_middle ? { backgroundImage: `url('${data.bg_middle}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_bottom ? { backgroundImage: `url('${data.bg_bottom}')` } : {}}></div></div>
+        </div>
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&display=swap');

@@ -162,8 +162,10 @@ function EditorContent() {
             <div className="grid grid-cols-2 gap-4">
               <PhotoUpload label="Foto Pria" value={formData.groom_photo} onChange={(b) => setFormData(prev => ({ ...prev, groom_photo: b }))} onClear={() => setFormData(prev => ({ ...prev, groom_photo: "" }))} />
               <PhotoUpload label="Foto Wanita" value={formData.bride_photo} onChange={(b) => setFormData(prev => ({ ...prev, bride_photo: b }))} onClear={() => setFormData(prev => ({ ...prev, bride_photo: "" }))} />
-              <div className="col-span-2">
-                <PhotoUpload label="Background Global (Semua Halaman)" value={formData.bg_image} onChange={(b) => setFormData(prev => ({ ...prev, bg_image: b }))} onClear={() => setFormData(prev => ({ ...prev, bg_image: "" }))} />
+              <div className="col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-gray-100 pt-4 mt-2">
+                <PhotoUpload label="Background Atas (Cover)" value={formData.bg_image} onChange={(b) => setFormData(prev => ({ ...prev, bg_image: b }))} onClear={() => setFormData(prev => ({ ...prev, bg_image: "" }))} />
+                <PhotoUpload label="Background Tengah (Cerita)" value={formData.bg_middle} onChange={(b) => setFormData(prev => ({ ...prev, bg_middle: b }))} onClear={() => setFormData(prev => ({ ...prev, bg_middle: "" }))} />
+                <PhotoUpload label="Background Bawah (Penutup)" value={formData.bg_bottom} onChange={(b) => setFormData(prev => ({ ...prev, bg_bottom: b }))} onClear={() => setFormData(prev => ({ ...prev, bg_bottom: "" }))} />
               </div>
             </div>
           </div>

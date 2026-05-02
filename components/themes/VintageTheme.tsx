@@ -36,8 +36,12 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
 
   return (
     <div className={`min-h-screen bg-[#f1ede3] text-[#2c2c2c] font-serif selection:bg-[#2c2c2c] selection:text-white ${previewMode ? "relative" : ""}`}>
-      {data.bg_image && (
-        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      {(data.bg_image || data.bg_middle || data.bg_bottom) && (
+        <div className="absolute inset-0 pointer-events-none z-0 flex flex-col opacity-15">
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_image ? { backgroundImage: `url('${data.bg_image}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_middle ? { backgroundImage: `url('${data.bg_middle}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_bottom ? { backgroundImage: `url('${data.bg_bottom}')` } : {}}></div></div>
+        </div>
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');

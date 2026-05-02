@@ -57,8 +57,12 @@ export default function MinangTheme({ data, previewMode = false, guestName = "Ta
 
   return (
     <div className={`bg-[#4a0404] min-h-screen text-[#f2cc8f] font-serif selection:bg-[#f2cc8f] selection:text-[#4a0404] ${previewMode ? 'relative' : ''}`}>
-      {data.bg_image && (
-        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      {(data.bg_image || data.bg_middle || data.bg_bottom) && (
+        <div className="absolute inset-0 pointer-events-none z-0 flex flex-col opacity-15">
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_image ? { backgroundImage: `url('${data.bg_image}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_middle ? { backgroundImage: `url('${data.bg_middle}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_bottom ? { backgroundImage: `url('${data.bg_bottom}')` } : {}}></div></div>
+        </div>
       )}
       {/* Songket Pattern Overlay */}
       <div className="fixed inset-0 opacity-10 pointer-events-none z-0 bg-[url('https://www.transparenttextures.com/patterns/weave.png')]"></div>

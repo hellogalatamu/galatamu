@@ -58,8 +58,12 @@ export default function RusticTheme({ data, previewMode = false, guestName = "Ta
 
   return (
     <div className={`bg-[#f4efe6] min-h-screen text-[#4a3f35] font-serif selection:bg-[#4a3f35] selection:text-white ${previewMode ? 'relative' : ''}`}>
-      {data.bg_image && (
-        <div className="fixed inset-0 pointer-events-none z-0" style={{ backgroundImage: `url('${data.bg_image}')`, backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.15 }}></div>
+      {(data.bg_image || data.bg_middle || data.bg_bottom) && (
+        <div className="absolute inset-0 pointer-events-none z-0 flex flex-col opacity-15">
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_image ? { backgroundImage: `url('${data.bg_image}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_middle ? { backgroundImage: `url('${data.bg_middle}')` } : {}}></div></div>
+          <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_bottom ? { backgroundImage: `url('${data.bg_bottom}')` } : {}}></div></div>
+        </div>
       )}
       {/* Cover / Hero Overlay  hidden in preview mode */}
       {!previewMode && (
