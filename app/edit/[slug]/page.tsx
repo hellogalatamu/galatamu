@@ -2,13 +2,13 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { CheckCircle, ExternalLink, Share2, Copy, X } from "lucide-react";
+import { CheckCircle, ExternalLink, Share2, Copy, X, Eye, Play, Pause } from "lucide-react";
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { InvitationData } from "@/components/themes/types";
 import PhotoUpload from "@/components/PhotoUpload";
 import { musicLibrary } from "@/lib/musicLibrary";
-import { Music, Play, Pause } from "lucide-react";
+import PreviewModal from "@/components/PreviewModal";
 
 import { getInvitationLocal, updateInvitationLocal } from "@/app/actions";
 
@@ -30,6 +30,7 @@ function EditForm() {
   const [copied, setCopied] = useState(false);
   const [playingId, setPlayingId] = useState<string | null>(null);
   const [audioPreview, setAudioPreview] = useState<HTMLAudioElement | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
   
   // Guest Tool state
   const [isGuestToolOpen, setIsGuestToolOpen] = useState(false);
@@ -284,10 +285,36 @@ function EditForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6 sm:py-12 px-4 sm:px-6 text-[#1a1a1a]">
-      <div className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-gray-200">
-        <h1 className="text-2xl sm:text-3xl font-serif font-bold mb-2">Edit Undangan</h1>
-        <p className="text-gray-500 mb-8 font-light">Perbarui data undangan Anda (Slug: {slug})</p>
+    <>
+      {/* Preview Modal */}
+      {formData && (
+        <PreviewModal
+          isOpen={showPreview}
+          onClose={() => setShowPreview(false)}
+          data={formData}
+          themeId={formData.theme_id || "amara_01"}
+        />
+      )}
+
+    <div className="min-h-screen bg-gray-50 text-[#1a1a1a]">
+      {/* Sticky Header with Preview Button */}
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+          <div>
+            <h1 className="text-lg font-serif font-bold">Edit Undangan</h1>
+            <p className="text-[10px] text-gray-400 font-mono truncate max-w-[160px] sm:max-w-xs">{slug}</p>
+          </div>
+          <button
+            onClick={() => setShowPreview(true)}
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#1a1a1a] text-white rounded-full text-sm font-semibold hover:bg-gray-800 active:scale-95 transition-all shadow-md"
+          >
+            <Eye size={16} />
+            Preview
+          </button>
+        </div>
+      </header>
+
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
 
         <div className="space-y-8">
           {/* Section Kategori */}
@@ -578,18 +605,28 @@ function EditForm() {
             </div>
           </section>
 
-          <button 
-            onClick={handleUpdate}
-            disabled={isSaving}
-            className="w-full py-4 mt-4 bg-[#1a1a1a] text-white rounded-xl font-medium tracking-wide hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md"
-          >
-            {isSaving ? "Menyimpan..." : "Simpan Perubahan"}
-          </button>
+          <div className="space-y-3 mt-4">
+            <button
+              onClick={() => setShowPreview(true)}
+              className="w-full py-4 border-2 border-[#1a1a1a] text-[#1a1a1a] rounded-xl font-semibold flex items-center justify-center gap-2 hover:bg-[#1a1a1a] hover:text-white transition-all"
+            >
+              <Eye size={18} /> Preview Hasil Undangan
+            </button>
+            <button 
+              onClick={handleUpdate}
+              disabled={isSaving}
+              className="w-full py-4 bg-[#1a1a1a] text-white rounded-xl font-medium tracking-wide hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all shadow-md"
+            >
+              {isSaving ? "Menyimpan..." : "Simpan Perubahan"}
+            </button>
+          </div>
         </div>
       </div>
+    </div>
+
       {/* Guest Name Tool Modal */}
       {isGuestToolOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+        <div className="fixed inset-0 z-[10001] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in zoom-in duration-300">
             <div className="p-6 border-b border-gray-100 flex justify-between items-center">
               <div>
@@ -614,7 +651,7 @@ function EditForm() {
                   rows={5}
                   value={guestNames}
                   onChange={(e) => setGuestNames(e.target.value)}
-                  placeholder="Contoh:&#10;Bapak Budi & Ibu&#10;Keluarga Besar Ahmad&#10;Santi & Partner"
+                  placeholder={`Contoh:\nBapak Budi & Ibu\nKeluarga Besar Ahmad\nSanti & Partner`}
                   className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1a1a1a] focus:bg-white focus:outline-none transition-all text-sm font-medium"
                 ></textarea>
               </div>
@@ -627,12 +664,8 @@ function EditForm() {
                       const encodedName = encodeURIComponent(name.trim());
                       const personalUrl = `${window.location.origin}/${slug}?to=${encodedName}`;
                       const waMsg = encodeURIComponent(
-                        `Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i *${name.trim()}* untuk hadir di acara pernikahan kami.\n\n` +
-                        `Berikut link undangan digital kami:\n${personalUrl}\n\n` +
-                        `Merupakan suatu kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\n` +
-                        `Terima kasih.`
+                        `Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i *${name.trim()}* untuk hadir di acara kami.\n\nBerikut link undangan digital kami:\n${personalUrl}\n\nTerima kasih.`
                       );
-                      
                       return (
                         <div key={idx} className="p-4 bg-white border border-gray-100 rounded-2xl flex items-center justify-between gap-4 shadow-sm">
                           <div className="flex-1 min-w-0">
@@ -641,20 +674,14 @@ function EditForm() {
                           </div>
                           <div className="flex gap-2">
                             <button 
-                              onClick={() => {
-                                navigator.clipboard.writeText(personalUrl);
-                                alert(`Link untuk ${name.trim()} disalin!`);
-                              }}
-                              className="p-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition"
-                              title="Salin Link"
+                              onClick={() => { navigator.clipboard.writeText(personalUrl); alert(`Link untuk ${name.trim()} disalin!`); }}
+                              className="p-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition" title="Salin Link"
                             >
                               <Copy size={14} />
                             </button>
                             <a 
-                              href={`https://wa.me/?text=${waMsg}`}
-                              target="_blank"
-                              className="p-2 bg-[#25D366] text-white rounded-lg hover:bg-[#1ebe5d] transition"
-                              title="Kirim ke WhatsApp"
+                              href={`https://wa.me/?text=${waMsg}`} target="_blank"
+                              className="p-2 bg-[#25D366] text-white rounded-lg hover:bg-[#1ebe5d] transition" title="Kirim ke WhatsApp"
                             >
                               <Share2 size={14} />
                             </a>
@@ -678,9 +705,10 @@ function EditForm() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
+
 
 export default function MagicLinkEditor() {
   return (

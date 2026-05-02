@@ -7,49 +7,8 @@ import FadeIn from "../FadeIn";
 import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 
-export interface WishData {
-  name: string;
-  presence: string;
-  message: string;
-  timestamp: string;
-}
-
-export interface InvitationData {
-  slug?: string;
-  theme_id?: string;
-  category?: string;
-  bride_data: {
-    groom: string;
-    bride: string;
-    parents_groom: string;
-    parents_bride: string;
-    groom_ig?: string;
-    bride_ig?: string;
-  };
-  event_data: {
-    date: string;
-    akad_time: string;
-    akad_location: string;
-    akad_map?: string;
-    resepsi_time: string;
-    resepsi_location: string;
-    resepsi_map?: string;
-    live_stream?: string;
-  };
-  hero_image?: string;
-  bg_middle?: string;
-  bg_bottom?: string;
-  bride_photo?: string;
-  groom_photo?: string;
-  love_story?: { year: string; title: string; desc: string }[];
-  gallery?: string[];
-  video?: string;
-  gifts?: { bank: string; acc: string; name: string }[];
-  music_url?: string;
-  quote?: string;
-  is_paid?: boolean;
-  wishes?: WishData[];
-}
+import { InvitationData, WishData } from "./types";
+import { generateGoogleCalendarLink } from "@/lib/calendarHelper";
 
 interface AqiqahThemeProps {
   data: InvitationData;
@@ -97,8 +56,7 @@ export default function AqiqahTheme({ data, previewMode = false, guestName = "Ta
   };
 
   const eventDate = data.event_data.date ? new Date(data.event_data.date) : new Date();
-  const calendarDateStr = eventDate.toISOString().split('T')[0].replace(/-/g, '');
-  const calendarLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Pernikahan+${encodeURIComponent(data.bride_data.groom)}+%26+${encodeURIComponent(data.bride_data.bride)}&dates=${calendarDateStr}/${calendarDateStr}`;
+  const calendarLink = generateGoogleCalendarLink(`Tasyakuran Aqiqah ${data.bride_data.groom}`, data.event_data.date, data.event_data.akad_location);
 
   // Dummy fallback data if missing
   const gallery = data.gallery?.length ? data.gallery : [

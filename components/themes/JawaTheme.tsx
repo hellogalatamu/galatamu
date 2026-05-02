@@ -116,7 +116,13 @@ export default function JawaTheme({ data, previewMode = false, guestName = "Tamu
                    <img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"} className="w-full h-full object-cover grayscale sepia-[0.4] relative z-10" />
                 </div>
                 <h3 className="font-ethnic text-3xl mb-4">{data.bride_data.groom}</h3>
-                <p className="font-serif italic text-lg text-white/40">Putra saking Bapak {data.bride_data.parents_groom.split('&')[0]} &amp; Ibu {data.bride_data.parents_groom.split('&')[1] || data.bride_data.parents_groom}</p>
+                <p className="font-serif italic text-lg text-white/40">
+                  {data.bride_data.parents_groom.includes('&') ? (
+                    <>Putra saking Bapak {data.bride_data.parents_groom.split('&')[0]} &amp; Ibu {data.bride_data.parents_groom.split('&')[1]}</>
+                  ) : (
+                    <>Putra saking {data.bride_data.parents_groom}</>
+                  )}
+                </p>
              </FadeIn>
              <FadeIn className="text-center" delay={0.2}>
                 <div className="relative w-64 h-80 mx-auto mb-10 group">
@@ -124,7 +130,13 @@ export default function JawaTheme({ data, previewMode = false, guestName = "Tamu
                    <img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"} className="w-full h-full object-cover grayscale sepia-[0.4] relative z-10" />
                 </div>
                 <h3 className="font-ethnic text-3xl mb-4">{data.bride_data.bride}</h3>
-                <p className="font-serif italic text-lg text-white/40">Putri saking Bapak {data.bride_data.parents_bride.split('&')[0]} &amp; Ibu {data.bride_data.parents_bride.split('&')[1] || data.bride_data.parents_bride}</p>
+                <p className="font-serif italic text-lg text-white/40">
+                  {data.bride_data.parents_bride.includes('&') ? (
+                    <>Putri saking Bapak {data.bride_data.parents_bride.split('&')[0]} &amp; Ibu {data.bride_data.parents_bride.split('&')[1]}</>
+                  ) : (
+                    <>Putri saking {data.bride_data.parents_bride}</>
+                  )}
+                </p>
              </FadeIn>
           </section>
 
