@@ -8,7 +8,7 @@ import { saveInvitationLocal } from "@/app/actions";
 import { useSearchParams } from "next/navigation";
 import PhotoUpload from "@/components/PhotoUpload";
 import { THEMES } from "@/lib/themes";
-import { Check, Eye, Sparkles } from "lucide-react";
+import { Eye } from "lucide-react";
 import PreviewModal from "@/components/PreviewModal";
 
 function EditorContent() {
@@ -122,33 +122,7 @@ function EditorContent() {
             <p className="text-gray-500 font-light">Pilih tema & isi data undangan. Klik <strong>Preview Hasil</strong> untuk melihat tampilan.</p>
           </div>
 
-          {/* Pilih Tema */}
-          <div className={sectionCls}>
-            <h2 className="text-base font-bold flex items-center gap-2">
-              <Sparkles size={16} className="text-orange-400" /> Pilih Tema
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {THEMES.map((theme) => (
-                <button
-                  key={theme.id}
-                  onClick={() => setFormData(prev => ({ ...prev, theme_id: theme.id }))}
-                  className={`p-2 rounded-xl border-2 transition-all text-left group ${formData.theme_id === theme.id ? "border-[#1a1a1a] bg-gray-50 shadow-sm" : "border-gray-100 hover:border-gray-300"}`}
-                >
-                  <div className="aspect-[4/5] bg-gray-100 rounded-lg overflow-hidden mb-2 relative">
-                    <img src={theme.thumbnail} alt={theme.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    {formData.theme_id === theme.id && (
-                      <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                        <div className="w-6 h-6 bg-[#1a1a1a] text-white rounded-full flex items-center justify-center">
-                          <Check size={12} />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <p className="text-[9px] font-bold uppercase tracking-wider truncate">{theme.name}</p>
-                </button>
-              ))}
-            </div>
-          </div>
+
 
           {/* Data Pemilik Acara */}
           <div className={sectionCls}>
