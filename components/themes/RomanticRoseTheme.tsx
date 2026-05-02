@@ -22,7 +22,7 @@ export default function RomanticRoseTheme({ data, previewMode = false, guestName
 
   useEffect(() => {
     if (!previewMode) {
-      const musicSrc = data.music_url || "https://cdn.pixabay.com/download/audio/2022/01/26/audio_0e5458390b.mp3?filename=piano-wedding-8532.mp3";
+      const musicSrc = data.music_url || "/music/wedding.mp3";
       audioRef.current = new Audio(musicSrc);
       audioRef.current.loop = true;
     }

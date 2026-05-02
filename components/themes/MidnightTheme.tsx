@@ -22,7 +22,7 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
 
   useEffect(() => {
     if (!previewMode) {
-      const musicSrc = data.music_url || "https://cdn.pixabay.com/download/audio/2021/11/17/audio_0974b9f5e3.mp3?filename=midnight-wedding-1153.mp3";
+      const musicSrc = data.music_url || "/music/wedding.mp3";
       audioRef.current = new Audio(musicSrc);
       audioRef.current.loop = true;
     }

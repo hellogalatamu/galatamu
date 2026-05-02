@@ -22,7 +22,7 @@ export default function SundaTheme({ data, previewMode = false, guestName = "Tam
 
   useEffect(() => {
     if (!previewMode) {
-      const musicSrc = data.music_url || "https://cdn.pixabay.com/download/audio/2022/02/22/audio_c2f7b8893d.mp3?filename=sunda-flute-1123.mp3";
+      const musicSrc = data.music_url || "/music/wedding.mp3";
       audioRef.current = new Audio(musicSrc);
       audioRef.current.loop = true;
     }

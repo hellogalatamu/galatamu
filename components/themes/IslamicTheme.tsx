@@ -24,7 +24,7 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
 
   useEffect(() => {
     if (!previewMode) {
-      audioRef.current = new Audio(data.music_url || "https://cdn.pixabay.com/download/audio/2022/03/15/audio_7aff99ea66.mp3?filename=islamic-background-music-21074.mp3");
+      audioRef.current = new Audio(data.music_url || "/music/wedding.mp3");
       audioRef.current.loop = true;
     }
     return () => { if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; } };

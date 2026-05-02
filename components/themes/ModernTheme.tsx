@@ -24,7 +24,7 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
 
   useEffect(() => {
     if (!previewMode) {
-      audioRef.current = new Audio(data.music_url || "https://cdn.pixabay.com/download/audio/2022/10/30/audio_b5a19859f7.mp3?filename=lofi-study-112191.mp3");
+      audioRef.current = new Audio(data.music_url || "/music/wedding.mp3");
       audioRef.current.loop = true;
     }
     return () => { if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; } };

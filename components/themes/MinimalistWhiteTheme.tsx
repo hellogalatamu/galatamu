@@ -23,7 +23,7 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
 
   useEffect(() => {
     if (!previewMode) {
-      audioRef.current = new Audio(data.music_url || "https://cdn.pixabay.com/download/audio/2022/01/26/audio_0e5458390b.mp3?filename=piano-wedding-8532.mp3");
+      audioRef.current = new Audio(data.music_url || "/music/wedding.mp3");
       audioRef.current.loop = true;
     }
     return () => { if (audioRef.current) { audioRef.current.pause(); audioRef.current = null; } };

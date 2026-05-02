@@ -22,7 +22,7 @@ export default function MarbleLuxuryTheme({ data, previewMode = false, guestName
 
   useEffect(() => {
     if (!previewMode) {
-      const musicSrc = data.music_url || "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808d7a4f4.mp3?filename=luxury-wedding-110620.mp3";
+      const musicSrc = data.music_url || "/music/wedding.mp3";
       audioRef.current = new Audio(musicSrc);
       audioRef.current.loop = true;
     }

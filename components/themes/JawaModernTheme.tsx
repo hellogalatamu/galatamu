@@ -22,7 +22,7 @@ export default function JawaModernTheme({ data, previewMode = false, guestName =
 
   useEffect(() => {
     if (!previewMode) {
-      const musicSrc = data.music_url || "https://cdn.pixabay.com/download/audio/2022/03/10/audio_c2f7b8893d.mp3?filename=javanese-gamelan-soft-1123.mp3";
+      const musicSrc = data.music_url || "/music/wedding.mp3";
       audioRef.current = new Audio(musicSrc);
       audioRef.current.loop = true;
     }

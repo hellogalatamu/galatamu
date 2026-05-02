@@ -30,7 +30,7 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
 
   useEffect(() => {
     if (!previewMode) {
-      const musicSrc = data.music_url || "https://cdn.pixabay.com/download/audio/2022/11/06/audio_f5eb8dfcb7.mp3?filename=beautiful-wedding-125026.mp3";
+      const musicSrc = data.music_url || "/music/wedding.mp3";
       audioRef.current = new Audio(musicSrc);
       audioRef.current.loop = true;
     }
