@@ -10,6 +10,7 @@ import PhotoUpload from "@/components/PhotoUpload";
 import { THEMES } from "@/lib/themes";
 import { Eye } from "lucide-react";
 import PreviewModal from "@/components/PreviewModal";
+import GalleryUpload from "@/components/GalleryUpload";
 
 function EditorContent() {
   const searchParams = useSearchParams();
@@ -168,6 +169,15 @@ function EditorContent() {
                 <PhotoUpload label="Background Bawah (Penutup)" value={formData.bg_bottom} onChange={(b) => setFormData(prev => ({ ...prev, bg_bottom: b }))} onClear={() => setFormData(prev => ({ ...prev, bg_bottom: "" }))} />
               </div>
             </div>
+          </div>
+
+          {/* Galeri Foto */}
+          <div className={sectionCls}>
+            <GalleryUpload
+              themeId={formData.theme_id || "amara_01"}
+              value={formData.gallery || []}
+              onChange={(urls) => setFormData(prev => ({ ...prev, gallery: urls }))}
+            />
           </div>
 
           {/* CTA */}

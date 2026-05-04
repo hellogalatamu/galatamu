@@ -397,3 +397,16 @@ export const THEMES_MAP: Record<string, string> = THEMES.reduce((acc, theme) => 
   acc[theme.id] = theme.name;
   return acc;
 }, {} as Record<string, string>);
+
+// Batas upload foto galeri per tier
+export const GALLERY_LIMITS: Record<"basic" | "premium" | "exclusive", number> = {
+  basic: 3,
+  premium: 10,
+  exclusive: 20,
+};
+
+export function getGalleryLimit(themeId: string): number {
+  const theme = THEMES.find((t) => t.id === themeId);
+  const tier = theme?.tier ?? "basic";
+  return GALLERY_LIMITS[tier];
+}
