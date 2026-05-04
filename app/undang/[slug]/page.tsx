@@ -1,4 +1,4 @@
-import MasterTheme from '@/components/themes/MasterTheme';
+import ThemeRegistry from '@/components/ThemeRegistry';
 import dummyData from '@/lib/dummyData.json';
 
 export default async function DynamicInvitationPage({
@@ -25,12 +25,15 @@ export default async function DynamicInvitationPage({
     );
   }
 
-  // Jika ditemukan, render Tema dan pass data tersebut sebagai props
+  // Gunakan themeId dari data, atau default ke 'amara_01'
+  const themeId: string = data.themeId || 'amara_01';
+
+  // Jika ditemukan, render ThemeRegistry dengan tema yang sesuai
   return (
     <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center">
       {/* Wrapper mensimulasikan layar mobile layaknya demo */}
       <div className="w-full max-w-md bg-white min-h-screen shadow-2xl relative overflow-hidden">
-        <MasterTheme data={data} />
+        <ThemeRegistry themeId={themeId} data={data} />
       </div>
     </main>
   );
