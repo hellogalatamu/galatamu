@@ -43,7 +43,12 @@ const DEMO_DATA = {
 };
 
 // Theme Catalog Data
-const CATEGORIES = ["Semua", "Pernikahan"];
+const TIERS = [
+  { key: "Semua", label: "Semua Tema", icon: "✦" },
+  { key: "basic", label: "Basic", icon: "○", color: "text-gray-500", duration: "Masa Aktif 3 Bulan" },
+  { key: "premium", label: "Premium", icon: "★", color: "text-amber-500", duration: "Masa Aktif 6 Bulan" },
+  { key: "exclusive", label: "Exclusive", icon: "♦", color: "text-purple-600", duration: "Masa Aktif 1 Tahun" },
+];
 
 import { THEMES } from "@/lib/themes";
 
@@ -60,9 +65,15 @@ const FEATURES = [
 export default function LandingPage() {
   const [previewTheme, setPreviewTheme] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("Semua");
+  const [activeTier, setActiveTier] = useState("Semua");
 
-  const filteredThemes = THEMES.filter(theme => activeCategory === "Semua" || theme.category === activeCategory);
+  const filteredThemes = THEMES.filter(theme => activeTier === "Semua" || theme.tier === activeTier);
+
+  const TIER_BADGE: Record<string, { label: string; className: string; glow?: boolean }> = {
+    basic: { label: "Basic", className: "bg-gray-100 text-gray-500 border border-gray-200" },
+    premium: { label: "Premium", className: "bg-amber-50 text-amber-600 border border-amber-200" },
+    exclusive: { label: "Exclusive", className: "bg-purple-900 text-purple-200 border border-purple-700", glow: true },
+  };
 
   return (
     <main className="min-h-screen bg-[#faf9f6] text-[#1a1a1a] font-sans selection:bg-[#1a1a1a] selection:text-white scroll-smooth">
@@ -191,19 +202,29 @@ export default function LandingPage() {
                 Desain eksklusif yang dirancang oleh desainer profesional untuk memastikan undangan Anda tampil memukau di layar tamu.
               </p>
               
-              {/* Category Filter */}
+              {/* Tier Filter */}
               <div className="flex flex-wrap justify-center gap-3">
-                {CATEGORIES.map((cat) => (
+                {TIERS.map((tier) => (
                   <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
-                      activeCategory === cat 
-                        ? "bg-[#1a1a1a] text-white shadow-2xl shadow-gray-400" 
+                    key={tier.key}
+                    onClick={() => setActiveTier(tier.key)}
+                    className={`group px-7 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all flex items-center gap-2 ${
+                      activeTier === tier.key
+                        ? tier.key === "exclusive"
+                          ? "bg-gradient-to-r from-purple-900 to-purple-700 text-white shadow-2xl shadow-purple-500/40 scale-105"
+                          : tier.key === "premium"
+                          ? "bg-gradient-to-r from-amber-500 to-yellow-400 text-white shadow-2xl shadow-amber-400/40 scale-105"
+                          : "bg-[#1a1a1a] text-white shadow-2xl shadow-gray-400"
                         : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50 hover:text-[#1a1a1a]"
                     }`}
                   >
-                    {cat}
+                    <span>{tier.icon}</span>
+                    {tier.label}
+                    {tier.key !== "Semua" && (
+                      <span className={`text-[8px] opacity-60 hidden sm:inline ${
+                        activeTier === tier.key ? "text-white" : ""
+                      }`}>— {tier.duration}</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -211,9 +232,27 @@ export default function LandingPage() {
           </FadeIn>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {filteredThemes.map((theme, idx) => (
+            {filteredThemes.map((theme, idx) => {
+              const badge = TIER_BADGE[theme.tier || "basic"];
+              const isExclusive = theme.tier === "exclusive";
+              return (
               <FadeIn key={theme.id} delay={0.2 + idx * 0.1}>
-                <div className={`group rounded-[3rem] overflow-hidden ${theme.bg} border ${theme.border} shadow-2xl shadow-gray-200/50 hover:shadow-2xl transition-all duration-700 hover:-translate-y-2`}>
+                <div className={`group rounded-[3rem] overflow-hidden ${theme.bg} border ${theme.border} shadow-2xl transition-all duration-700 hover:-translate-y-2 relative ${
+                  isExclusive ? "shadow-purple-500/20 hover:shadow-purple-500/40 hover:shadow-2xl" : "shadow-gray-200/50 hover:shadow-2xl"
+                }`}>
+                  {/* Tier Badge */}
+                  <div className="absolute top-4 left-4 z-[150]">
+                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest shadow-sm ${
+                      badge?.className
+                    } ${
+                      isExclusive ? "animate-pulse" : ""
+                    }`}>
+                      {theme.tier === "exclusive" && <span>♦</span>}
+                      {theme.tier === "premium" && <span>★</span>}
+                      {theme.tier === "basic" && <span>○</span>}
+                      {badge?.label}
+                    </span>
+                  </div>
                   {/* Preview Area */}
                   <div className={`aspect-[3/4] relative overflow-hidden p-8 bg-gradient-to-br ${theme.previewBg} flex items-center justify-center cursor-pointer group`} onClick={() => setPreviewTheme(theme.id)}>
                     <div className="w-full h-full relative group-hover:scale-105 transition-transform duration-1000">
@@ -264,8 +303,20 @@ export default function LandingPage() {
                   </div>
 
                   <div className={`p-10 text-center bg-white`}>
-                    <h3 className={`font-serif font-bold text-3xl ${theme.textColor} mb-3 italic`}>{theme.name}</h3>
-                    <p className={`${theme.tagColor} text-[10px] mb-10 font-bold uppercase tracking-[0.3em] opacity-60`}>{theme.tagline}</p>
+                    <h3 className={`font-serif font-bold text-3xl ${theme.textColor} mb-1 italic`}>{theme.name}</h3>
+                    <p className={`${theme.tagColor} text-[10px] mb-2 font-bold uppercase tracking-[0.3em] opacity-60`}>{theme.tagline}</p>
+                    {/* Duration badge */}
+                    <div className="flex justify-center mb-8">
+                      <span className={`inline-flex items-center gap-1 px-4 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest ${
+                        theme.tier === "exclusive"
+                          ? "bg-purple-50 text-purple-700 border border-purple-200"
+                          : theme.tier === "premium"
+                          ? "bg-amber-50 text-amber-600 border border-amber-200"
+                          : "bg-gray-50 text-gray-500 border border-gray-200"
+                      }`}>
+                        ⏱ {theme.duration}
+                      </span>
+                    </div>
                     <div className="flex gap-4">
                        <button onClick={() => setPreviewTheme(theme.id)} className={`flex-1 py-4 border ${theme.btnBorder} rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-all duration-500 flex items-center justify-center gap-2`}>
                          Preview
@@ -277,7 +328,8 @@ export default function LandingPage() {
                   </div>
                 </div>
               </FadeIn>
-            ))}
+            );
+          })}
           </div>
         </div>
       </section>

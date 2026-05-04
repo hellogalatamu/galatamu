@@ -8,7 +8,7 @@ const PACKAGES = [
   {
     name: "Basic",
     price: "Rp 69.000",
-    period: "3 Bulan Masa Aktif",
+    period: "Masa Aktif 3 Bulan",
     features: [
       "Custom Nama Tamu",
       "Musik Latar (Standar)",
@@ -23,7 +23,7 @@ const PACKAGES = [
   {
     name: "Premium",
     price: "Rp 99.000",
-    period: "Masa Aktif 1 Tahun",
+    period: "Masa Aktif 6 Bulan",
     features: [
       "Semua Fitur Basic",
       "Masa Aktif Lebih Lama",
@@ -38,7 +38,7 @@ const PACKAGES = [
   {
     name: "Exclusive",
     price: "Rp 149.000",
-    period: "Masa Aktif Selamanya",
+    period: "Masa Aktif 1 Tahun",
     features: [
       "Semua Fitur Premium",
       "Live Streaming Link",
