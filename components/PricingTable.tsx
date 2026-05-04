@@ -45,7 +45,6 @@ const PACKAGES = [
       "Google Calendar Sync",
       "Tanpa Logo Galatamu",
       "Revisi Sepuasnya",
-      "Custom Domain (Opsional)",
     ],
     cta: "Pilih Paket Exclusive",
     highlight: false,
