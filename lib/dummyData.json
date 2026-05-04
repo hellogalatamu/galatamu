@@ -1,10 +1,33 @@
 {
   "demo-elegan": {
-    "namaPria": "Riyan",
-    "namaWanita": "Lara",
-    "namaLengkapPria": "Muh. Riyan Apriandi, S.Tra.",
-    "namaLengkapWanita": "Baiq Dinda Lara Pertiwi, S.Pd.",
-    "tanggalAkad": "2026-04-25T10:00:00",
-    "lokasiAkad": "Desa Anjani, Lombok Timur"
+    "themeId": "amara_01",
+    "slug": "demo-elegan",
+    "bride_data": {
+      "groom": "Riyan Apriandi",
+      "bride": "Dinda Lara Pertiwi",
+      "parents_groom": "Bpk. H. Apriandi & Ibu Hj. Suryani",
+      "parents_bride": "Bpk. Pertiwi & Ibu Hj. Marlina",
+      "groom_ig": "@riyan.apriandi",
+      "bride_ig": "@dindalarapertiwi"
+    },
+    "event_data": {
+      "date": "2026-04-25",
+      "akad_time": "10:00 - 11:00 WITA",
+      "akad_location": "Masjid Nurul Islam, Desa Anjani, Lombok Timur",
+      "akad_map": "https://maps.google.com",
+      "resepsi_time": "12:00 - 14:00 WITA",
+      "resepsi_location": "Gedung Serbaguna Anjani, Lombok Timur",
+      "resepsi_map": "https://maps.google.com"
+    },
+    "quote": "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya. — Q.S. Ar-Rum: 21",
+    "gallery": [],
+    "love_story": [
+      { "year": "2020", "title": "Pertama Bertemu", "desc": "Kami bertemu di sebuah acara kampus yang sederhana, namun penuh kenangan." },
+      { "year": "2022", "title": "Menjalin Hubungan", "desc": "Setelah dua tahun persahabatan, kami memutuskan untuk melangkah lebih jauh." },
+      { "year": "2026", "title": "Menuju Pelaminan", "desc": "Hari ini kami menyempurnakan separuh agama kami bersama." }
+    ],
+    "gifts": [
+      { "bank": "BCA", "acc": "1234567890", "name": "Muh. Riyan Apriandi" }
+    ]
   }
 }
