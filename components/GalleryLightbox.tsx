@@ -6,6 +6,8 @@ import FadeIn from "./FadeIn";
 
 interface GalleryLightboxProps {
   images: string[];
+  /** Batas maksimal foto yang ditampilkan (dari tier tema). Jika tidak diisi, tampilkan semua. */
+  maxImages?: number;
   /** Optional CSS classes for the outer grid wrapper */
   gridClassName?: string;
   /** Optional CSS classes for each thumbnail item */
@@ -22,6 +24,7 @@ interface GalleryLightboxProps {
 
 export default function GalleryLightbox({
   images,
+  maxImages,
   gridClassName = "grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto",
   itemClassName = "aspect-square rounded-2xl overflow-hidden bg-gray-200 group cursor-pointer relative",
   imgClassName = "w-full h-full object-cover group-hover:scale-110 transition duration-700",
@@ -31,7 +34,8 @@ export default function GalleryLightbox({
 }: GalleryLightboxProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const filtered = images.filter((img) => img && img.trim() !== "");
+  const allFiltered = images.filter((img) => img && img.trim() !== "");
+  const filtered = maxImages !== undefined ? allFiltered.slice(0, maxImages) : allFiltered;
 
   const prev = useCallback(() => {
     setLightboxIndex((i) => (i === null ? null : (i - 1 + filtered.length) % filtered.length));
