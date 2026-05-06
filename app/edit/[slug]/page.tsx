@@ -2,13 +2,15 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { CheckCircle, ExternalLink, Share2, Copy, X, Eye, Play, Pause } from "lucide-react";
+import { CheckCircle, ExternalLink, Share2, Copy, X, Eye, Play, Pause, Type } from "lucide-react";
 import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { InvitationData } from "@/components/themes/types";
 import PhotoUpload from "@/components/PhotoUpload";
 import { musicLibrary } from "@/lib/musicLibrary";
 import PreviewModal from "@/components/PreviewModal";
+import { FONT_STYLES } from "@/lib/fontStyles";
+import GuestbookTab from "@/components/GuestbookTab";
 
 import { getInvitationLocal, updateInvitationLocal } from "@/app/actions";
 
@@ -35,6 +37,9 @@ function EditForm() {
   // Guest Tool state
   const [isGuestToolOpen, setIsGuestToolOpen] = useState(false);
   const [guestNames, setGuestNames] = useState("");
+
+  // Tab State
+  const [activeTab, setActiveTab] = useState<'form' | 'guestbook'>('form');
 
   useEffect(() => {
     return () => {
@@ -154,6 +159,7 @@ function EditForm() {
           video: formData.video || "",
           music_url: formData.music_url || "",
           quote: formData.quote || "",
+          font_style: formData.font_style || "",
         });
       } else if (docId) {
         const docRef = doc(db, "invitations", docId);
@@ -172,6 +178,7 @@ function EditForm() {
           video: formData.video || "",
           music_url: formData.music_url || "",
           quote: formData.quote || "",
+          font_style: formData.font_style || "",
         });
       }
       setSaveSuccess(true); // Show success screen
@@ -315,7 +322,23 @@ function EditForm() {
       </header>
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
+        {/* Tab Switcher */}
+        <div className="flex bg-white border border-gray-200 p-1 rounded-xl shadow-sm mb-8">
+          <button 
+            onClick={() => setActiveTab('form')} 
+            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'form' ? 'bg-[#1a1a1a] text-white shadow-md' : 'text-gray-500 hover:text-[#1a1a1a] hover:bg-gray-50'}`}
+          >
+            📝 Edit Data Undangan
+          </button>
+          <button 
+            onClick={() => setActiveTab('guestbook')} 
+            className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all ${activeTab === 'guestbook' ? 'bg-[#1a1a1a] text-white shadow-md' : 'text-gray-500 hover:text-[#1a1a1a] hover:bg-gray-50'}`}
+          >
+            📖 Buku Tamu & RSVP ({formData.wishes?.length || 0})
+          </button>
+        </div>
 
+        {activeTab === 'form' ? (
         <div className="space-y-8">
           {/* Section Kategori */}
           <section>
@@ -329,6 +352,47 @@ function EditForm() {
               >
                 <option value="Pernikahan">Pernikahan & Pertunangan</option>
               </select>
+            </div>
+          </section>
+
+          {/* Section Font Style */}
+          <section>
+            <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
+              <Type size={20} /> Gaya Font Nama Mempelai
+            </h2>
+            <p className="text-sm text-gray-500 mb-4">Pilih gaya huruf untuk menampilkan nama pasangan di undangan.</p>
+            <style>{FONT_STYLES.map(f => `@import url('${f.googleUrl}');`).join('\n')}</style>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <button
+                onClick={() => setFormData(prev => prev ? ({ ...prev, font_style: "" }) : prev)}
+                className={`p-4 rounded-xl border-2 text-center transition-all ${
+                  !formData.font_style
+                    ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
+                    : "border-gray-200 bg-white hover:border-gray-400"
+                }`}
+              >
+                <p className="text-xs font-semibold uppercase tracking-wider mb-1">Default</p>
+                <p className="text-sm opacity-70">Font bawaan tema</p>
+              </button>
+              {FONT_STYLES.map((font) => (
+                <button
+                  key={font.id}
+                  onClick={() => setFormData(prev => prev ? ({ ...prev, font_style: font.id }) : prev)}
+                  className={`p-4 rounded-xl border-2 text-center transition-all ${
+                    formData.font_style === font.id
+                      ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
+                      : "border-gray-200 bg-white hover:border-gray-400"
+                  }`}
+                >
+                  <p
+                    style={{ fontFamily: font.fontFamily }}
+                    className="text-xl mb-1 leading-tight"
+                  >
+                    {font.preview}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-wider opacity-60 font-semibold">{font.category}</p>
+                </button>
+              ))}
             </div>
           </section>
 
@@ -621,6 +685,13 @@ function EditForm() {
             </button>
           </div>
         </div>
+        ) : (
+          <GuestbookTab 
+            wishes={formData.wishes || []} 
+            slug={slug} 
+            onUpdate={(newWishes) => setFormData(prev => prev ? ({ ...prev, wishes: newWishes }) : prev)} 
+          />
+        )}
       </div>
     </div>
 

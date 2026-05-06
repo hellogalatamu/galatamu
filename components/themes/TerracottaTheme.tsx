@@ -8,8 +8,10 @@ import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import DigitalEnvelope from "../DigitalEnvelope";
 import VideoPlayer from "../VideoPlayer";
 import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
+import { getFontStyle } from "@/lib/fontStyles";
 
 export default function TerracottaTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -34,9 +36,16 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
   const openInvitation = () => { setIsOpen(true); if (audioRef.current) audioRef.current.play().then(() => setIsPlaying(true)); };
   const toggleMusic = () => { if (!audioRef.current) return; if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); } else { audioRef.current.play(); setIsPlaying(true); } };
   const eventDate = data.event_data.date ? new Date(data.event_data.date) : new Date();
+  const customFont = getFontStyle(data.font_style);
 
   return (
     <div className={`bg-[#fff7ed] min-h-screen text-[#7c2d12] font-serif selection:bg-[#ea580c] selection:text-white ${previewMode ? 'relative' : ''}`}>
+      {customFont && (
+        <style>{`
+          @import url('${customFont.googleUrl}');
+          .font-terracotta-display { font-family: ${customFont.fontFamily}; }
+        `}</style>
+      )}
       {(data.bg_image || data.bg_middle || data.bg_bottom) && (
         <div className="absolute inset-0 pointer-events-none z-0 flex flex-col opacity-15">
           <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_image ? { backgroundImage: `url('${data.bg_image}')` } : {}}></div></div>
@@ -51,7 +60,7 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
           {!isOpen && (
             <motion.div initial={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }} className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#c2410c] text-[#fff7ed] p-6 text-center">
               <div className="mb-12 animate-bounce"><Heart className="w-16 h-16 fill-current" /></div>
-              <FadeIn><h1 className="text-5xl font-bold italic mb-6 tracking-tight">{data.bride_data.groom} & {data.bride_data.bride}</h1></FadeIn>
+              <FadeIn><h1 className={`text-5xl font-bold italic mb-6 tracking-tight ${customFont ? 'font-terracotta-display' : ''}`}>{data.bride_data.groom} & {data.bride_data.bride}</h1></FadeIn>
               <FadeIn delay={0.2}><p className="mb-16 opacity-80 uppercase tracking-[0.4em] text-[10px]">An Earthy Union for {guestName}</p></FadeIn>
               <button onClick={openInvitation} className="px-16 py-5 border-2 border-white text-white rounded-none font-bold uppercase text-[10px] tracking-[0.5em] hover:bg-white hover:text-[#c2410c] transition-all">Open Invitation</button>
             </motion.div>
@@ -65,7 +74,7 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
           <section className="h-screen flex flex-col items-center justify-center text-center p-6 bg-gradient-to-b from-[#fed7aa] to-[#fff7ed]">
              <FadeIn>
                 <p className="tracking-[0.8em] uppercase text-[9px] mb-12 text-[#ea580c] font-bold">The Wedding Celebration</p>
-                <h2 className="text-6xl md:text-9xl font-bold italic mb-12 text-[#7c2d12] tracking-tighter leading-none">{data.bride_data.groom} <br/> & <br/> {data.bride_data.bride}</h2>
+                <h2 className={`text-6xl md:text-9xl font-bold italic mb-12 text-[#7c2d12] tracking-tighter leading-none ${customFont ? 'font-terracotta-display' : ''}`}>{data.bride_data.groom} <br/> & <br/> {data.bride_data.bride}</h2>
                 <div className="w-32 h-1 bg-[#ea580c] mx-auto mb-12 rounded-full opacity-30"></div>
                 <p className="text-3xl font-bold mb-16 text-[#c2410c] tracking-widest">{eventDate.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 <div className="max-w-md mx-auto p-12 bg-white shadow-2xl rounded-[3rem] border-8 border-[#fed7aa]/50">
@@ -88,7 +97,7 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
                    <div className="absolute -inset-4 border-2 border-[#ea580c]/20 rounded-[4rem] group-hover:-inset-8 transition-all duration-700"></div>
                    <div className="aspect-[4/5] overflow-hidden rounded-[3.5rem] shadow-2xl relative border-8 border-white"><img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"} className="w-full h-full object-cover" /></div>
                 </div>
-                <h3 className="text-4xl font-bold italic text-[#7c2d12] mb-2">{data.bride_data.groom}</h3>
+                <h3 className={`text-4xl font-bold italic text-[#7c2d12] mb-2 ${customFont ? 'font-terracotta-display' : ''}`}>{data.bride_data.groom}</h3>
                 <p className="text-[#ea580c] uppercase text-[10px] tracking-[0.4em] font-bold mb-4 italic">Son of</p>
                 <p className="text-xl italic text-[#7c2d12]/60">{data.bride_data.parents_groom}</p>
              </FadeIn>
@@ -97,7 +106,7 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
                    <div className="absolute -inset-4 border-2 border-[#ea580c]/20 rounded-[4rem] group-hover:-inset-8 transition-all duration-700"></div>
                    <div className="aspect-[4/5] overflow-hidden rounded-[3.5rem] shadow-2xl relative border-8 border-white"><img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"} className="w-full h-full object-cover" /></div>
                 </div>
-                <h3 className="text-4xl font-bold italic text-[#7c2d12] mb-2">{data.bride_data.bride}</h3>
+                <h3 className={`text-4xl font-bold italic text-[#7c2d12] mb-2 ${customFont ? 'font-terracotta-display' : ''}`}>{data.bride_data.bride}</h3>
                 <p className="text-[#ea580c] uppercase text-[10px] tracking-[0.4em] font-bold mb-4 italic">Daughter of</p>
                 <p className="text-xl italic text-[#7c2d12]/60">{data.bride_data.parents_bride}</p>
              </FadeIn>
@@ -183,27 +192,19 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
             </section>
           )}
 
-          {data.gifts && data.gifts.length > 0 && (
-            <section className="py-32 px-6 text-center">
-               <div className="max-w-4xl mx-auto">
-                  <FadeIn className="mb-24">
-                     <Gift className="w-16 h-16 text-[#ea580c] mx-auto mb-10 opacity-30 shadow-orange-200" />
-                     <h2 className="text-5xl font-bold italic text-[#7c2d12] tracking-widest uppercase">Love Gift</h2>
-                  </FadeIn>
-                  <div className="grid sm:grid-cols-2 gap-12">
-                     {data.gifts.map((gift, i) => (
-                        <FadeIn key={i} delay={i * 0.1}>
-                           <div className="bg-white p-16 shadow-2xl rounded-[3rem] relative group overflow-hidden border border-orange-50">
-                              <div className="absolute top-0 left-0 w-full h-2 bg-[#ea580c] opacity-10 group-hover:h-full transition-all duration-700"></div>
-                              <p className="uppercase text-[9px] tracking-[0.5em] font-bold text-[#ea580c] mb-10 italic">{gift.bank}</p>
-                              <p className="text-3xl font-bold text-[#7c2d12] mb-4 tracking-widest italic">{gift.acc}</p>
-                              <p className="text-[10px] uppercase tracking-widest opacity-40 font-bold">a.n {gift.name}</p>
-                           </div>
-                        </FadeIn>
-                     ))}
-                  </div>
-               </div>
-            </section>
+{data.gifts && data.gifts.length > 0 && (
+          <section className="py-32 px-6 text-center">
+            <DigitalEnvelope
+              gifts={data.gifts}
+              gift_address={data.gift_address}
+              primaryColor="#ea580c"
+              bgColor="#fff7ed"
+              textColor="#7c2d12"
+              envelopeStyle="light"
+              titleClassName="text-5xl font-bold italic text-[#7c2d12] tracking-widest uppercase"
+              subtitleClassName="hidden"
+            />
+          </section>
           )}
 
           <section className="py-32 px-6 bg-white border-t border-orange-50">
@@ -244,6 +245,13 @@ export default function TerracottaTheme({ data, previewMode = false, guestName =
                             <span className="text-[10px] bg-orange-50 px-4 py-2 text-[#ea580c] rounded-full uppercase font-bold tracking-widest">{wish.presence === 'hadir' ? 'Attending' : 'Absen'}</span>
                         </div>
                         <p className="text-[#7c2d12]/60 italic font-light leading-relaxed text-xl">&quot;{wish.message}&quot;</p>
+                        {wish.reply && (
+                          <div className="mt-4 p-4 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{wish.reply}</p>
+                          </div>
+                        )}
                     </div>
                   ))}
                </div>

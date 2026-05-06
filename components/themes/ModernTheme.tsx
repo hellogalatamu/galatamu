@@ -8,9 +8,11 @@ import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import DigitalEnvelope from "../DigitalEnvelope";
 import VideoPlayer from "../VideoPlayer";
 import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
 import { Video } from "lucide-react";
+import { getFontStyle } from "@/lib/fontStyles";
 
 export default function ModernTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -45,7 +47,8 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap');
-        .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
+        ${getFontStyle(data.font_style) ? `@import url('${getFontStyle(data.font_style)!.googleUrl}');` : ''}
+        .font-mono-tech { font-family: ${getFontStyle(data.font_style)?.fontFamily ?? "'JetBrains Mono', monospace"}; }
         .glitch-text { text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff; }
         .scanline { width: 100%; height: 2px; background: rgba(0, 255, 65, 0.1); position: fixed; top: 0; left: 0; pointer-events: none; z-index: 100; animation: scan 8s linear infinite; }
         @keyframes scan { from { transform: translateY(0); } to { transform: translateY(100vh); } }
@@ -239,6 +242,22 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
              />
           </section>
 
+          {/* GIFTS SECTION */}
+          {data.gifts && data.gifts.length > 0 && (
+             <section className="border-tech bg-tech p-10 text-center mb-6">
+                <DigitalEnvelope
+                  gifts={data.gifts}
+                  gift_address={data.gift_address}
+                  primaryColor="#00ff41"
+                  bgColor="#050505"
+                  textColor="#00ff41"
+                  envelopeStyle="dark"
+                  titleClassName="text-3xl font-bold mb-8 glitch-text font-mono-tech uppercase"
+                  subtitleClassName="text-[10px] mb-4 opacity-50 tracking-widest font-mono-tech uppercase"
+                />
+             </section>
+          )}
+
           {/* RSVP SECTION */}
           <section className="grid md:grid-cols-2 gap-6">
              <div className="border-tech p-10 flex flex-col justify-center">
@@ -285,6 +304,13 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
                          <span className="opacity-40">{w.presence === 'hadir' ? 'ONLINE' : 'OFFLINE'}</span>
                       </div>
                       <p className="opacity-50 italic leading-relaxed">&gt; {w.message.toUpperCase()}</p>
+                        {w.reply && (
+                          <div className="mt-3 p-3 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{w.reply}</p>
+                          </div>
+                        )}
                    </div>
                 ))}
              </div>

@@ -8,9 +8,11 @@ import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import DigitalEnvelope from "../DigitalEnvelope";
 import VideoPlayer from "../VideoPlayer";
 import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
 import { Video } from "lucide-react";
+import { getFontStyle } from "@/lib/fontStyles";
 
 export default function VintageTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -45,8 +47,9 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+        ${getFontStyle(data.font_style) ? `@import url('${getFontStyle(data.font_style)!.googleUrl}');` : ''}
         .font-paper { font-family: 'Old Standard TT', serif; }
-        .font-display { font-family: 'Playfair Display', serif; }
+        .font-display { font-family: ${getFontStyle(data.font_style) ? getFontStyle(data.font_style)!.fontFamily : "'Playfair Display', serif"}; }
         .paper-texture { background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); }
         .newspaper-border { border: 1px solid #000; border-width: 4px 1px 1px 1px; }
         .newspaper-double-border { border-top: 3px double #000; border-bottom: 3px double #000; }
@@ -191,18 +194,19 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
                    </div>
                 </div>
 
-                {/* Gift Registry */}
-                <div className="space-y-4">
-                   <h4 className="font-display text-xl font-bold uppercase">Classifieds: Gifts</h4>
-                   {data.gifts?.map((g, i) => (
-                      <div key={i} className="border-t border-black py-4">
-                         <p className="font-paper text-[10px] font-bold mb-1">{g.bank.toUpperCase()}</p>
-                         <p className="font-display text-lg tracking-widest">{g.acc}</p>
-                         <p className="font-paper text-xs">A.N {g.name.toUpperCase()}</p>
-                      </div>
-                   ))}
-                </div>
-
+{/* Gift Registry */}
+          <section className="py-32 px-6 text-center">
+            <DigitalEnvelope
+              gifts={data.gifts}
+              gift_address={data.gift_address}
+              primaryColor="#8b5e3c"
+              bgColor="#e5d3b3"
+              textColor="#5d4037"
+              envelopeStyle="light"
+              titleClassName="font-display text-xl font-bold uppercase"
+              subtitleClassName="hidden"
+            />
+          </section>
                 {/* RSVP Advertisement */}
                 <div className="border-4 border-black p-6 bg-[#fdfcf8] rotate-1 shadow-lg">
                    <h4 className="font-display text-2xl font-black text-center mb-4">RSVP NOW!</h4>
@@ -250,6 +254,13 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
                    <div key={i} className="border-b border-black/20 pb-4">
                       <p className="font-display font-bold mb-1">{w.name} says:</p>
                       <p className="font-paper italic text-sm opacity-80 leading-relaxed">&ldquo;{w.message}&rdquo;</p>
+                        {w.reply && (
+                          <div className="mt-3 p-3 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{w.reply}</p>
+                          </div>
+                        )}
                    </div>
                 ))}
              </div>

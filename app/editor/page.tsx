@@ -8,9 +8,10 @@ import { saveInvitationLocal } from "@/app/actions";
 import { useSearchParams } from "next/navigation";
 import PhotoUpload from "@/components/PhotoUpload";
 import { THEMES } from "@/lib/themes";
-import { Eye } from "lucide-react";
+import { Eye, Gift, Trash2, Plus, MapPin, Type } from "lucide-react";
 import PreviewModal from "@/components/PreviewModal";
 import GalleryUpload from "@/components/GalleryUpload";
+import { FONT_STYLES } from "@/lib/fontStyles";
 
 function EditorContent() {
   const searchParams = useSearchParams();
@@ -28,7 +29,7 @@ function EditorContent() {
     gallery: [] as string[],
     love_story: [] as { year: string; title: string; desc: string }[],
     gifts: [] as { bank: string; acc: string; name: string }[],
-    video: "", music_url: "", quote: "",
+    video: "", music_url: "", quote: "", font_style: "",
   });
 
   useEffect(() => {
@@ -91,6 +92,14 @@ function EditorContent() {
   const sectionCls = "bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4";
   const labelCls = "block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5";
 
+  const addGift = () => setFormData(prev => ({ ...prev, gifts: [...(prev.gifts || []), { bank: "", acc: "", name: "", qr_image: "" }] }));
+  const removeGift = (index: number) => setFormData(prev => ({ ...prev, gifts: (prev.gifts || []).filter((_, i) => i !== index) }));
+  const updateGift = (index: number, field: string, value: string) => {
+    const newGifts = [...(formData.gifts || [])];
+    newGifts[index] = { ...newGifts[index], [field]: value };
+    setFormData(prev => ({ ...prev, gifts: newGifts }));
+  };
+
   return (
     <>
       <PreviewModal
@@ -121,6 +130,47 @@ function EditorContent() {
         <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 pb-32 space-y-6">
           <div className="text-center py-4">
             <p className="text-gray-500 font-light">Pilih tema & isi data undangan. Klik <strong>Preview Hasil</strong> untuk melihat tampilan.</p>
+          </div>
+
+          {/* Font Style Picker */}
+          <div className={sectionCls}>
+            <h2 className="text-base font-bold flex items-center gap-2"><Type size={18} /> Gaya Font Nama Mempelai</h2>
+            <p className="text-xs text-gray-500">Pilih gaya huruf yang akan dipakai untuk menampilkan nama pasangan di undangan.</p>
+            {/* Load preview fonts */}
+            <style>{FONT_STYLES.map(f => `@import url('${f.googleUrl}');`).join('\n')}</style>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+              {/* Default option */}
+              <button
+                onClick={() => setFormData(prev => ({ ...prev, font_style: "" }))}
+                className={`p-4 rounded-xl border-2 text-center transition-all ${
+                  !formData.font_style
+                    ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
+                    : "border-gray-200 bg-white hover:border-gray-400"
+                }`}
+              >
+                <p className="text-xs font-semibold uppercase tracking-wider mb-1">Default</p>
+                <p className="text-sm text-current opacity-70">Font bawaan tema</p>
+              </button>
+              {FONT_STYLES.map((font) => (
+                <button
+                  key={font.id}
+                  onClick={() => setFormData(prev => ({ ...prev, font_style: font.id }))}
+                  className={`p-4 rounded-xl border-2 text-center transition-all ${
+                    formData.font_style === font.id
+                      ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
+                      : "border-gray-200 bg-white hover:border-gray-400"
+                  }`}
+                >
+                  <p
+                    style={{ fontFamily: font.fontFamily }}
+                    className="text-xl mb-1 leading-tight"
+                  >
+                    {font.preview}
+                  </p>
+                  <p className="text-[10px] uppercase tracking-wider opacity-60 font-semibold">{font.category}</p>
+                </button>
+              ))}
+            </div>
           </div>
 
 
@@ -178,6 +228,40 @@ function EditorContent() {
               value={formData.gallery || []}
               onChange={(urls) => setFormData(prev => ({ ...prev, gallery: urls }))}
             />
+          </div>
+
+          {/* Digital Amplop */}
+          <div className={sectionCls}>
+            <div className="flex items-center justify-between">
+              <h2 className="text-base font-bold flex items-center gap-2"><Gift size={18} /> Digital Amplop</h2>
+              <button onClick={addGift} className="text-xs font-bold bg-gray-100 px-3 py-1.5 rounded-full hover:bg-gray-200 flex items-center gap-1">
+                <Plus size={14} /> Tambah
+              </button>
+            </div>
+            <p className="text-xs text-gray-500">Tamu dapat menyalin nomor rekening atau scan QR Code untuk memberikan hadiah.</p>
+            
+            <div className="space-y-4">
+              {formData.gifts?.map((gift, index) => (
+                <div key={index} className="p-4 border border-gray-100 rounded-xl bg-gray-50 relative">
+                  <button onClick={() => removeGift(index)} className="absolute top-4 right-4 text-red-500 hover:text-red-700">
+                    <Trash2 size={16} />
+                  </button>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                    <div><label className={labelCls}>Bank / E-Wallet</label><input type="text" value={gift.bank} onChange={(e) => updateGift(index, "bank", e.target.value)} className={inputCls} placeholder="Contoh: BCA, GoPay" /></div>
+                    <div><label className={labelCls}>Atas Nama</label><input type="text" value={gift.name} onChange={(e) => updateGift(index, "name", e.target.value)} className={inputCls} placeholder="Nama Pemilik Rekening" /></div>
+                    <div className="sm:col-span-2"><label className={labelCls}>Nomor Rekening / HP</label><input type="text" value={gift.acc} onChange={(e) => updateGift(index, "acc", e.target.value)} className={inputCls} placeholder="1234567890" /></div>
+                    <div className="sm:col-span-2 border-t border-gray-200 pt-3 mt-2">
+                      <PhotoUpload label="QR Code (Opsional)" value={gift.qr_image || ""} onChange={(url) => updateGift(index, "qr_image", url)} onClear={() => updateGift(index, "qr_image", "")} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-gray-100 pt-4 mt-4">
+              <label className={labelCls + " flex items-center gap-2"}><MapPin size={14} /> Alamat Pengiriman Kado (Fisik)</label>
+              <textarea value={formData.gift_address || ""} onChange={(e) => setFormData(prev => ({ ...prev, gift_address: e.target.value }))} className={inputCls + " resize-none"} rows={3} placeholder="Alamat lengkap penerima kado..." />
+            </div>
           </div>
 
           {/* CTA */}

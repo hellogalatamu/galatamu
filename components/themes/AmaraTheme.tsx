@@ -9,7 +9,9 @@ import { submitWish } from "@/app/actions";
 import GalleryLightbox from "../GalleryLightbox";
 import { InvitationData, WishData } from "./types";
 import VideoPlayer from "../VideoPlayer";
+import DigitalEnvelope from "../DigitalEnvelope";
 import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
+import { getFontStyle } from "@/lib/fontStyles";
 
 export default function AmaraTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -63,7 +65,8 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;600&display=swap');
-        .font-serif-display { font-family: 'Playfair Display', serif; }
+        ${getFontStyle(data.font_style) ? `@import url('${getFontStyle(data.font_style)!.googleUrl}');` : ''}
+        .font-serif-display { font-family: ${getFontStyle(data.font_style) ? getFontStyle(data.font_style)!.fontFamily : "'Playfair Display', serif"}; }
         .font-inter { font-family: 'Inter', sans-serif; }
         .text-huge { font-size: clamp(4rem, 15vw, 12rem); line-height: 0.8; }
         .outline-text { -webkit-text-stroke: 1px #1a1a1a; color: transparent; }
@@ -291,21 +294,17 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
                   <p className="font-inter text-gray-400 font-light mb-16 leading-relaxed">Kehadiran Anda adalah hadiah terbaik bagi kami. Namun jika ingin memberikan tanda kasih, silakan melalui saluran berikut:</p>
                </FadeIn>
                
-               <div className="space-y-6">
-                  {data.gifts?.map((gift, i) => (
-                    <FadeIn key={i} delay={i * 0.1}>
-                      <div className="p-12 border border-black/5 bg-[#faf9f6] flex flex-col items-center group relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
-                           <Gift size={24} />
-                        </div>
-                        <p className="font-inter text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 mb-4 italic">{gift.bank}</p>
-                        <p className="font-inter text-3xl font-light mb-2 tracking-widest">{gift.acc}</p>
-                        <p className="font-inter text-xs text-gray-500 font-bold uppercase tracking-widest">{gift.name}</p>
-                      </div>
-                    </FadeIn>
-                  ))}
                </div>
-            </div>
+            <DigitalEnvelope
+              gifts={data.gifts}
+              gift_address={data.gift_address}
+              primaryColor="#1a1a1a"
+              bgColor="#faf9f6"
+              textColor="#1a1a1a"
+              envelopeStyle="light"
+              titleClassName="hidden"
+              subtitleClassName="hidden"
+            />
           </section>
 
           {/* Section 7: RSVP Dark Editorial */}
@@ -365,6 +364,13 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
                             <span className="text-[8px] uppercase tracking-widest text-white/20 border border-white/10 px-2 py-1">{wish.presence === 'hadir' ? 'Attending' : 'Absent'}</span>
                          </div>
                          <p className="text-white/40 font-inter text-sm leading-relaxed italic">&ldquo;{wish.message}&rdquo;</p>
+                        {wish.reply && (
+                          <div className="mt-4 p-4 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{wish.reply}</p>
+                          </div>
+                        )}
                       </div>
                    ))}
                 </div>

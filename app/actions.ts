@@ -239,3 +239,43 @@ export async function updateInvitationFullLocal(oldSlug: string, newData: any) {
     return false;
   }
 }
+
+export async function updateWishes(slug: string, newWishes: any[]) {
+  const isDummy = !process.env.NEXT_PUBLIC_FIREBASE_API_KEY || process.env.NEXT_PUBLIC_FIREBASE_API_KEY === "dummy-api-key";
+
+  if (isDummy) {
+    const filePath = getFilePath();
+    try {
+      const file = await fs.readFile(filePath, "utf8");
+      const db = JSON.parse(file);
+      const index = db.findIndex((item: any) => item.slug === slug);
+      if (index >= 0) {
+        db[index].wishes = newWishes;
+        await fs.writeFile(filePath, JSON.stringify(db, null, 2));
+        revalidatePath('/edit/' + slug);
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  try {
+    const q = query(collection(firestoreDb, "invitations"), where("slug", "==", slug));
+    const querySnapshot = await getDocs(q);
+    
+    if (!querySnapshot.empty) {
+      const invitationDoc = querySnapshot.docs[0];
+      await updateDoc(doc(firestoreDb, "invitations", invitationDoc.id), {
+        wishes: newWishes
+      });
+      revalidatePath('/edit/' + slug);
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Error updating wishes in Firebase:", error);
+    return false;
+  }
+}

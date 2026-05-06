@@ -8,6 +8,8 @@ import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import DigitalEnvelope from "../DigitalEnvelope";
+import { getFontStyle } from "@/lib/fontStyles";
 
 export default function MidnightTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -32,9 +34,16 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
   const openInvitation = () => { setIsOpen(true); if (audioRef.current) audioRef.current.play().then(() => setIsPlaying(true)); };
   const toggleMusic = () => { if (!audioRef.current) return; if (isPlaying) { audioRef.current.pause(); setIsPlaying(false); } else { audioRef.current.play(); setIsPlaying(true); } };
   const eventDate = data.event_data.date ? new Date(data.event_data.date) : new Date();
+  const customFont = getFontStyle(data.font_style);
 
   return (
     <div className={`bg-[#1e1b4b] min-h-screen text-[#e0e7ff] font-sans selection:bg-[#c7d2fe] selection:text-[#1e1b4b] ${previewMode ? 'relative' : ''}`}>
+      {customFont && (
+        <style>{`
+          @import url('${customFont.googleUrl}');
+          .font-midnight-display { font-family: ${customFont.fontFamily}; }
+        `}</style>
+      )}
       {(data.bg_image || data.bg_middle || data.bg_bottom) && (
         <div className="absolute inset-0 pointer-events-none z-0 flex flex-col opacity-15">
           <div className="flex-1 relative overflow-hidden"><div className="sticky top-0 w-full h-screen bg-cover bg-center" style={data.bg_image ? { backgroundImage: `url('${data.bg_image}')` } : {}}></div></div>
@@ -49,7 +58,7 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
           {!isOpen && (
             <motion.div initial={{ opacity: 1 }} exit={{ scale: 2, opacity: 0 }} transition={{ duration: 1.5, ease: [0.77, 0, 0.175, 1] }} className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#1e1b4b] text-white p-6 text-center">
                <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#4338ca] via-[#1e1b4b] to-transparent pointer-events-none"></motion.div>
-              <FadeIn><h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none">{data.bride_data.groom} <br/> & <br/> {data.bride_data.bride}</h1></FadeIn>
+              <FadeIn><h1 className={`text-6xl md:text-8xl font-black uppercase tracking-tighter mb-8 leading-none ${customFont ? 'font-midnight-display' : ''}`}>{data.bride_data.groom} <br/> & <br/> {data.bride_data.bride}</h1></FadeIn>
               <FadeIn delay={0.2}><p className="mb-16 opacity-40 uppercase tracking-[1em] text-[9px] font-bold italic">The Midnight Invitation for {guestName}</p></FadeIn>
               <button onClick={openInvitation} className="px-20 py-6 bg-[#4338ca] text-white rounded-full font-bold uppercase text-[10px] tracking-[0.8em] hover:bg-[#c7d2fe] hover:text-[#1e1b4b] transition-all shadow-[0_0_80px_rgba(67,56,202,0.6)]">Enter Magic</button>
             </motion.div>
@@ -64,7 +73,7 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
              <FadeIn className="relative">
                 <Sparkles className="w-16 h-16 text-[#c7d2fe] mx-auto mb-16 opacity-40 animate-pulse" />
                 <p className="tracking-[1.2em] uppercase text-[9px] mb-12 text-[#c7d2fe] font-black">The Midnight Union</p>
-                <h2 className="text-6xl md:text-9xl font-black uppercase tracking-tighter mb-16 text-white leading-none">{data.bride_data.groom} <br/> & <br/> {data.bride_data.bride}</h2>
+                <h2 className={`text-6xl md:text-9xl font-black uppercase tracking-tighter mb-16 text-white leading-none ${customFont ? 'font-midnight-display' : ''}`}>{data.bride_data.groom} <br/> & <br/> {data.bride_data.bride}</h2>
                 <div className="w-40 h-1 bg-[#4338ca] mx-auto mb-16 rounded-full shadow-[0_0_20px_#4338ca]"></div>
                 <p className="text-3xl font-bold mb-20 text-white tracking-[0.3em] uppercase">{eventDate.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                 <div className="max-w-md mx-auto p-12 border border-[#c7d2fe]/20 bg-white/5 backdrop-blur-xl rounded-[3rem] shadow-2xl">
@@ -87,7 +96,7 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
                    <div className="absolute inset-0 bg-[#4338ca]/20 rounded-[4rem] group-hover:scale-110 group-hover:rotate-6 transition-all duration-1000"></div>
                    <div className="aspect-[3/4] overflow-hidden rounded-[3.5rem] shadow-2xl relative border-8 border-white/5 group-hover:-rotate-3 transition-all duration-700"><img src={data.groom_photo || "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80"} className="w-full h-full object-cover" /></div>
                 </div>
-                <h3 className="text-5xl font-black uppercase text-white mb-4 tracking-tighter">{data.bride_data.groom}</h3>
+                <h3 className={`text-5xl font-black uppercase text-white mb-4 tracking-tighter ${customFont ? 'font-midnight-display' : ''}`}>{data.bride_data.groom}</h3>
                 <p className="text-[#c7d2fe] uppercase text-[10px] tracking-[0.6em] font-black mb-4 italic opacity-40">Son of</p>
                 <p className="text-2xl font-bold italic text-[#c7d2fe]">{data.bride_data.parents_groom}</p>
              </FadeIn>
@@ -96,7 +105,7 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
                    <div className="absolute inset-0 bg-[#4338ca]/20 rounded-[4rem] group-hover:scale-110 group-hover:-rotate-6 transition-all duration-1000"></div>
                    <div className="aspect-[3/4] overflow-hidden rounded-[3.5rem] shadow-2xl relative border-8 border-white/5 group-hover:rotate-3 transition-all duration-700"><img src={data.bride_photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80"} className="w-full h-full object-cover" /></div>
                 </div>
-                <h3 className="text-5xl font-black uppercase text-white mb-4 tracking-tighter">{data.bride_data.bride}</h3>
+                <h3 className={`text-5xl font-black uppercase text-white mb-4 tracking-tighter ${customFont ? 'font-midnight-display' : ''}`}>{data.bride_data.bride}</h3>
                 <p className="text-[#c7d2fe] uppercase text-[10px] tracking-[0.6em] font-black mb-4 italic opacity-40">Daughter of</p>
                 <p className="text-2xl font-bold italic text-[#c7d2fe]">{data.bride_data.parents_bride}</p>
              </FadeIn>
@@ -159,27 +168,19 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
             </section>
           )}
 
-          {data.gifts && data.gifts.length > 0 && (
-            <section className="py-32 px-6 text-center">
-               <div className="max-w-4xl mx-auto">
-                  <FadeIn className="mb-24">
-                     <Gift className="w-20 h-20 text-[#4338ca] mx-auto mb-12 opacity-30 shadow-[0_0_50px_rgba(67,56,202,0.5)]" />
-                     <h2 className="text-5xl font-black uppercase tracking-[0.6em] text-white">Midnight Gift</h2>
-                  </FadeIn>
-                  <div className="grid sm:grid-cols-2 gap-16">
-                     {data.gifts.map((gift, i) => (
-                        <FadeIn key={i} delay={i * 0.1}>
-                           <div className="bg-[#312e81]/20 border border-white/10 p-24 rounded-[4rem] group relative overflow-hidden shadow-2xl">
-                              <div className="absolute top-0 left-0 w-full h-full bg-[#4338ca] opacity-5 group-hover:opacity-20 transition-all duration-700"></div>
-                              <p className="uppercase text-[9px] tracking-[1em] font-black text-[#c7d2fe]/40 mb-12 italic">{gift.bank}</p>
-                              <p className="text-4xl font-black text-white mb-6 tracking-widest leading-none italic">{gift.acc}</p>
-                              <p className="text-[11px] uppercase tracking-[0.6em] text-[#c7d2fe] font-black opacity-40">a.n {gift.name}</p>
-                           </div>
-                        </FadeIn>
-                     ))}
-                  </div>
-               </div>
-            </section>
+{data.gifts && data.gifts.length > 0 && (
+          <section className="py-32 px-6 text-center">
+            <DigitalEnvelope
+              gifts={data.gifts}
+              gift_address={data.gift_address}
+              primaryColor="#4338ca"
+              bgColor="#020617"
+              textColor="#ffffff"
+              envelopeStyle="dark"
+              titleClassName="text-5xl font-black uppercase tracking-[0.6em] text-white"
+              subtitleClassName="hidden"
+            />
+          </section>
           )}
 
           <section className="py-32 px-6 bg-black/30 border-t border-white/5">
@@ -221,6 +222,13 @@ export default function MidnightTheme({ data, previewMode = false, guestName = "
                             <span className="text-[10px] bg-[#4338ca]/20 border border-[#4338ca]/40 px-6 py-2 text-[#c7d2fe] uppercase font-black tracking-[0.6em] italic rounded-full shadow-2xl">{wish.presence === 'hadir' ? 'Attending' : 'Absen'}</span>
                         </div>
                         <p className="text-[#c7d2fe]/30 italic font-black leading-relaxed text-3xl tracking-wide group-hover:text-white transition duration-700">&quot;{wish.message}&quot;</p>
+                        {wish.reply && (
+                          <div className="mt-4 p-4 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{wish.reply}</p>
+                          </div>
+                        )}
                     </div>
                   ))}
                </div>

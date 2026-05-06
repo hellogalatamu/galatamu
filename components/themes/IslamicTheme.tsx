@@ -8,6 +8,8 @@ import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import DigitalEnvelope from "../DigitalEnvelope";
+import { getFontStyle } from "@/lib/fontStyles";
 
 // Islamic geometric star SVG pattern as inline background
 const STAR_PATTERN = `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231a4d2e' fill-opacity='0.07'%3E%3Cpath d='M30 0l7.5 22.5L60 30l-22.5 7.5L30 60l-7.5-22.5L0 30l22.5-7.5z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`;
@@ -45,7 +47,8 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&display=swap');
-        .font-amiri { font-family: 'Amiri', Georgia, serif; }
+        ${getFontStyle(data.font_style) ? `@import url('${getFontStyle(data.font_style)!.googleUrl}');` : ''}
+        .font-amiri { font-family: ${getFontStyle(data.font_style)?.fontFamily ?? "'Amiri', Georgia, serif"}; }
         .font-lato { font-family: 'Lato', sans-serif; }
         .arch-clip { clip-path: ellipse(50% 58% at 50% 42%); }
         .arch-frame { border-radius: 50% 50% 4px 4px / 60% 60% 4px 4px; }
@@ -253,15 +256,16 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
                   <Gift className="w-10 h-10 text-[#c8973e] mx-auto mb-4" />
                   <div className="ornament-divider max-w-xs mx-auto"><span className="font-amiri text-[#c8973e] text-2xl italic">Amplop Digital</span></div>
                 </FadeIn>
-                <div className="grid sm:grid-cols-2 gap-8">
-                  {data.gifts.map((g, i) => (
-                    <FadeIn key={i} delay={i * 0.1} className="bg-white/5 border border-[#c8973e]/20 p-8 text-center">
-                      <p className="font-lato text-[10px] tracking-widest uppercase text-[#c8973e] mb-3">{g.bank}</p>
-                      <p className="font-amiri text-3xl italic text-[#fdfcf0] mb-2">{g.acc}</p>
-                      <p className="font-lato text-xs text-[#fdfcf0]/40">a.n {g.name}</p>
-                    </FadeIn>
-                  ))}
-                </div>
+                <DigitalEnvelope
+                  gifts={data.gifts}
+                  gift_address={data.gift_address}
+                  primaryColor="#c8973e"
+                  bgColor="#1a4d2e"
+                  textColor="#fdfcf0"
+                  envelopeStyle="dark"
+                  titleClassName="hidden"
+                  subtitleClassName="hidden"
+                />
               </div>
             </section>
           )}
@@ -307,6 +311,13 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
                         <span className="font-lato text-[10px] uppercase tracking-widest text-[#c8973e]">{w.presence === "hadir" ? "Hadir " : "Absen"}</span>
                       </div>
                       <p className="font-lato text-sm text-[#1a4d2e]/60 italic">&ldquo;{w.message}&rdquo;</p>
+                        {w.reply && (
+                          <div className="mt-3 p-3 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{w.reply}</p>
+                          </div>
+                        )}
                     </div>
                   ))}
                 </div>

@@ -8,8 +8,10 @@ import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import DigitalEnvelope from "../DigitalEnvelope";
 import VideoPlayer from "../VideoPlayer";
 import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
+import { getFontStyle } from "@/lib/fontStyles";
 
 export default function MinimalistWhiteTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData, previewMode?: boolean, guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -44,8 +46,9 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;600&family=Playfair+Display:ital,wght@0,400;1,400&display=swap');
+        ${getFontStyle(data.font_style) ? `@import url('${getFontStyle(data.font_style)!.googleUrl}');` : ''}
         .font-ultra { font-family: 'Inter', sans-serif; }
-        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-playfair { font-family: ${getFontStyle(data.font_style)?.fontFamily ?? "'Playfair Display', serif"}; }
         .tracking-ultra { letter-spacing: 0.8em; }
       `}</style>
 
@@ -170,20 +173,19 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
               )}
           </section>
 
-          {/* Section 5: Gifts */}
-          <section className="py-40 border-t border-gray-100">
-             <p className="font-ultra text-[10px] tracking-ultra uppercase mb-20 text-gray-300 text-center">ENDOWMENTS</p>
-             <div className="grid md:grid-cols-2 gap-12">
-                {data.gifts?.map((g, i) => (
-                   <FadeIn key={i} className="p-12 border border-gray-50 bg-gray-50/50">
-                      <p className="font-ultra text-[10px] tracking-widest mb-8 text-gray-400">{g.bank.toUpperCase()}</p>
-                      <p className="font-ultra text-3xl font-light mb-2">{g.acc}</p>
-                      <p className="font-playfair text-lg italic text-gray-500">a.n {g.name}</p>
-                   </FadeIn>
-                ))}
-             </div>
+{/* Section 5: Gifts */}
+          <section className="py-32 px-6 text-center">
+            <DigitalEnvelope
+              gifts={data.gifts}
+              gift_address={data.gift_address}
+              primaryColor="#111827"
+              bgColor="#ffffff"
+              textColor="#111827"
+              envelopeStyle="light"
+              titleClassName="text-3xl tracking-[0.2em] uppercase font-light"
+              subtitleClassName="hidden"
+            />
           </section>
-
           {/* Section 6: RSVP */}
           <section className="py-40 border-t border-gray-100">
              <div className="max-w-xl mx-auto">
@@ -216,6 +218,13 @@ export default function MinimalistWhiteTheme({ data, previewMode = false, guestN
                             <span className="font-ultra text-[8px] tracking-widest text-gray-300">{w.presence === 'hadir' ? 'YES' : 'NO'}</span>
                          </div>
                          <p className="font-ultra text-xs text-gray-400 italic leading-relaxed tracking-wider">&quot;{w.message}&quot;</p>
+                        {w.reply && (
+                          <div className="mt-3 p-3 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{w.reply}</p>
+                          </div>
+                        )}
                       </div>
                    ))}
                 </div>

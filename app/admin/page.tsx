@@ -10,8 +10,9 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { musicLibrary } from "@/lib/musicLibrary";
-import { Music, Play, Pause } from "lucide-react";
-
+import { Music, Play, Pause, TrendingUp, Users, Wallet } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { getThemePrice } from "@/lib/pricing";
 // Admin Dashboard - Managed by Galatamu Team
 export default function AdminDashboard() {
   const [invitations, setInvitations] = useState<any[]>([]);
@@ -73,6 +74,21 @@ export default function AdminDashboard() {
     
     return matchesSearch && matchesCategory;
   });
+
+  const totalOrders = invitations.length;
+  const totalRevenue = invitations.reduce((acc, inv) => acc + (inv.is_paid ? getThemePrice(inv.theme_id || "") : 0), 0);
+  const totalRSVPs = invitations.reduce((acc, inv) => acc + (inv.wishes?.length || 0), 0);
+
+  // Group orders by month for chart (last 6 months approximation)
+  const chartData = (() => {
+    const months: Record<string, number> = {};
+    invitations.forEach(inv => {
+      const date = inv.createdAt ? new Date(inv.createdAt) : new Date();
+      const month = date.toLocaleString('id-ID', { month: 'short' });
+      months[month] = (months[month] || 0) + 1;
+    });
+    return Object.keys(months).map(month => ({ name: month, Pesanan: months[month] }));
+  })();
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -344,6 +360,53 @@ export default function AdminDashboard() {
             >
               <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} /> Refresh Data
             </button>
+          </div>
+
+          {/* Top Metrics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm flex items-center gap-6">
+              <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <TrendingUp size={24} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 font-medium mb-1">Total Pesanan</p>
+                <p className="text-3xl font-serif font-bold text-[#1a1a1a]">{totalOrders}</p>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm flex items-center gap-6">
+              <div className="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <Wallet size={24} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 font-medium mb-1">Estimasi Pendapatan</p>
+                <p className="text-3xl font-serif font-bold text-[#1a1a1a]">Rp {totalRevenue.toLocaleString('id-ID')}</p>
+              </div>
+            </div>
+            <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm flex items-center gap-6">
+              <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                <Users size={24} />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 font-medium mb-1">Total Tamu (RSVP)</p>
+                <p className="text-3xl font-serif font-bold text-[#1a1a1a]">{totalRSVPs}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Chart Section */}
+          <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm mb-10">
+            <h3 className="text-lg font-serif font-bold text-[#1a1a1a] mb-6">Tren Pesanan Bulanan</h3>
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 12}} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{fill: '#888', fontSize: 12}} dx={-10} />
+                  <Tooltip cursor={{fill: '#f9fafb'}} contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}} />
+                  <Bar dataKey="Pesanan" fill="#1a1a1a" radius={[4, 4, 0, 0]} barSize={40} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
         {/* Create New Invitation Form */}

@@ -3,6 +3,7 @@ export interface WishData {
   presence: string;
   message: string;
   timestamp: string;
+  reply?: string;
 }
 
 export interface LoveStoryData {
@@ -15,6 +16,7 @@ export interface GiftData {
   bank: string;
   acc: string;
   name: string;
+  qr_image?: string;
 }
 
 export interface InvitationData {
@@ -50,9 +52,11 @@ export interface InvitationData {
   gallery?: string[];
   love_story?: LoveStoryData[];
   gifts?: GiftData[];
+  gift_address?: string;
   wishes?: WishData[];
   video?: string;
   music_url?: string;
   quote?: string;
+  font_style?: string;
   createdAt?: string;
 }

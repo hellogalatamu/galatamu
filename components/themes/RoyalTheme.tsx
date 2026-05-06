@@ -8,8 +8,10 @@ import Countdown from "../logic/Countdown";
 import { submitWish } from "@/app/actions";
 import { InvitationData, WishData } from "./types";
 import GalleryLightbox from "../GalleryLightbox";
+import DigitalEnvelope from "../DigitalEnvelope";
 import VideoPlayer from "../VideoPlayer";
 import { generateGoogleCalendarLink, generateICalLink } from "@/lib/calendarHelper";
+import { getFontStyle } from "@/lib/fontStyles";
 
 export default function RoyalTheme({ data, previewMode = false, guestName = "Tamu Undangan" }: { data: InvitationData; previewMode?: boolean; guestName?: string }) {
   const [isOpen, setIsOpen] = useState(previewMode);
@@ -44,7 +46,8 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
       )}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Pinyon+Script&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&display=swap');
-        .font-royal { font-family: 'Cinzel', serif; }
+        ${getFontStyle(data.font_style) ? `@import url('${getFontStyle(data.font_style)!.googleUrl}');` : ''}
+        .font-royal { font-family: ${getFontStyle(data.font_style)?.fontFamily ?? "'Cinzel', serif"}; }
         .font-script { font-family: 'Pinyon Script', cursive; }
         .font-serif { font-family: 'Cormorant Garamond', serif; }
         .royal-gradient { background: linear-gradient(135deg, #0c0b1e 0%, #06060f 100%); }
@@ -181,23 +184,15 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
           </section>
 
           {/* GIFTS */}
-          <section className="py-32 px-10 royal-gradient">
-             <div className="max-w-4xl mx-auto text-center border border-[#c8973e]/20 p-20 relative">
-                <div className="absolute inset-2 border border-[#c8973e]/5" />
-                <FadeIn>
-                   <h3 className="font-royal text-3xl mb-12 tracking-widest text-[#c8973e]">WEDDING GIFT</h3>
-                   <p className="font-serif italic text-xl mb-16 opacity-60">Your presence is our greatest honor. However, should you wish to send a gift, we appreciate your generosity through these channels.</p>
-                   <div className="grid md:grid-cols-2 gap-10">
-                      {data.gifts?.map((g, i) => (
-                         <div key={i} className="p-10 border border-[#c8973e]/10 bg-black/20 group hover:border-[#c8973e]/40 transition-all">
-                            <p className="font-royal text-[10px] mb-6 opacity-40">{g.bank.toUpperCase()}</p>
-                            <p className="font-royal text-2xl tracking-[0.3em] mb-4 text-[#c8973e]">{g.acc}</p>
-                            <p className="font-serif italic opacity-60">A.N {g.name}</p>
-                         </div>
-                      ))}
-                   </div>
-                </FadeIn>
-             </div>
+          <section className="py-32 px-8 md:px-20 bg-transparent text-center">
+            <DigitalEnvelope
+              gifts={data.gifts}
+              gift_address={data.gift_address}
+              primaryColor="#c8973e"
+              bgColor="#06060f"
+              textColor="#e8d5a3"
+              envelopeStyle="dark"
+            />
           </section>
 
           {/* RSVP */}
@@ -233,6 +228,13 @@ export default function RoyalTheme({ data, previewMode = false, guestName = "Tam
                          <span className="font-serif italic opacity-40 text-sm">{w.presence === 'hadir' ? 'Attending' : 'Regrets'}</span>
                       </div>
                       <p className="font-serif text-xl italic opacity-60 leading-relaxed">&ldquo;{w.message}&rdquo;</p>
+                        {w.reply && (
+                          <div className="mt-3 p-3 bg-white/5 border border-current/10 rounded-xl relative">
+                            <div className="absolute top-0 left-0 w-1 h-full bg-current opacity-30 rounded-l-xl"></div>
+                            <p className="text-[9px] uppercase tracking-widest font-bold opacity-40 mb-1">Balasan Mempelai</p>
+                            <p className="text-sm opacity-90">{w.reply}</p>
+                          </div>
+                        )}
                    </div>
                 ))}
              </div>
