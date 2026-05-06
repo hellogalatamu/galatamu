@@ -53,7 +53,16 @@ export default function VintageTheme({ data, previewMode = false, guestName = "T
         .paper-texture { background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); }
         .newspaper-border { border: 1px solid #000; border-width: 4px 1px 1px 1px; }
         .newspaper-double-border { border-top: 3px double #000; border-bottom: 3px double #000; }
-      `}</style>
+      
+        ${data.fonts?.bride_name || data.font_style ? `@import url('${getFontStyle(data.fonts?.bride_name || data.font_style)?.googleUrl}');` : ''}
+        ${data.fonts?.parents_name ? `@import url('${getFontStyle(data.fonts.parents_name)?.googleUrl}');` : ''}
+        ${data.fonts?.event_details ? `@import url('${getFontStyle(data.fonts.event_details)?.googleUrl}');` : ''}
+        ${data.fonts?.quote ? `@import url('${getFontStyle(data.fonts.quote)?.googleUrl}');` : ''}
+        .font-bride { font-family: ${data.fonts?.bride_name || data.font_style ? `'${getFontStyle(data.fonts?.bride_name || data.font_style)?.fontFamily}'` : "inherit"} !important; }
+        .font-parents { font-family: ${data.fonts?.parents_name ? `'${getFontStyle(data.fonts.parents_name)?.fontFamily}'` : "inherit"} !important; }
+        .font-event { font-family: ${data.fonts?.event_details ? `'${getFontStyle(data.fonts.event_details)?.fontFamily}'` : "inherit"} !important; }
+        .font-quote { font-family: ${data.fonts?.quote ? `'${getFontStyle(data.fonts.quote)?.fontFamily}'` : "inherit"} !important; }
+  `}</style>
 
       {/*  ENVELOPE (COVER)  */}
       {!previewMode && (

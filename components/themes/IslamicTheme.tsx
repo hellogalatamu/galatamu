@@ -56,7 +56,16 @@ export default function IslamicTheme({ data, previewMode = false, guestName = "T
         .islamic-border::before { content: ''; position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #fdfcf0; padding: 0 8px; color: #c8973e; font-size: 18px; }
         .ornament-divider { display: flex; align-items: center; gap: 16px; }
         .ornament-divider::before, .ornament-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, #c8973e, transparent); }
-      `}</style>
+      
+        ${data.fonts?.bride_name || data.font_style ? `@import url('${getFontStyle(data.fonts?.bride_name || data.font_style)?.googleUrl}');` : ''}
+        ${data.fonts?.parents_name ? `@import url('${getFontStyle(data.fonts.parents_name)?.googleUrl}');` : ''}
+        ${data.fonts?.event_details ? `@import url('${getFontStyle(data.fonts.event_details)?.googleUrl}');` : ''}
+        ${data.fonts?.quote ? `@import url('${getFontStyle(data.fonts.quote)?.googleUrl}');` : ''}
+        .font-bride { font-family: ${data.fonts?.bride_name || data.font_style ? `'${getFontStyle(data.fonts?.bride_name || data.font_style)?.fontFamily}'` : "inherit"} !important; }
+        .font-parents { font-family: ${data.fonts?.parents_name ? `'${getFontStyle(data.fonts.parents_name)?.fontFamily}'` : "inherit"} !important; }
+        .font-event { font-family: ${data.fonts?.event_details ? `'${getFontStyle(data.fonts.event_details)?.fontFamily}'` : "inherit"} !important; }
+        .font-quote { font-family: ${data.fonts?.quote ? `'${getFontStyle(data.fonts.quote)?.fontFamily}'` : "inherit"} !important; }
+  `}</style>
 
       {/* COVER */}
       {!previewMode && (

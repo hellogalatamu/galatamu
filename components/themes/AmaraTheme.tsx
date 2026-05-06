@@ -70,7 +70,16 @@ export default function AmaraTheme({ data, previewMode = false, guestName = "Tam
         .font-inter { font-family: 'Inter', sans-serif; }
         .text-huge { font-size: clamp(4rem, 15vw, 12rem); line-height: 0.8; }
         .outline-text { -webkit-text-stroke: 1px #1a1a1a; color: transparent; }
-      `}</style>
+      
+        ${data.fonts?.bride_name || data.font_style ? `@import url('${getFontStyle(data.fonts?.bride_name || data.font_style)?.googleUrl}');` : ''}
+        ${data.fonts?.parents_name ? `@import url('${getFontStyle(data.fonts.parents_name)?.googleUrl}');` : ''}
+        ${data.fonts?.event_details ? `@import url('${getFontStyle(data.fonts.event_details)?.googleUrl}');` : ''}
+        ${data.fonts?.quote ? `@import url('${getFontStyle(data.fonts.quote)?.googleUrl}');` : ''}
+        .font-bride { font-family: ${data.fonts?.bride_name || data.font_style ? `'${getFontStyle(data.fonts?.bride_name || data.font_style)?.fontFamily}'` : "inherit"} !important; }
+        .font-parents { font-family: ${data.fonts?.parents_name ? `'${getFontStyle(data.fonts.parents_name)?.fontFamily}'` : "inherit"} !important; }
+        .font-event { font-family: ${data.fonts?.event_details ? `'${getFontStyle(data.fonts.event_details)?.fontFamily}'` : "inherit"} !important; }
+        .font-quote { font-family: ${data.fonts?.quote ? `'${getFontStyle(data.fonts.quote)?.fontFamily}'` : "inherit"} !important; }
+  `}</style>
 
       {/*  ENVELOPE / COVER  */}
       {!previewMode && (

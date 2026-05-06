@@ -27,8 +27,8 @@ function EditorContent() {
     hero_image: "", bg_image: "", bg_middle: "", bg_bottom: "",
     groom_photo: "", bride_photo: "",
     gallery: [] as string[],
-    love_story: [] as { year: string; title: string; desc: string }[],
-    gifts: [] as { bank: string; acc: string; name: string }[],
+    love_story: [{ year: "2023", title: "Pertama Bertemu", desc: "Awal mula kisah kami..." }],
+    gifts: [{ bank: "BCA", acc: "1234567890", name: "Nama Rekening" }],
     video: "", music_url: "", quote: "", font_style: "",
   });
 
@@ -130,54 +130,38 @@ function EditorContent() {
         <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 pb-32 space-y-6">
           <div className="text-center py-4">
             <p className="text-gray-500 font-light">Pilih tema & isi data undangan. Klik <strong>Preview Hasil</strong> untuk melihat tampilan.</p>
-          </div>
-
-          {/* Font Style Picker */}
-          <div className={sectionCls}>
-            <h2 className="text-base font-bold flex items-center gap-2"><Type size={18} /> Gaya Font Nama Mempelai</h2>
-            <p className="text-xs text-gray-500">Pilih gaya huruf yang akan dipakai untuk menampilkan nama pasangan di undangan.</p>
-            {/* Load preview fonts */}
             <style>{FONT_STYLES.map(f => `@import url('${f.googleUrl}');`).join('\n')}</style>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
-              {/* Default option */}
-              <button
-                onClick={() => setFormData(prev => ({ ...prev, font_style: "" }))}
-                className={`p-4 rounded-xl border-2 text-center transition-all ${
-                  !formData.font_style
-                    ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
-                    : "border-gray-200 bg-white hover:border-gray-400"
-                }`}
-              >
-                <p className="text-xs font-semibold uppercase tracking-wider mb-1">Default</p>
-                <p className="text-sm text-current opacity-70">Font bawaan tema</p>
-              </button>
-              {FONT_STYLES.map((font) => (
-                <button
-                  key={font.id}
-                  onClick={() => setFormData(prev => ({ ...prev, font_style: font.id }))}
-                  className={`p-4 rounded-xl border-2 text-center transition-all ${
-                    formData.font_style === font.id
-                      ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
-                      : "border-gray-200 bg-white hover:border-gray-400"
-                  }`}
-                >
-                  <p
-                    style={{ fontFamily: font.fontFamily }}
-                    className="text-xl mb-1 leading-tight"
-                  >
-                    {font.preview}
-                  </p>
-                  <p className="text-[10px] uppercase tracking-wider opacity-60 font-semibold">{font.category}</p>
-                </button>
-              ))}
-            </div>
           </div>
-
-
 
           {/* Data Pemilik Acara */}
           <div className={sectionCls}>
             <h2 className="text-base font-bold">Data Pemilik Acara</h2>
+            <div className="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div>
+                <label className={labelCls}><Type size={14} className="inline mr-1"/>Font Nama Mempelai</label>
+                <select 
+                  value={formData.fonts?.bride_name || formData.font_style || ""} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, fonts: { ...prev.fonts, bride_name: e.target.value } }))}
+                  className={inputCls}
+                  style={{ fontFamily: FONT_STYLES.find(f => f.id === (formData.fonts?.bride_name || formData.font_style))?.fontFamily }}
+                >
+                  <option value="">Default Tema</option>
+                  {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className={labelCls}><Type size={14} className="inline mr-1"/>Font Nama Orang Tua</label>
+                <select 
+                  value={formData.fonts?.parents_name || ""} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, fonts: { ...prev.fonts, parents_name: e.target.value } }))}
+                  className={inputCls}
+                  style={{ fontFamily: FONT_STYLES.find(f => f.id === formData.fonts?.parents_name)?.fontFamily }}
+                >
+                  <option value="">Ikuti Font Mempelai / Default</option>
+                  {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+                </select>
+              </div>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div><label className={labelCls}>Nama Pria</label><input type="text" name="groom" value={formData.bride_data.groom} onChange={handleBrideChange} className={inputCls} placeholder="Contoh: Andi" /></div>
               <div><label className={labelCls}>Nama Wanita</label><input type="text" name="bride" value={formData.bride_data.bride} onChange={handleBrideChange} className={inputCls} placeholder="Contoh: Rina" /></div>
@@ -189,6 +173,18 @@ function EditorContent() {
           {/* Detail Acara */}
           <div className={sectionCls}>
             <h2 className="text-base font-bold">Detail Acara</h2>
+            <div className="mb-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <label className={labelCls}><Type size={14} className="inline mr-1"/>Font Teks Acara (Tanggal & Lokasi)</label>
+              <select 
+                value={formData.fonts?.event_details || ""} 
+                onChange={(e) => setFormData(prev => ({ ...prev, fonts: { ...prev.fonts, event_details: e.target.value } }))}
+                className={inputCls}
+                style={{ fontFamily: FONT_STYLES.find(f => f.id === formData.fonts?.event_details)?.fontFamily }}
+              >
+                <option value="">Default Tema</option>
+                {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+              </select>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2"><label className={labelCls}>Tanggal Acara</label><input type="date" name="date" value={formData.event_data.date} onChange={handleEventChange} className={inputCls} /></div>
               <div><label className={labelCls}>Waktu Akad</label><input type="text" name="akad_time" value={formData.event_data.akad_time} onChange={handleEventChange} className={inputCls} placeholder="08:00 - Selesai" /></div>
@@ -203,6 +199,18 @@ function EditorContent() {
           {/* Konten Tambahan */}
           <div className={sectionCls}>
             <h2 className="text-base font-bold">Konten Tambahan</h2>
+            <div className="mb-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <label className={labelCls}><Type size={14} className="inline mr-1"/>Font Ayat / Kutipan Cinta</label>
+              <select 
+                value={formData.fonts?.quote || ""} 
+                onChange={(e) => setFormData(prev => ({ ...prev, fonts: { ...prev.fonts, quote: e.target.value } }))}
+                className={inputCls}
+                style={{ fontFamily: FONT_STYLES.find(f => f.id === formData.fonts?.quote)?.fontFamily }}
+              >
+                <option value="">Default Tema</option>
+                {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+              </select>
+            </div>
             <div><label className={labelCls}>Link Musik (URL MP3)</label><input type="text" value={formData.music_url || ""} onChange={(e) => setFormData(prev => ({ ...prev, music_url: e.target.value }))} className={inputCls} placeholder="https://domain.com/musik.mp3" /></div>
             <div><label className={labelCls}>Quote / Ayat Suci</label><textarea value={formData.quote || ""} onChange={(e) => setFormData(prev => ({ ...prev, quote: e.target.value }))} className={inputCls + " resize-none"} rows={3} placeholder="Tuliskan kata mutiara..." /></div>
           </div>

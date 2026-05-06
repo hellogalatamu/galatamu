@@ -58,5 +58,11 @@ export interface InvitationData {
   music_url?: string;
   quote?: string;
   font_style?: string;
+  fonts?: {
+    bride_name?: string;
+    parents_name?: string;
+    event_details?: string;
+    quote?: string;
+  };
   createdAt?: string;
 }

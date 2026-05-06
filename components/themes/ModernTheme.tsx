@@ -54,7 +54,16 @@ export default function ModernTheme({ data, previewMode = false, guestName = "Ta
         @keyframes scan { from { transform: translateY(0); } to { transform: translateY(100vh); } }
         .border-tech { border: 1px solid rgba(0, 255, 65, 0.2); }
         .bg-tech { background: rgba(0, 255, 65, 0.03); }
-      `}</style>
+      
+        ${data.fonts?.bride_name || data.font_style ? `@import url('${getFontStyle(data.fonts?.bride_name || data.font_style)?.googleUrl}');` : ''}
+        ${data.fonts?.parents_name ? `@import url('${getFontStyle(data.fonts.parents_name)?.googleUrl}');` : ''}
+        ${data.fonts?.event_details ? `@import url('${getFontStyle(data.fonts.event_details)?.googleUrl}');` : ''}
+        ${data.fonts?.quote ? `@import url('${getFontStyle(data.fonts.quote)?.googleUrl}');` : ''}
+        .font-bride { font-family: ${data.fonts?.bride_name || data.font_style ? `'${getFontStyle(data.fonts?.bride_name || data.font_style)?.fontFamily}'` : "inherit"} !important; }
+        .font-parents { font-family: ${data.fonts?.parents_name ? `'${getFontStyle(data.fonts.parents_name)?.fontFamily}'` : "inherit"} !important; }
+        .font-event { font-family: ${data.fonts?.event_details ? `'${getFontStyle(data.fonts.event_details)?.fontFamily}'` : "inherit"} !important; }
+        .font-quote { font-family: ${data.fonts?.quote ? `'${getFontStyle(data.fonts.quote)?.fontFamily}'` : "inherit"} !important; }
+  `}</style>
       
       <div className="scanline" />
 

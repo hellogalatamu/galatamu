@@ -29,9 +29,7 @@ const DEMO_DATA = {
     akad_location: "Masjid Raya",
     resepsi_time: "11:00 - Selesai",
     resepsi_location: "Gedung Serbaguna",
-    live_stream: "https://youtube.com/live/demo",
   },
-  video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
   gallery: [
     "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&q=80",

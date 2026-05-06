@@ -160,6 +160,7 @@ function EditForm() {
           music_url: formData.music_url || "",
           quote: formData.quote || "",
           font_style: formData.font_style || "",
+          fonts: formData.fonts || {},
         });
       } else if (docId) {
         const docRef = doc(db, "invitations", docId);
@@ -179,6 +180,7 @@ function EditForm() {
           music_url: formData.music_url || "",
           quote: formData.quote || "",
           font_style: formData.font_style || "",
+          fonts: formData.fonts || {},
         });
       }
       setSaveSuccess(true); // Show success screen
@@ -336,6 +338,12 @@ function EditForm() {
           >
             📖 Buku Tamu & RSVP ({formData.wishes?.length || 0})
           </button>
+          <button 
+            onClick={() => setIsGuestToolOpen(true)} 
+            className="flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all text-purple-600 hover:bg-purple-50"
+          >
+            ✉️ Sebar Undangan
+          </button>
         </div>
 
         {activeTab === 'form' ? (
@@ -355,50 +363,38 @@ function EditForm() {
             </div>
           </section>
 
-          {/* Section Font Style */}
-          <section>
-            <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100 flex items-center gap-2">
-              <Type size={20} /> Gaya Font Nama Mempelai
-            </h2>
-            <p className="text-sm text-gray-500 mb-4">Pilih gaya huruf untuk menampilkan nama pasangan di undangan.</p>
-            <style>{FONT_STYLES.map(f => `@import url('${f.googleUrl}');`).join('\n')}</style>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              <button
-                onClick={() => setFormData(prev => prev ? ({ ...prev, font_style: "" }) : prev)}
-                className={`p-4 rounded-xl border-2 text-center transition-all ${
-                  !formData.font_style
-                    ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
-                    : "border-gray-200 bg-white hover:border-gray-400"
-                }`}
-              >
-                <p className="text-xs font-semibold uppercase tracking-wider mb-1">Default</p>
-                <p className="text-sm opacity-70">Font bawaan tema</p>
-              </button>
-              {FONT_STYLES.map((font) => (
-                <button
-                  key={font.id}
-                  onClick={() => setFormData(prev => prev ? ({ ...prev, font_style: font.id }) : prev)}
-                  className={`p-4 rounded-xl border-2 text-center transition-all ${
-                    formData.font_style === font.id
-                      ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-lg"
-                      : "border-gray-200 bg-white hover:border-gray-400"
-                  }`}
-                >
-                  <p
-                    style={{ fontFamily: font.fontFamily }}
-                    className="text-xl mb-1 leading-tight"
-                  >
-                    {font.preview}
-                  </p>
-                  <p className="text-[10px] uppercase tracking-wider opacity-60 font-semibold">{font.category}</p>
-                </button>
-              ))}
-            </div>
-          </section>
+          {/* Removed centralized Font Style section */}
+          <style>{FONT_STYLES.map(f => `@import url('${f.googleUrl}');`).join('\n')}</style>
 
           {/* Section Mempelai */}
           <section>
             <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Data Pemilik Acara (Mempelai/Yang Merayakan)</h2>
+            <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1 font-medium"><Type size={14} className="inline mr-1"/>Font Nama Mempelai</label>
+                <select 
+                  value={formData.fonts?.bride_name || formData.font_style || ""} 
+                  onChange={(e) => setFormData(prev => prev ? ({ ...prev, fonts: { ...prev.fonts, bride_name: e.target.value } }) : prev)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none bg-white text-sm"
+                  style={{ fontFamily: FONT_STYLES.find(f => f.id === (formData.fonts?.bride_name || formData.font_style))?.fontFamily }}
+                >
+                  <option value="">Default Tema</option>
+                  {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-gray-600 mb-1 font-medium"><Type size={14} className="inline mr-1"/>Font Nama Orang Tua</label>
+                <select 
+                  value={formData.fonts?.parents_name || ""} 
+                  onChange={(e) => setFormData(prev => prev ? ({ ...prev, fonts: { ...prev.fonts, parents_name: e.target.value } }) : prev)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none bg-white text-sm"
+                  style={{ fontFamily: FONT_STYLES.find(f => f.id === formData.fonts?.parents_name)?.fontFamily }}
+                >
+                  <option value="">Ikuti Font Mempelai / Default</option>
+                  {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+                </select>
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Nama Pria</label>
@@ -430,6 +426,18 @@ function EditForm() {
           {/* Section Acara */}
           <section>
             <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Detail Acara</h2>
+            <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <label className="block text-sm text-gray-600 mb-1 font-medium"><Type size={14} className="inline mr-1"/>Font Teks Acara (Tanggal & Lokasi)</label>
+              <select 
+                value={formData.fonts?.event_details || ""} 
+                onChange={(e) => setFormData(prev => prev ? ({ ...prev, fonts: { ...prev.fonts, event_details: e.target.value } }) : prev)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none bg-white text-sm"
+                style={{ fontFamily: FONT_STYLES.find(f => f.id === formData.fonts?.event_details)?.fontFamily }}
+              >
+                <option value="">Default Tema</option>
+                {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+              </select>
+            </div>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Tanggal Acara</label>
@@ -475,6 +483,18 @@ function EditForm() {
           {/* Section Tambahan: Video, Musik & Quotes */}
           <section>
             <h2 className="text-xl font-medium mb-4 pb-2 border-b border-gray-100">Konten Tambahan</h2>
+            <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <label className="block text-sm text-gray-600 mb-1 font-medium"><Type size={14} className="inline mr-1"/>Font Ayat / Kutipan Cinta</label>
+              <select 
+                value={formData.fonts?.quote || ""} 
+                onChange={(e) => setFormData(prev => prev ? ({ ...prev, fonts: { ...prev.fonts, quote: e.target.value } }) : prev)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1a1a1a] focus:outline-none bg-white text-sm"
+                style={{ fontFamily: FONT_STYLES.find(f => f.id === formData.fonts?.quote)?.fontFamily }}
+              >
+                <option value="">Default Tema</option>
+                {FONT_STYLES.map(f => <option key={f.id} value={f.id} style={{ fontFamily: f.fontFamily }}>{f.id.split('_')[0].toUpperCase()} - {f.preview}</option>)}
+              </select>
+            </div>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Link Video YouTube (Opsional)</label>
